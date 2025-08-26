@@ -12,7 +12,6 @@ export default [
     route("/edit", "features/recipes/screens/edit-recipe.tsx"),
     route("/:id", "features/recipes/screens/recipe.tsx"),
   ]),
-  route("/search", "features/search/screens/search.tsx"),
   ...prefix("/auth", [
     route("/login", "features/auth/screens/login.tsx"),
     route("/join", "features/auth/screens/join.tsx"),
