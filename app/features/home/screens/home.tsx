@@ -94,7 +94,7 @@ export default function Home() {
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] flex flex-col">
-      <div className="container mx-auto p-4 flex-1 flex flex-col">
+      <div className="container py-10 mx-auto p-4 flex-1 flex flex-col">
         {/* <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Moca에 오신 것을 환영합니다</h1>
           <p className="text-muted-foreground">
@@ -186,16 +186,6 @@ export default function Home() {
             </div>
           </div>
 
-          {(searchQuery || selectedFilter || selectedSort) && (
-            <div className="text-sm text-muted-foreground">
-              {pagination.totalItems}개의 결과 를 보여주는 중 •
-              {pagination.currentPage} / {pagination.totalPages} 페이지
-              {searchQuery && ` "${searchQuery}" 검색 결과`}
-              {selectedFilter && ` (${selectedFilter} 레시피)`}
-              {selectedSort &&
-                ` • ${selectedSort === "popularity" ? "인기순" : "최신순"} 정렬`}
-            </div>
-          )}
         </div>
 
         <div className="flex-1 flex flex-col">
@@ -225,7 +215,7 @@ export default function Home() {
           </div>
 
           {pagination.totalPages >= 1 && (
-            <div className="flex-shrink-0 pt-6">
+            <div className="flex-shrink-0 py-6">
               <Pagination>
                 <PaginationContent>
                   <PaginationItem>
