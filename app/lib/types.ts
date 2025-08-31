@@ -5,8 +5,6 @@ export interface Recipe {
   title: string;
   description: string;
   brewType: BrewType;
-  difficulty: 'easy' | 'medium' | 'hard';
-  prepTime: number; // in minutes
   rating: number; // 1-5 stars
   author: string;
   image?: string;

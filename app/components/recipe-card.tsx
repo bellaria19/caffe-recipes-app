@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import type { Recipe } from "@/lib/types";
 
 interface RecipeCardProps {
@@ -39,26 +39,7 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
       <CardContent className="pt-0 flex-1 flex flex-col justify-between">
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4 flex-shrink-0" />
-              <span className="whitespace-nowrap">{recipe.prepTime} min</span>
-            </div>
-            <Badge
-              variant={
-                recipe.difficulty === "easy"
-                  ? "secondary"
-                  : recipe.difficulty === "medium"
-                    ? "outline"
-                    : "destructive"
-              }
-              className="text-xs flex-shrink-0"
-            >
-              {recipe.difficulty}
-            </Badge>
-          </div>
-
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <p className="line-clamp-1">by {recipe.author}</p>
+            <p className="line-clamp-1">{recipe.author}</p>
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 flex-shrink-0" />
               <span className="whitespace-nowrap">{recipe.rating}/5</span>
@@ -71,7 +52,7 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
           onClick={handleViewRecipe}
           className="w-full justify-end p-2 h-auto font-medium text-primary hover:text-primary/80 hover:bg-primary/5"
         >
-          <span>View Recipe</span>
+          <span>레시피 보기</span>
           <span>→</span>
         </Button>
       </CardContent>
