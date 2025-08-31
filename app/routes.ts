@@ -20,4 +20,5 @@ export default [
     index("features/users/screens/profile.tsx"),
     route("/edit", "features/users/screens/edit-profile.tsx"),
   ]),
+  route("/my-recipes", "features/users/screens/my-recipes.tsx"),
 ] satisfies RouteConfig;

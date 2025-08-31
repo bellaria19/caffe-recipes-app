@@ -18,24 +18,24 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center space-x-2">
-          {/* <Button asChild variant="ghost" size="sm">
-            <Link to="/" className="flex items-center space-x-1">
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/my-recipes" className="flex items-center space-x-1">
               <Home className="h-4 w-4" />
-              <span>Home</span>
+              <span>내 레시피</span>
             </Link>
-          </Button> */}
+          </Button>
 
           <Button asChild variant="ghost" size="sm">
             <Link to="/auth/login" className="flex items-center space-x-1">
               <LogIn className="h-4 w-4" />
-              <span>Login</span>
+              <span>로그인</span>
             </Link>
           </Button>
 
           <Button asChild variant="outline" size="sm">
             <Link to="/auth/join" className="flex items-center space-x-1">
               <UserPlus className="h-4 w-4" />
-              <span>Join</span>
+              <span>가입</span>
             </Link>
           </Button>
 

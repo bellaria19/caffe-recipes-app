@@ -5,14 +5,14 @@ export default function EditRecipe() {
   
   return (
     <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-3xl font-bold mb-6">Edit Recipe</h1>
+      <h1 className="text-3xl font-bold mb-6">레시피 수정</h1>
       
       <Form method="post" className="space-y-6">
         <input type="hidden" name="id" value={id} />
         
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Recipe Name
+            레시피 이름
           </label>
           <input
             type="text"
@@ -26,7 +26,7 @@ export default function EditRecipe() {
         
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-            Description
+            설명
           </label>
           <textarea
             id="description"
@@ -39,7 +39,7 @@ export default function EditRecipe() {
         
         <div>
           <label htmlFor="ingredients" className="block text-sm font-medium text-gray-700 mb-2">
-            Ingredients
+            재료
           </label>
           <textarea
             id="ingredients"
@@ -53,14 +53,14 @@ export default function EditRecipe() {
         
         <div>
           <label htmlFor="instructions" className="block text-sm font-medium text-gray-700 mb-2">
-            Instructions
+            만드는 법
           </label>
           <textarea
             id="instructions"
             name="instructions"
             rows={8}
             required
-            defaultValue="1. Heat water to 200�F\n2. Grind coffee beans\n3. Brew for 4 minutes\n4. Serve hot"
+            defaultValue="1. Heat water to 200�F\n2. Grind coffee beans\n3. Brew for 4 minutes\n4. Serve hot"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -70,13 +70,13 @@ export default function EditRecipe() {
             type="submit"
             className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Update Recipe
+            레시피 업데이트
           </button>
           <button
             type="button"
             className="px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
-            Cancel
+            취소
           </button>
         </div>
       </Form>

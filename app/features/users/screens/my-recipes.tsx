@@ -2,8 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, Link } from "react-router";
 import { mockRecipes } from "@/lib/data/recipes";
 import type { BrewType, Recipe } from "@/lib/types";
-
-type SortType = "" | "popularity" | "newest";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,22 +15,25 @@ import {
 import { Search, X, Plus } from "lucide-react";
 import { usePagination } from "@/lib/hooks/use-pagination";
 import { RecipeCard } from "@/components/recipe-card";
-import { Separator } from "@/components/ui/separator";
 
-export default function Home() {
+export default function MyRecipes() {
   const [searchParams] = useSearchParams();
   const initialFilter = (searchParams.get("type") as BrewType) || "";
-  const initialSort = (searchParams.get("sort") as SortType) || "";
   const initialQuery = searchParams.get("q") || "";
 
   const [selectedFilter, setSelectedFilter] = useState<BrewType | "">(
     initialFilter
   );
-  const [selectedSort, setSelectedSort] = useState<SortType>(initialSort);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
 
+  // TODO: Replace with actual user recipes from API/database
+  // For now, filtering mockRecipes by author to simulate user's recipes
+  const userRecipes = mockRecipes.filter(recipe => 
+    recipe.author === "John Coffee Lover" // This should be current user
+  );
+
   const filteredRecipes = useMemo(() => {
-    let results = [...mockRecipes];
+    let results = userRecipes;
 
     if (searchQuery) {
       results = results.filter(
@@ -41,39 +42,23 @@ export default function Home() {
           recipe.description
             .toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-          recipe.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
           recipe.ingredients.some((ingredient) =>
             ingredient.toLowerCase().includes(searchQuery.toLowerCase())
           )
       );
     }
 
-    // Handle brew type filtering
     if (selectedFilter) {
       results = results.filter((recipe) => recipe.brewType === selectedFilter);
     }
 
-    // Handle sorting
-    if (selectedSort === "popularity") {
-      results = results.sort((a, b) => b.rating - a.rating);
-    } else if (selectedSort === "newest") {
-      results = results.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
-    }
-
     return results;
-  }, [selectedFilter, selectedSort, searchQuery]);
+  }, [selectedFilter, searchQuery, userRecipes]);
 
   const pagination = usePagination(filteredRecipes, 6);
 
   const handleFilterChange = (filter: BrewType | "") => {
     setSelectedFilter(filter);
-    pagination.resetPage();
-  };
-
-  const handleSortChange = (sort: SortType) => {
-    setSelectedSort(sort);
     pagination.resetPage();
   };
 
@@ -95,27 +80,24 @@ export default function Home() {
   return (
     <div className="min-h-[calc(100vh-3.5rem)] flex flex-col">
       <div className="container mx-auto p-4 flex-1 flex flex-col">
-        {/* <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Moca에 오신 것을 환영합니다</h1>
-          <p className="text-muted-foreground">
-            전 세계의 놀라운 커피 레시피를 발견하고 공유하세요.
-          </p>
-        </div> */}
-
-        <div className="mb-6 space-y-10 flex-shrink-0">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">레시피 검색</h2>
-              <Button asChild>
-                <Link
-                  to="/recipes/create"
-                  className="flex items-center space-x-2"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>레시피 추가</span>
-                </Link>
-              </Button>
-            </div>
+            <h1 className="text-3xl font-bold mb-2">내 레시피</h1>
+            <p className="text-muted-foreground">
+              나만의 커피 레시피를 관리하고 공유하세요.
+            </p>
+          </div>
+          <Button asChild>
+            <Link to="/recipes/create" className="flex items-center space-x-2">
+              <Plus className="h-4 w-4" />
+              <span>새 레시피 추가</span>
+            </Link>
+          </Button>
+        </div>
+
+        <div className="mb-6 space-y-4 flex-shrink-0">
+          <div>
+            <h2 className="text-xl font-semibold mb-4">레시피 검색</h2>
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -123,7 +105,7 @@ export default function Home() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
-                  placeholder="이름, 설명, 작성자 또는 재료로 레시피를 검색하세요..."
+                  placeholder="내 레시피에서 검색..."
                   className="pl-10"
                 />
               </div>
@@ -140,60 +122,43 @@ export default function Home() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-4">정렬 및 필터</h2>
-            <div className="flex flex-wrap justify-between">
-              <div className="flex gap-2">
-                <Button
-                  variant={
-                    selectedSort === "popularity" ? "default" : "outline"
-                  }
-                  onClick={() => handleSortChange("popularity")}
-                >
-                  인기순
-                </Button>
-                <Button
-                  variant={selectedSort === "newest" ? "default" : "outline"}
-                  onClick={() => handleSortChange("newest")}
-                >
-                  최신순
-                </Button>
-              </div>
-
-              <Separator orientation="vertical" className="h-6 mx-4" />
-
-              <div className="flex gap-2">
-                <Button
-                  variant={selectedFilter === "" ? "default" : "outline"}
-                  onClick={() => handleFilterChange("")}
-                >
-                  전체
-                </Button>
-                <Button
-                  variant={selectedFilter === "drip" ? "default" : "outline"}
-                  onClick={() => handleFilterChange("drip")}
-                >
-                  드립
-                </Button>
-                <Button
-                  variant={
-                    selectedFilter === "espresso" ? "default" : "outline"
-                  }
-                  onClick={() => handleFilterChange("espresso")}
-                >
-                  에스프레소
-                </Button>
-              </div>
+            <h2 className="text-xl font-semibold mb-4">추출 방식별 필터</h2>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant={selectedFilter === "" ? "default" : "outline"}
+                onClick={() => handleFilterChange("")}
+              >
+                모든 유형 ({filteredRecipes.length})
+              </Button>
+              <Button
+                variant={selectedFilter === "drip" ? "default" : "outline"}
+                onClick={() => handleFilterChange("drip")}
+              >
+                드립 (
+                {searchQuery
+                  ? filteredRecipes.filter((r) => r.brewType === "drip").length
+                  : userRecipes.filter((r) => r.brewType === "drip").length}
+                )
+              </Button>
+              <Button
+                variant={selectedFilter === "espresso" ? "default" : "outline"}
+                onClick={() => handleFilterChange("espresso")}
+              >
+                에스프레소 (
+                {searchQuery
+                  ? filteredRecipes.filter((r) => r.brewType === "espresso")
+                      .length
+                  : userRecipes.filter((r) => r.brewType === "espresso").length}
+                )
+              </Button>
             </div>
           </div>
 
-          {(searchQuery || selectedFilter || selectedSort) && (
+          {(searchQuery || selectedFilter) && (
             <div className="text-sm text-muted-foreground">
-              {pagination.totalItems}개의 결과 를 보여주는 중 •
-              {pagination.currentPage} / {pagination.totalPages} 페이지
+              {pagination.totalItems}개의 결과를 보여주는 중 • {pagination.currentPage} / {pagination.totalPages} 페이지
               {searchQuery && ` "${searchQuery}" 검색 결과`}
               {selectedFilter && ` (${selectedFilter} 레시피)`}
-              {selectedSort &&
-                ` • ${selectedSort === "popularity" ? "인기순" : "최신순"} 정렬`}
             </div>
           )}
         </div>
@@ -210,7 +175,7 @@ export default function Home() {
               ))}
             </div>
 
-            {filteredRecipes.length === 0 && (
+            {filteredRecipes.length === 0 && userRecipes.length > 0 && (
               <div className="py-12 flex items-center justify-center">
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-muted-foreground mb-2">
@@ -222,9 +187,28 @@ export default function Home() {
                 </div>
               </div>
             )}
+
+            {userRecipes.length === 0 && (
+              <div className="py-12 flex items-center justify-center">
+                <div className="text-center">
+                  <h3 className="text-xl font-semibold text-muted-foreground mb-2">
+                    아직 작성한 레시피가 없습니다
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    첫 번째 레시피를 만들어보세요!
+                  </p>
+                  <Button asChild>
+                    <Link to="/recipes/create" className="flex items-center space-x-2">
+                      <Plus className="h-4 w-4" />
+                      <span>새 레시피 추가</span>
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
-          {pagination.totalPages >= 1 && (
+          {pagination.totalPages > 1 && (
             <div className="flex-shrink-0 pt-6">
               <Pagination>
                 <PaginationContent>
