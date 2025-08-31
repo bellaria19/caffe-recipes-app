@@ -13,7 +13,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Search, X, Plus } from "lucide-react";
-import { usePagination } from "@/lib/hooks/use-pagination";
+import { useDynamicPagination } from "@/lib/hooks/use-dynamic-pagination";
 import { RecipeCard } from "@/components/recipe-card";
 
 export default function MyRecipes() {
@@ -55,7 +55,7 @@ export default function MyRecipes() {
     return results;
   }, [selectedFilter, searchQuery, userRecipes]);
 
-  const pagination = usePagination(filteredRecipes, 6);
+  const pagination = useDynamicPagination(filteredRecipes);
 
   const handleFilterChange = (filter: BrewType | "") => {
     setSelectedFilter(filter);
