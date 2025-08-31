@@ -13,7 +13,7 @@ export function Navbar() {
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
           >
             <Coffee className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold">Caffe Recipes</span>
+            <span className="text-lg font-semibold">Moca</span>
           </Link>
         </div>
 

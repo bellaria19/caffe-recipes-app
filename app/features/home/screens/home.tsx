@@ -76,7 +76,7 @@ export default function Home() {
     <div className="min-h-[calc(100vh-3.5rem)] flex flex-col">
       <div className="container mx-auto p-4 flex-1 flex flex-col">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Welcome to Caffe Recipes</h1>
+          <h1 className="text-3xl font-bold mb-2">Welcome to Moca</h1>
           <p className="text-muted-foreground">
             Discover and share amazing coffee recipes from around the world.
           </p>
