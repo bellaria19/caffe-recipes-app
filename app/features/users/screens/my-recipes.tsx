@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, Link } from "react-router";
 import { mockRecipes } from "@/lib/data/recipes";
-import type { BrewType, Recipe } from "@/lib/types";
+import type { BrewType, Recipe, SortType } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,21 +15,22 @@ import {
 import { Search, X, Plus } from "lucide-react";
 import { useDynamicPagination } from "@/lib/hooks/use-dynamic-pagination";
 import { RecipeCard } from "@/components/recipe-card";
+import { Separator } from "@/components/ui/separator";
 
 export default function MyRecipes() {
   const [searchParams] = useSearchParams();
-  const initialFilter = (searchParams.get("type") as BrewType) || "";
+  const initialFilter = (searchParams.get("type") as BrewType) || "all";
+  const initialSort = (searchParams.get("sort") as SortType) || "newest";
   const initialQuery = searchParams.get("q") || "";
 
-  const [selectedFilter, setSelectedFilter] = useState<BrewType | "">(
-    initialFilter
-  );
+  const [selectedFilter, setSelectedFilter] = useState<BrewType>(initialFilter);
+  const [selectedSort, setSelectedSort] = useState<SortType>(initialSort);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
 
   // TODO: Replace with actual user recipes from API/database
   // For now, filtering mockRecipes by author to simulate user's recipes
-  const userRecipes = mockRecipes.filter(recipe => 
-    recipe.author === "John Coffee Lover" // This should be current user
+  const userRecipes = mockRecipes.filter(
+    (recipe) => recipe.author === "John Coffee Lover" // This should be current user
   );
 
   const filteredRecipes = useMemo(() => {
@@ -57,8 +58,13 @@ export default function MyRecipes() {
 
   const pagination = useDynamicPagination(filteredRecipes);
 
-  const handleFilterChange = (filter: BrewType | "") => {
+  const handleFilterChange = (filter: BrewType) => {
     setSelectedFilter(filter);
+    pagination.resetPage();
+  };
+
+  const handleSortChange = (sort: SortType) => {
+    setSelectedSort(sort);
     pagination.resetPage();
   };
 
@@ -79,7 +85,7 @@ export default function MyRecipes() {
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] flex flex-col">
-      <div className="container mx-auto p-4 flex-1 flex flex-col">
+      <div className="container py-10 mx-auto p-4 flex-1 flex flex-col">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">내 레시피</h1>
@@ -87,12 +93,12 @@ export default function MyRecipes() {
               나만의 커피 레시피를 관리하고 공유하세요.
             </p>
           </div>
-          <Button asChild>
+          {/* <Button asChild>
             <Link to="/recipes/create" className="flex items-center space-x-2">
               <Plus className="h-4 w-4" />
               <span>새 레시피 추가</span>
             </Link>
-          </Button>
+          </Button> */}
         </div>
 
         <div className="mb-6 space-y-4 flex-shrink-0">
@@ -122,45 +128,51 @@ export default function MyRecipes() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-4">추출 방식별 필터</h2>
-            <div className="flex gap-2 flex-wrap">
-              <Button
-                variant={selectedFilter === "" ? "default" : "outline"}
-                onClick={() => handleFilterChange("")}
-              >
-                모든 유형 ({filteredRecipes.length})
-              </Button>
-              <Button
-                variant={selectedFilter === "drip" ? "default" : "outline"}
-                onClick={() => handleFilterChange("drip")}
-              >
-                드립 (
-                {searchQuery
-                  ? filteredRecipes.filter((r) => r.brewType === "drip").length
-                  : userRecipes.filter((r) => r.brewType === "drip").length}
-                )
-              </Button>
-              <Button
-                variant={selectedFilter === "espresso" ? "default" : "outline"}
-                onClick={() => handleFilterChange("espresso")}
-              >
-                에스프레소 (
-                {searchQuery
-                  ? filteredRecipes.filter((r) => r.brewType === "espresso")
-                      .length
-                  : userRecipes.filter((r) => r.brewType === "espresso").length}
-                )
-              </Button>
+            <h2 className="text-xl font-semibold mb-4">정렬 및 필터</h2>
+            <div className="flex flex-wrap justify-between">
+              <div className="flex gap-2">
+                <Button
+                  variant={
+                    selectedSort === "popularity" ? "default" : "outline"
+                  }
+                  onClick={() => handleSortChange("popularity")}
+                >
+                  인기순
+                </Button>
+                <Button
+                  variant={selectedSort === "newest" ? "default" : "outline"}
+                  onClick={() => handleSortChange("newest")}
+                >
+                  최신순
+                </Button>
+              </div>
+
+              <Separator orientation="vertical" className="h-6 mx-4" />
+
+              <div className="flex gap-2">
+                <Button
+                  variant={selectedFilter === "all" ? "default" : "outline"}
+                  onClick={() => handleFilterChange("all")}
+                >
+                  전체
+                </Button>
+                <Button
+                  variant={selectedFilter === "drip" ? "default" : "outline"}
+                  onClick={() => handleFilterChange("drip")}
+                >
+                  드립
+                </Button>
+                <Button
+                  variant={
+                    selectedFilter === "espresso" ? "default" : "outline"
+                  }
+                  onClick={() => handleFilterChange("espresso")}
+                >
+                  에스프레소
+                </Button>
+              </div>
             </div>
           </div>
-
-          {(searchQuery || selectedFilter) && (
-            <div className="text-sm text-muted-foreground">
-              {pagination.totalItems}개의 결과를 보여주는 중 • {pagination.currentPage} / {pagination.totalPages} 페이지
-              {searchQuery && ` "${searchQuery}" 검색 결과`}
-              {selectedFilter && ` (${selectedFilter} 레시피)`}
-            </div>
-          )}
         </div>
 
         <div className="flex-1 flex flex-col">
@@ -195,14 +207,25 @@ export default function MyRecipes() {
                     아직 작성한 레시피가 없습니다
                   </h3>
                   <p className="text-muted-foreground mb-4">
-                    첫 번째 레시피를 만들어보세요!
+                    첫 번째 레시피를 만들거나 다른 사용자의 레시피를 둘러보세요!
                   </p>
-                  <Button asChild>
-                    <Link to="/recipes/create" className="flex items-center space-x-2">
-                      <Plus className="h-4 w-4" />
-                      <span>새 레시피 추가</span>
-                    </Link>
-                  </Button>
+                  <div className="flex gap-3 justify-center">
+                    <Button asChild>
+                      <Link
+                        to="/recipes/create"
+                        className="flex items-center space-x-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        <span>새 레시피 추가</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link to="/" className="flex items-center space-x-2">
+                        <Search className="h-4 w-4" />
+                        <span>레시피 둘러보기</span>
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}

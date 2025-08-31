@@ -1,9 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, Link } from "react-router";
 import { mockRecipes } from "@/lib/data/recipes";
-import type { BrewType, Recipe } from "@/lib/types";
+import type { BrewType, Recipe, SortType } from "@/lib/types";
 
-type SortType = "" | "popularity" | "newest";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -104,9 +103,9 @@ export default function Home() {
 
         <div className="mb-6 space-y-10 flex-shrink-0">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">레시피 검색</h2>
-              <Button asChild>
+            {/* <div className="flex items-center justify-between mb-4"> */}
+            <h2 className="text-xl font-semibold mb-4">레시피 검색</h2>
+            {/* <Button asChild>
                 <Link
                   to="/recipes/create"
                   className="flex items-center space-x-2"
@@ -114,8 +113,8 @@ export default function Home() {
                   <Plus className="h-4 w-4" />
                   <span>레시피 추가</span>
                 </Link>
-              </Button>
-            </div>
+              </Button> */}
+            {/* </div> */}
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -185,7 +184,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         </div>
 
         <div className="flex-1 flex flex-col">

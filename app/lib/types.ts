@@ -1,4 +1,6 @@
-export type BrewType = 'drip' | 'espresso';
+export type SortType = "popularity" | "newest";
+
+export type BrewType = "all" | "drip" | "espresso";
 
 export interface Recipe {
   id: string;
