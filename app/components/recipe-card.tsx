@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -21,7 +22,7 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow min-h-[320px] max-h-[400px] min-w-[280px] max-w-[400px] w-full h-fit flex flex-col">
+    <Card className="hover:shadow-lg hover:dark:shadow-white/20 transition-shadow min-h-[280px] max-h-[400px] min-w-[300px] max-w-[400px] w-full h-fit flex flex-col">
       <CardHeader className="pb-3 flex-shrink-0">
         <div className="flex justify-between items-start mb-2">
           <CardTitle className="text-lg leading-tight line-clamp-2">
@@ -36,17 +37,20 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="pt-0 flex-1 flex flex-col justify-between">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <p className="line-clamp-1">{recipe.author}</p>
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 flex-shrink-0" />
-              <span className="whitespace-nowrap">{recipe.rating}/5</span>
-            </div>
+      <CardContent className="py-2 flex flex-col justify-between">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <p className="line-clamp-1">{recipe.author}</p>
+          <div className="flex items-center gap-1">
+            <Star
+              className="h-4 w-4 flex-shrink-0 text-yellow-500"
+              fill="currentColor"
+            />
+            <span className="whitespace-nowrap">{recipe.rating}/5</span>
           </div>
         </div>
+      </CardContent>
 
+      <CardFooter className="pt-2">
         <Button
           variant="ghost"
           onClick={handleViewRecipe}
@@ -55,7 +59,7 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
           <span>레시피 보기</span>
           <span>→</span>
         </Button>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, Link } from "react-router";
 import { mockRecipes } from "@/lib/data/recipes";
 import type { BrewType, Recipe, SortType } from "@/lib/types";
+import { PageContainer } from "@/components/page-container";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -92,7 +93,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex flex-col">
+    <PageContainer className="flex flex-col">
       <div className="container py-10 mx-auto p-4 flex-1 flex flex-col">
         {/* <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Moca에 오신 것을 환영합니다</h1>
@@ -258,6 +259,6 @@ export default function Home() {
           )}
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -1,6 +1,7 @@
 import {
   type RouteConfig,
   index,
+  layout,
   prefix,
   route,
 } from "@react-router/dev/routes";
@@ -13,8 +14,10 @@ export default [
     route("/:id", "features/recipes/screens/recipe.tsx"),
   ]),
   ...prefix("/auth", [
-    route("/login", "features/auth/screens/login.tsx"),
-    route("/join", "features/auth/screens/join.tsx"),
+    layout("features/auth/layouts/auth-layout.tsx", [
+      route("/login", "features/auth/screens/login.tsx"),
+      route("/join", "features/auth/screens/join.tsx"),
+    ]),
   ]),
   ...prefix("/profile", [
     index("features/users/screens/profile.tsx"),

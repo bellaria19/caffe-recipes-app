@@ -11,7 +11,8 @@ export default defineConfig({
   out: "./app/migrations",
 
   // Location of schema definition files - looks for all schema.ts files in feature directories
-  schema: "./app/features/**/schema.ts",
+  // schema: "./app/features/**/schema.ts",
+  schema: "./app/db/schema.ts",
 
   // Database dialect - using PostgreSQL
   dialect: "postgresql",
