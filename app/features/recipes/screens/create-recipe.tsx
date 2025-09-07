@@ -1,81 +1,52 @@
-import { Form } from "react-router";
+import { Link } from "react-router";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Coffee, Droplets } from "lucide-react";
 
 export default function CreateRecipe() {
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-3xl font-bold mb-6">새 레시피 만들기</h1>
-      
-      <Form method="post" className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            레시피 이름
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="레시피 이름을 입력하세요"
-          />
+    <>
+      <div>
+        <h1 className="text-3xl font-bold mb-6">새 레시피 만들기</h1>
+        <p className="text-lg font-medium">
+          추출 노하우와 팁을 레시피로 공유해보세요
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <p className="text-muted-foreground mt-8">
+          어떤 종류의 커피 레시피를 만들고 싶으신가요?
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link to="/recipes/create/espresso">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary">
+              <CardHeader className="text-center">
+                <Coffee className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <CardTitle>에스프레소</CardTitle>
+                <CardDescription className="pt-4">
+                  에스프레소 레시피를 간단하게 만들어보세요.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+
+          <Link to="/recipes/create/drip">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary">
+              <CardHeader className="text-center">
+                <Droplets className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <CardTitle>드립 커피</CardTitle>
+                <CardDescription className="pt-2">
+                  드립 커피 레시피를 만들어보세요.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
         </div>
-        
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-            설명
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="레시피를 설명해주세요"
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="ingredients" className="block text-sm font-medium text-gray-700 mb-2">
-            재료
-          </label>
-          <textarea
-            id="ingredients"
-            name="ingredients"
-            rows={5}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="재료를 나열해주세요 (한 줄에 하나씩)"
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="instructions" className="block text-sm font-medium text-gray-700 mb-2">
-            만드는 법
-          </label>
-          <textarea
-            id="instructions"
-            name="instructions"
-            rows={8}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="단계별 만드는 법"
-          />
-        </div>
-        
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            레시피 만들기
-          </button>
-          <button
-            type="button"
-            className="px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            취소
-          </button>
-        </div>
-      </Form>
-    </div>
+      </div>
+    </>
   );
 }
