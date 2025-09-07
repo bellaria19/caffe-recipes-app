@@ -14,8 +14,10 @@ export default [
       route("/create/espresso", "features/recipes/screens/create-espresso.tsx"),
       route("/create/drip", "features/recipes/screens/create-drip.tsx"),
     ]),
-    route("/edit", "features/recipes/screens/edit-recipe.tsx"),
-    route("/:id", "features/recipes/screens/recipe.tsx"),
+    layout("features/recipes/layouts/recipe-layout.tsx", [
+      route("/:id", "features/recipes/screens/recipe.tsx"),
+      route("/edit/:id", "features/recipes/screens/edit-recipe.tsx"),
+    ]),
   ]),
   ...prefix("/auth", [
     layout("features/auth/layouts/auth-layout.tsx", [

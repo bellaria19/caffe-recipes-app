@@ -5,13 +5,11 @@ export type BrewType = "all" | "drip" | "espresso";
 export interface Recipe {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   brewType: BrewType;
   rating: number; // 1-5 stars
   author: string;
   image?: string;
-  ingredients: string[];
-  instructions: string[];
   tips?: string; // optional tips for other users
   createdAt: Date;
   espressoParams?: EspressoParams;
@@ -28,8 +26,8 @@ export interface EspressoParams {
 export interface DripParams {
   coffeeAmount: number; // in grams
   waterTemperature: number; // in Celsius
-  grindSize: string; // grinding degree description
-  brewingType: "hot" | "ice"; // hot or ice brewing
+  grindSize?: string; // grinding degree description
+  brewingType?: "hot" | "ice"; // hot or ice brewing
   extractionSteps: DripStep[];
 }
 

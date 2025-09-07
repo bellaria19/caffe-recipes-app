@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RecipeBasicInfo } from "@/components/recipe/recipe-basic-info";
-import { RecipeTips } from "@/components/recipe/recipe-tips";
+import { RecipeTipsForm } from "@/components/recipe/recipe-tips-form";
 import { RecipeFormWrapper } from "@/components/recipe/recipe-form-wrapper";
 
 interface EspressoRecipeFormProps {
@@ -94,7 +94,7 @@ export function EspressoRecipeForm({ onCancel }: EspressoRecipeFormProps) {
         </CardContent>
       </Card>
 
-      <RecipeTips placeholder={tipPlaceholder} rows={4} />
+      <RecipeTipsForm placeholder={tipPlaceholder} rows={4} />
     </RecipeFormWrapper>
   );
 }

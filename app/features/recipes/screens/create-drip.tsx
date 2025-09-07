@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
-import { DripRecipeForm } from "@/components/drip-recipe-form";
+import { DripRecipeForm } from "@/components/recipe/drip-recipe-form";
 
 export default function CreateDrip() {
   return (

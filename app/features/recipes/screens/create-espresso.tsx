@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
-import { EspressoRecipeForm } from "@/components/espresso-recipe-form";
+import { EspressoRecipeForm } from "@/components/recipe/espresso-recipe-form";
 
 export default function CreateEspresso() {
   return (

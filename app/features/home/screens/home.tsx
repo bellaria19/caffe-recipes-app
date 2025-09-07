@@ -42,20 +42,17 @@ export default function Home() {
       results = results.filter(
         (recipe) =>
           recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          recipe.description
+          (recipe.description || "")
             .toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-          recipe.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          recipe.ingredients.some((ingredient) =>
-            ingredient.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+          recipe.author.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     // Handle brew type filtering
     if (selectedFilter) {
       results = results.filter((recipe) => recipe.brewType === selectedFilter);
-      
+
       // Additional filtering for drip brewing type (hot/ice)
       if (selectedFilter === "drip" && brewingType) {
         // Note: This would filter based on recipe.dripParams?.brewingType once the data includes this
@@ -157,19 +154,19 @@ export default function Home() {
           <div>
             <h2 className="text-xl font-semibold mb-4">정렬 및 필터</h2>
             <div className="flex flex-wrap gap-4">
-              <SortDropdown 
+              <SortDropdown
                 selectedSort={selectedSort}
                 onSortChange={handleSortChange}
               />
 
-              <FilterDropdown 
+              <FilterDropdown
                 selectedFilter={selectedFilter}
                 onFilterChange={handleFilterChange}
               />
 
               {/* Conditional Hot/Ice dropdown for drip filter */}
               {selectedFilter === "drip" && (
-                <BrewingTypeDropdown 
+                <BrewingTypeDropdown
                   brewingType={brewingType}
                   onBrewingTypeChange={setBrewingType}
                 />

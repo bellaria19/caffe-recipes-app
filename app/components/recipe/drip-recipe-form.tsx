@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
 import { RecipeBasicInfo } from "@/components/recipe/recipe-basic-info";
-import { RecipeTips } from "@/components/recipe/recipe-tips";
+import { RecipeTipsForm } from "@/components/recipe/recipe-tips-form";
 import { RecipeFormWrapper } from "@/components/recipe/recipe-form-wrapper";
 import { BrewingTypeSelector } from "@/components/recipe/brewing-type-selector";
 import type { DripStep } from "@/lib/types";
@@ -207,7 +207,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
         </CardContent>
       </Card>
 
-      <RecipeTips placeholder={tipPlaceholder} rows={5} />
+      <RecipeTipsForm placeholder={tipPlaceholder} rows={5} />
     </RecipeFormWrapper>
   );
 }

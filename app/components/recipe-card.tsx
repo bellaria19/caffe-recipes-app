@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
+import { useNavigate } from "react-router";
 import type { Recipe } from "@/lib/types";
 
 interface RecipeCardProps {
@@ -17,7 +18,10 @@ interface RecipeCardProps {
 }
 
 export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
+  const navigate = useNavigate();
+  
   const handleViewRecipe = () => {
+    navigate(`/recipes/${recipe.id}`);
     onViewRecipe?.(recipe);
   };
 

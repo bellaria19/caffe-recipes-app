@@ -1,14 +1,20 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Lightbulb } from "lucide-react";
 
-interface RecipeTipsProps {
+interface RecipeTipsFormProps {
   placeholder: string;
   rows?: number;
 }
 
-export function RecipeTips({ placeholder, rows = 4 }: RecipeTipsProps) {
+export function RecipeTipsForm({ placeholder, rows = 4 }: RecipeTipsFormProps) {
   return (
     <Card>
       <CardHeader>
@@ -16,7 +22,9 @@ export function RecipeTips({ placeholder, rows = 4 }: RecipeTipsProps) {
           <Lightbulb className="h-5 w-5 text-yellow-500" />
           <CardTitle>팁 (선택사항)</CardTitle>
         </div>
-        <CardDescription>다른 사용자들을 위한 추가 조언이나 노하우를 공유해주세요</CardDescription>
+        <CardDescription>
+          다른 사용자들을 위한 추가 조언이나 노하우를 공유해주세요
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-2">
