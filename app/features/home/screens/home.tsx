@@ -14,7 +14,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Search, X, Plus } from "lucide-react";
+import { Search, X } from "lucide-react";
+import { SortDropdown } from "@/components/home/sort-dropdown";
+import { FilterDropdown } from "@/components/home/filter-dropdown";
+import { BrewingTypeDropdown } from "@/components/home/brewing-type-dropdown";
 import { useDynamicPagination } from "@/lib/hooks/use-dynamic-pagination";
 import { RecipeCard } from "@/components/recipe-card";
 import { Separator } from "@/components/ui/separator";
@@ -30,6 +33,7 @@ export default function Home() {
   );
   const [selectedSort, setSelectedSort] = useState<SortType>(initialSort);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [brewingType, setBrewingType] = useState<"hot" | "ice" | "">(""); // For drip filtering
 
   const filteredRecipes = useMemo(() => {
     let results = [...mockRecipes];
@@ -51,6 +55,13 @@ export default function Home() {
     // Handle brew type filtering
     if (selectedFilter) {
       results = results.filter((recipe) => recipe.brewType === selectedFilter);
+      
+      // Additional filtering for drip brewing type (hot/ice)
+      if (selectedFilter === "drip" && brewingType) {
+        // Note: This would filter based on recipe.dripParams?.brewingType once the data includes this
+        // For now, we'll show all drip recipes regardless of hot/ice selection
+        // results = results.filter((recipe) => recipe.dripParams?.brewingType === brewingType);
+      }
     }
 
     // Handle sorting
@@ -63,12 +74,16 @@ export default function Home() {
     }
 
     return results;
-  }, [selectedFilter, selectedSort, searchQuery]);
+  }, [selectedFilter, selectedSort, searchQuery, brewingType]);
 
   const pagination = useDynamicPagination(filteredRecipes);
 
   const handleFilterChange = (filter: BrewType | "") => {
     setSelectedFilter(filter);
+    // Reset brewing type when filter changes
+    if (filter !== "drip") {
+      setBrewingType("");
+    }
     pagination.resetPage();
   };
 
@@ -141,48 +156,24 @@ export default function Home() {
 
           <div>
             <h2 className="text-xl font-semibold mb-4">정렬 및 필터</h2>
-            <div className="flex flex-wrap justify-between">
-              <div className="flex gap-2">
-                <Button
-                  variant={
-                    selectedSort === "popularity" ? "default" : "outline"
-                  }
-                  onClick={() => handleSortChange("popularity")}
-                >
-                  인기순
-                </Button>
-                <Button
-                  variant={selectedSort === "newest" ? "default" : "outline"}
-                  onClick={() => handleSortChange("newest")}
-                >
-                  최신순
-                </Button>
-              </div>
+            <div className="flex flex-wrap gap-4">
+              <SortDropdown 
+                selectedSort={selectedSort}
+                onSortChange={handleSortChange}
+              />
 
-              <Separator orientation="vertical" className="h-6 mx-4" />
+              <FilterDropdown 
+                selectedFilter={selectedFilter}
+                onFilterChange={handleFilterChange}
+              />
 
-              <div className="flex gap-2">
-                <Button
-                  variant={selectedFilter === "" ? "default" : "outline"}
-                  onClick={() => handleFilterChange("")}
-                >
-                  전체
-                </Button>
-                <Button
-                  variant={selectedFilter === "drip" ? "default" : "outline"}
-                  onClick={() => handleFilterChange("drip")}
-                >
-                  드립
-                </Button>
-                <Button
-                  variant={
-                    selectedFilter === "espresso" ? "default" : "outline"
-                  }
-                  onClick={() => handleFilterChange("espresso")}
-                >
-                  에스프레소
-                </Button>
-              </div>
+              {/* Conditional Hot/Ice dropdown for drip filter */}
+              {selectedFilter === "drip" && (
+                <BrewingTypeDropdown 
+                  brewingType={brewingType}
+                  onBrewingTypeChange={setBrewingType}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -15,17 +15,20 @@ import {
 import { Search, X, Plus } from "lucide-react";
 import { useDynamicPagination } from "@/lib/hooks/use-dynamic-pagination";
 import { RecipeCard } from "@/components/recipe-card";
-import { Separator } from "@/components/ui/separator";
+import { SortDropdown } from "@/components/home/sort-dropdown";
+import { FilterDropdown } from "@/components/home/filter-dropdown";
+import { BrewingTypeDropdown } from "@/components/home/brewing-type-dropdown";
 
 export default function MyRecipes() {
   const [searchParams] = useSearchParams();
-  const initialFilter = (searchParams.get("type") as BrewType) || "all";
+  const initialFilter = (searchParams.get("type") as BrewType) || "";
   const initialSort = (searchParams.get("sort") as SortType) || "newest";
   const initialQuery = searchParams.get("q") || "";
 
-  const [selectedFilter, setSelectedFilter] = useState<BrewType>(initialFilter);
-  const [selectedSort, setSelectedSort] = useState<SortType>(initialSort);
+  const [selectedFilter, setSelectedFilter] = useState<BrewType | "">(initialFilter);
+  const [selectedSort, setSelectedSort] = useState<SortType | "">(initialSort);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [brewingType, setBrewingType] = useState<"hot" | "ice" | "">(""); // For drip filtering
 
   // TODO: Replace with actual user recipes from API/database
   // For now, filtering mockRecipes by author to simulate user's recipes
@@ -49,17 +52,38 @@ export default function MyRecipes() {
       );
     }
 
+    // Handle brew type filtering
     if (selectedFilter) {
       results = results.filter((recipe) => recipe.brewType === selectedFilter);
+      
+      // Additional filtering for drip brewing type (hot/ice)
+      if (selectedFilter === "drip" && brewingType) {
+        // Note: This would filter based on recipe.dripParams?.brewingType once the data includes this
+        // For now, we'll show all drip recipes regardless of hot/ice selection
+        // results = results.filter((recipe) => recipe.dripParams?.brewingType === brewingType);
+      }
+    }
+
+    // Handle sorting
+    if (selectedSort === "popularity") {
+      results = results.sort((a, b) => b.rating - a.rating);
+    } else if (selectedSort === "newest") {
+      results = results.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
     }
 
     return results;
-  }, [selectedFilter, searchQuery, userRecipes]);
+  }, [selectedFilter, selectedSort, searchQuery, brewingType, userRecipes]);
 
   const pagination = useDynamicPagination(filteredRecipes);
 
-  const handleFilterChange = (filter: BrewType) => {
+  const handleFilterChange = (filter: BrewType | "") => {
     setSelectedFilter(filter);
+    // Reset brewing type when filter changes
+    if (filter !== "drip") {
+      setBrewingType("");
+    }
     pagination.resetPage();
   };
 
@@ -93,12 +117,12 @@ export default function MyRecipes() {
               나만의 커피 레시피를 관리하고 공유하세요.
             </p>
           </div>
-          {/* <Button asChild>
+          <Button asChild>
             <Link to="/recipes/create" className="flex items-center space-x-2">
               <Plus className="h-4 w-4" />
               <span>새 레시피 추가</span>
             </Link>
-          </Button> */}
+          </Button>
         </div>
 
         <div className="mb-6 space-y-4 flex-shrink-0">
@@ -129,48 +153,24 @@ export default function MyRecipes() {
 
           <div>
             <h2 className="text-xl font-semibold mb-4">정렬 및 필터</h2>
-            <div className="flex flex-wrap justify-between">
-              <div className="flex gap-2">
-                <Button
-                  variant={
-                    selectedSort === "popularity" ? "default" : "outline"
-                  }
-                  onClick={() => handleSortChange("popularity")}
-                >
-                  인기순
-                </Button>
-                <Button
-                  variant={selectedSort === "newest" ? "default" : "outline"}
-                  onClick={() => handleSortChange("newest")}
-                >
-                  최신순
-                </Button>
-              </div>
+            <div className="flex flex-wrap gap-4">
+              <SortDropdown 
+                selectedSort={selectedSort}
+                onSortChange={handleSortChange}
+              />
 
-              <Separator orientation="vertical" className="h-6 mx-4" />
+              <FilterDropdown 
+                selectedFilter={selectedFilter}
+                onFilterChange={handleFilterChange}
+              />
 
-              <div className="flex gap-2">
-                <Button
-                  variant={selectedFilter === "all" ? "default" : "outline"}
-                  onClick={() => handleFilterChange("all")}
-                >
-                  전체
-                </Button>
-                <Button
-                  variant={selectedFilter === "drip" ? "default" : "outline"}
-                  onClick={() => handleFilterChange("drip")}
-                >
-                  드립
-                </Button>
-                <Button
-                  variant={
-                    selectedFilter === "espresso" ? "default" : "outline"
-                  }
-                  onClick={() => handleFilterChange("espresso")}
-                >
-                  에스프레소
-                </Button>
-              </div>
+              {/* Conditional Hot/Ice dropdown for drip filter */}
+              {selectedFilter === "drip" && (
+                <BrewingTypeDropdown 
+                  brewingType={brewingType}
+                  onBrewingTypeChange={setBrewingType}
+                />
+              )}
             </div>
           </div>
         </div>
