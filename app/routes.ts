@@ -9,7 +9,11 @@ import {
 export default [
   index("features/home/screens/home.tsx"),
   ...prefix("recipes", [
-    route("/create", "features/recipes/screens/create-recipe.tsx"),
+    layout("features/recipes/layouts/create-recipe-layout.tsx", [
+      route("/create", "features/recipes/screens/create-recipe.tsx"),
+      route("/create/espresso", "features/recipes/screens/create-espresso.tsx"),
+      route("/create/drip", "features/recipes/screens/create-drip.tsx"),
+    ]),
     route("/edit", "features/recipes/screens/edit-recipe.tsx"),
     route("/:id", "features/recipes/screens/recipe.tsx"),
   ]),
