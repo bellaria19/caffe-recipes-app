@@ -91,15 +91,10 @@ export default function Recipe() {
 
         {/* Recipe Parameters */}
         {recipe.espressoParams && (
-          <EspressoRecipeDisplay 
-            params={recipe.espressoParams} 
-            title={recipe.title} 
-          />
+          <EspressoRecipeDisplay params={recipe.espressoParams} />
         )}
 
-        {recipe.dripParams && (
-          <DripRecipeDisplay params={recipe.dripParams} />
-        )}
+        {recipe.dripParams && <DripRecipeDisplay params={recipe.dripParams} />}
 
         {/* Tips */}
         {recipe.tips && (
