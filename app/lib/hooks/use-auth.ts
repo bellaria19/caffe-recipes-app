@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 
 interface User {
   id: string;
@@ -33,9 +33,9 @@ export function useAuth() {
     const demoUser: User = {
       id: '1',
       name: 'John Coffee Lover',
-      email: email
+      email: email,
     };
-    
+
     setUser(demoUser);
     localStorage.setItem('demo_user', JSON.stringify(demoUser));
     return Promise.resolve(demoUser);
@@ -51,9 +51,9 @@ export function useAuth() {
     const demoUser: User = {
       id: '1',
       name: name,
-      email: email
+      email: email,
     };
-    
+
     setUser(demoUser);
     localStorage.setItem('demo_user', JSON.stringify(demoUser));
     return Promise.resolve(demoUser);
@@ -65,6 +65,6 @@ export function useAuth() {
     isAuthenticated: !!user,
     login,
     logout,
-    signup
+    signup,
   };
 }

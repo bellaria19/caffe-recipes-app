@@ -1,101 +1,101 @@
+import { relations, sql } from 'drizzle-orm';
 import {
-  pgTable,
-  uuid,
-  text,
-  integer,
-  timestamp,
-  jsonb,
   check,
-  unique,
+  integer,
+  jsonb,
   numeric,
-} from "drizzle-orm/pg-core";
-import { relations, sql } from "drizzle-orm";
+  pgTable,
+  text,
+  timestamp,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 // Users table
-export const users = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
-  username: text("username").notNull().unique(),
-  profileImageUrl: text("profile_image_url"),
-  createdAt: timestamp("created_at", { withTimezone: true })
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  email: text('email').notNull().unique(),
+  password: text('password').notNull(),
+  username: text('username').notNull().unique(),
+  profileImageUrl: text('profile_image_url'),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
+  updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
 });
 
 // Recipes table
-export const recipes = pgTable("recipes", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
+export const recipes = pgTable('recipes', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id')
     .notNull()
     .references(() => users.id),
-  title: text("title").notNull(),
-  description: text("description"),
-  bean: text("bean"),
-  recipeType: text("recipe_type"),
-  brewingTool: text("brewing_tool"),
-  grindValue: text("grind_value"),
-  recipeDetails: jsonb("recipe_details"),
-  rating: numeric("rating").notNull(),
-  likesCount: integer("likes_count").default(0).notNull(),
-  reviewsCount: integer("reviews_count").default(0).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
+  title: text('title').notNull(),
+  description: text('description'),
+  bean: text('bean'),
+  recipeType: text('recipe_type'),
+  brewingTool: text('brewing_tool'),
+  grindValue: text('grind_value'),
+  recipeDetails: jsonb('recipe_details'),
+  rating: numeric('rating').notNull(),
+  likesCount: integer('likes_count').default(0).notNull(),
+  reviewsCount: integer('reviews_count').default(0).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
+  updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
 });
 
 // Reviews table
 export const reviews = pgTable(
-  "reviews",
+  'reviews',
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id")
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
       .notNull()
       .references(() => users.id),
-    recipeId: uuid("recipe_id")
+    recipeId: uuid('recipe_id')
       .notNull()
       .references(() => recipes.id),
-    rating: integer("rating").notNull(),
-    content: text("content"),
-    createdAt: timestamp("created_at", { withTimezone: true })
+    rating: integer('rating').notNull(),
+    content: text('content'),
+    createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
+    updatedAt: timestamp('updated_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
   },
   (table) => ({
     ratingCheck: check(
-      "rating_check",
-      sql`${table.rating} >= 1 AND ${table.rating} <= 5`
+      'rating_check',
+      sql`${table.rating} >= 1 AND ${table.rating} <= 5`,
     ),
-  })
+  }),
 );
 
 // Likes table
 export const likes = pgTable(
-  "likes",
+  'likes',
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id")
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
       .notNull()
       .references(() => users.id),
-    recipeId: uuid("recipe_id")
+    recipeId: uuid('recipe_id')
       .notNull()
       .references(() => recipes.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
+    createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
   },
   (table) => ({
     uniqueUserRecipeLike: unique().on(table.userId, table.recipeId),
-  })
+  }),
 );
 
 // Relations

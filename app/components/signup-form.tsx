@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Link } from "react-router";
-import { SiGoogle } from "@icons-pack/react-simple-icons";
-import { useAuth } from "@/lib/hooks/use-auth";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/lib/hooks/use-auth';
+import { cn } from '@/lib/utils';
+import { SiGoogle } from '@icons-pack/react-simple-icons';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 export function SignupForm({
   className,
   ...props
-}: React.ComponentProps<"form">) {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+}: React.ComponentProps<'form'>) {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -22,32 +22,36 @@ export function SignupForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       await signup(username, email, password);
-      navigate("/"); // Redirect to home after signup
+      navigate('/'); // Redirect to home after signup
     } catch (error) {
-      console.error("Signup failed:", error);
+      console.error('Signup failed:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
+    <form
+      className={cn('flex flex-col gap-6', className)}
+      onSubmit={handleSubmit}
+      {...props}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Sign up to your account</h1>
       </div>
       <div className="grid gap-6 space-y-3">
         <div className="grid gap-3">
           <Label htmlFor="username">Username</Label>
-          <Input 
-            id="username" 
-            type="text" 
-            placeholder="username" 
+          <Input
+            id="username"
+            type="text"
+            placeholder="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required 
+            required
           />
         </div>
 
@@ -65,17 +69,17 @@ export function SignupForm({
 
         <div className="grid gap-3">
           <Label htmlFor="password">Password</Label>
-          <Input 
-            id="password" 
-            type="password" 
+          <Input
+            id="password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
           />
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "가입 중..." : "Sign up"}
+          {isLoading ? '가입 중...' : 'Sign up'}
         </Button>
 
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -90,7 +94,7 @@ export function SignupForm({
         </Button>
       </div>
       <div className="text-center text-sm">
-        Already have an account?{" "}
+        Already have an account?{' '}
         <Link to="/auth/login" className="underline underline-offset-4">
           Login
         </Link>

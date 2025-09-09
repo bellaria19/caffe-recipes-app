@@ -1,10 +1,10 @@
-import { Outlet } from "react-router";
-import { PageContainer } from "@/components/page-container";
+import { PageContainer } from '@/components/page-container';
+import { Outlet } from 'react-router';
 
 export default function RecipeLayout() {
   return (
     <PageContainer>
-      <div className="container mx-auto p-4 max-w-4xl">
+      <div className="container mx-auto max-w-4xl p-4">
         <Outlet />
       </div>
     </PageContainer>

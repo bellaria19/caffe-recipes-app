@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button";
+import type { Recipe } from '@/lib/types';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -6,11 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
-import { useNavigate } from "react-router";
-import type { Recipe } from "@/lib/types";
+} from '@/components/ui/card';
+import { Star } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -19,20 +20,20 @@ interface RecipeCardProps {
 
 export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
   const navigate = useNavigate();
-  
+
   const handleViewRecipe = () => {
     navigate(`/recipes/${recipe.id}`);
     onViewRecipe?.(recipe);
   };
 
   return (
-    <Card className="hover:shadow-lg hover:dark:shadow-white/20 transition-shadow min-h-[280px] max-h-[400px] min-w-[300px] max-w-[400px] w-full h-fit flex flex-col">
-      <CardHeader className="pb-3 flex-shrink-0">
-        <div className="flex justify-between items-start mb-2">
-          <CardTitle className="text-lg leading-tight line-clamp-2">
+    <Card className="flex h-fit max-h-[400px] min-h-[280px] w-full max-w-[400px] min-w-[300px] flex-col transition-shadow hover:shadow-lg hover:dark:shadow-white/20">
+      <CardHeader className="flex-shrink-0 pb-3">
+        <div className="mb-2 flex items-start justify-between">
+          <CardTitle className="line-clamp-2 text-lg leading-tight">
             {recipe.title}
           </CardTitle>
-          <Badge variant="outline" className="flex-shrink-0 ml-2">
+          <Badge variant="outline" className="ml-2 flex-shrink-0">
             {recipe.brewType}
           </Badge>
         </div>
@@ -41,8 +42,8 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="py-2 flex flex-col justify-between">
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
+      <CardContent className="flex flex-col justify-between py-2">
+        <div className="text-muted-foreground flex items-center justify-between text-sm">
           <p className="line-clamp-1">{recipe.author}</p>
           <div className="flex items-center gap-1">
             <Star
@@ -58,7 +59,7 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
         <Button
           variant="ghost"
           onClick={handleViewRecipe}
-          className="w-full justify-end p-2 h-auto font-medium text-primary hover:text-primary/80 hover:bg-primary/5"
+          className="text-primary hover:text-primary/80 hover:bg-primary/5 h-auto w-full justify-end p-2 font-medium"
         >
           <span>레시피 보기</span>
           <span>→</span>

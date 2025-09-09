@@ -1,5 +1,5 @@
-import { Form } from "react-router";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { Form } from 'react-router';
 
 interface RecipeFormWrapperProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface RecipeFormWrapperProps {
 export function RecipeFormWrapper({
   children,
   onCancel,
-  submitText = "",
+  submitText = '',
   hiddenInputs = [],
 }: RecipeFormWrapperProps) {
   return (

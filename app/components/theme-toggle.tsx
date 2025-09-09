@@ -1,6 +1,6 @@
-import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/lib/theme-context';
+import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -10,7 +10,11 @@ export function ThemeToggle() {
   };
 
   const getIcon = () => {
-    return theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />;
+    return theme === 'dark' ? (
+      <Moon className="h-4 w-4" />
+    ) : (
+      <Sun className="h-4 w-4" />
+    );
   };
 
   const getTooltip = () => {

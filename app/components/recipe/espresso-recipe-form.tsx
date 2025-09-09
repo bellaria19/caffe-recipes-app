@@ -1,15 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { RecipeBasicInfo } from '@/components/recipe/recipe-basic-info';
+import { RecipeFormWrapper } from '@/components/recipe/recipe-form-wrapper';
+import { RecipeTipsForm } from '@/components/recipe/recipe-tips-form';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { RecipeBasicInfo } from "@/components/recipe/recipe-basic-info";
-import { RecipeTipsForm } from "@/components/recipe/recipe-tips-form";
-import { RecipeFormWrapper } from "@/components/recipe/recipe-form-wrapper";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface EspressoRecipeFormProps {
   onCancel?: () => void;
@@ -17,12 +17,12 @@ interface EspressoRecipeFormProps {
 
 export function EspressoRecipeForm({ onCancel }: EspressoRecipeFormProps) {
   const tipPlaceholder =
-    "예:\n• 원두는 추출 직전에 갈아주세요\n• 첫 번째 드롭이 나올 때까지의 시간을 체크해보세요\n• 크레마의 색깔로 추출 상태를 확인할 수 있습니다";
+    '예:\n• 원두는 추출 직전에 갈아주세요\n• 첫 번째 드롭이 나올 때까지의 시간을 체크해보세요\n• 크레마의 색깔로 추출 상태를 확인할 수 있습니다';
 
   return (
     <RecipeFormWrapper
       onCancel={onCancel}
-      hiddenInputs={[{ name: "brewType", value: "espresso" }]}
+      hiddenInputs={[{ name: 'brewType', value: 'espresso' }]}
     >
       <RecipeBasicInfo />
 
@@ -34,7 +34,7 @@ export function EspressoRecipeForm({ onCancel }: EspressoRecipeFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="waterTemperature">물 온도 (°C)</Label>
               <Input

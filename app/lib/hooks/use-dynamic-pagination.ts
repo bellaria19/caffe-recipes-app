@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 function useScreenSize() {
   const [screenSize, setScreenSize] = useState<{
@@ -29,13 +29,16 @@ function useScreenSize() {
 function getItemsPerPage(width: number, height: number): number {
   // Based on Tailwind breakpoints and grid layout
   // grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
-  
+
   let columns = 1;
-  if (width >= 1280) columns = 4; // xl
-  else if (width >= 1024) columns = 3; // lg  
-  else if (width >= 768) columns = 2; // md
+  if (width >= 1280)
+    columns = 4; // xl
+  else if (width >= 1024)
+    columns = 3; // lg
+  else if (width >= 768)
+    columns = 2; // md
   else columns = 1; // sm and below
-  
+
   // Calculate rows based on available height
   // Each card is roughly 320-400px tall plus gaps
   const headerHeight = 200; // Search section + filters
@@ -43,14 +46,14 @@ function getItemsPerPage(width: number, height: number): number {
   const availableHeight = height - headerHeight - footerHeight;
   const cardHeight = 360; // Estimated card height + gap
   const rows = Math.max(1, Math.floor(availableHeight / cardHeight));
-  
+
   return columns * rows;
 }
 
 export function useDynamicPagination<T>(items: T[]) {
   const [currentPage, setCurrentPage] = useState(1);
   const { width, height } = useScreenSize();
-  
+
   const itemsPerPage = useMemo(() => {
     return getItemsPerPage(width, height);
   }, [width, height]);

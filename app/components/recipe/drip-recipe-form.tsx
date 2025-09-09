@@ -1,39 +1,40 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import type { DripStep } from '@/lib/types';
+
+import { BrewingTypeSelector } from '@/components/recipe/brewing-type-selector';
+import { RecipeBasicInfo } from '@/components/recipe/recipe-basic-info';
+import { RecipeFormWrapper } from '@/components/recipe/recipe-form-wrapper';
+import { RecipeTipsForm } from '@/components/recipe/recipe-tips-form';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Plus, Trash2 } from "lucide-react";
-import { RecipeBasicInfo } from "@/components/recipe/recipe-basic-info";
-import { RecipeTipsForm } from "@/components/recipe/recipe-tips-form";
-import { RecipeFormWrapper } from "@/components/recipe/recipe-form-wrapper";
-import { BrewingTypeSelector } from "@/components/recipe/brewing-type-selector";
-import type { DripStep } from "@/lib/types";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface DripRecipeFormProps {
   onCancel?: () => void;
 }
 
 export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
-  const [brewingType, setBrewingType] = useState<"hot" | "ice">("hot");
+  const [brewingType, setBrewingType] = useState<'hot' | 'ice'>('hot');
   const [extractionSteps, setExtractionSteps] = useState<DripStep[]>([
-    { stepName: "Blooming", waterAmount: 40, duration: 30 },
-    { stepName: "Pour 1st", waterAmount: 70 },
-    { stepName: "2nd", waterAmount: 50 },
-    { stepName: "3rd", waterAmount: 50 },
+    { stepName: 'Blooming', waterAmount: 40, duration: 30 },
+    { stepName: 'Pour 1st', waterAmount: 70 },
+    { stepName: '2nd', waterAmount: 50 },
+    { stepName: '3rd', waterAmount: 50 },
   ]);
 
   const tipPlaceholder =
-    "예:\n• 필터를 충분히 적셔서 종이 맛을 제거해주세요\n• 뜸을 들일 때 원두가 균등하게 부풀어 오르는지 확인하세요\n• 물을 부을 때는 중심에서 바깥쪽으로 원을 그려주세요\n• 추출 시간이 너무 길면 분쇄도를 거칠게 조정하세요";
+    '예:\n• 필터를 충분히 적셔서 종이 맛을 제거해주세요\n• 뜸을 들일 때 원두가 균등하게 부풀어 오르는지 확인하세요\n• 물을 부을 때는 중심에서 바깥쪽으로 원을 그려주세요\n• 추출 시간이 너무 길면 분쇄도를 거칠게 조정하세요';
 
   const addStep = () => {
-    setExtractionSteps([...extractionSteps, { stepName: "", waterAmount: 0 }]);
+    setExtractionSteps([...extractionSteps, { stepName: '', waterAmount: 0 }]);
   };
 
   const removeStep = (index: number) => {
@@ -45,7 +46,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
   const updateStep = (
     index: number,
     field: keyof DripStep,
-    value: string | number | undefined
+    value: string | number | undefined,
   ) => {
     const updatedSteps = [...extractionSteps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
@@ -56,9 +57,9 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
     <RecipeFormWrapper
       onCancel={onCancel}
       hiddenInputs={[
-        { name: "brewType", value: "drip" },
-        { name: "brewingType", value: brewingType },
-        { name: "extractionSteps", value: JSON.stringify(extractionSteps) },
+        { name: 'brewType', value: 'drip' },
+        { name: 'brewingType', value: brewingType },
+        { name: 'extractionSteps', value: JSON.stringify(extractionSteps) },
       ]}
     >
       <RecipeBasicInfo />
@@ -76,7 +77,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="grid gap-2">
               <Label htmlFor="coffeeAmount">원두 양 (g)</Label>
               <Input
@@ -129,7 +130,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
               </CardDescription>
             </div>
             <Button type="button" variant="outline" size="sm" onClick={addStep}>
-              <Plus className="h-4 w-4 mr-1" />
+              <Plus className="mr-1 h-4 w-4" />
               단계 추가
             </Button>
           </div>
@@ -138,7 +139,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
           {extractionSteps.map((step, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg"
+              className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-4"
             >
               <div className="grid gap-2">
                 <Label>단계 이름</Label>
@@ -146,7 +147,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
                   placeholder="예: Blooming"
                   value={step.stepName}
                   onChange={(e) =>
-                    updateStep(index, "stepName", e.target.value)
+                    updateStep(index, 'stepName', e.target.value)
                   }
                   required
                 />
@@ -164,8 +165,8 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
                   onChange={(e) =>
                     updateStep(
                       index,
-                      "waterAmount",
-                      parseInt(e.target.value) || 0
+                      'waterAmount',
+                      parseInt(e.target.value) || 0,
                     )
                   }
                   required
@@ -180,12 +181,12 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
                   max="120"
                   step="5"
                   placeholder="30"
-                  value={step.duration || ""}
+                  value={step.duration || ''}
                   onChange={(e) =>
                     updateStep(
                       index,
-                      "duration",
-                      parseInt(e.target.value) || undefined
+                      'duration',
+                      parseInt(e.target.value) || undefined,
                     )
                   }
                 />

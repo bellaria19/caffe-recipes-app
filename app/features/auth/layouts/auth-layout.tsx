@@ -1,12 +1,12 @@
-import { Outlet } from "react-router";
-import { PageContainer } from "@/components/page-container";
+import { PageContainer } from '@/components/page-container';
+import { Outlet } from 'react-router';
 
 export default function AuthLayout() {
   return (
-    <PageContainer className="grid lg:grid-cols-2 items-center justify-center bg-background overflow-hidden">
+    <PageContainer className="bg-background grid items-center justify-center overflow-hidden lg:grid-cols-2">
       <Outlet />
 
-      <div className="bg-muted relative hidden md:block h-full">
+      <div className="bg-muted relative hidden h-full md:block">
         <img
           src="/images/placeholder2.jpg"
           alt="Image"

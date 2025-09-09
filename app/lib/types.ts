@@ -1,6 +1,6 @@
-export type SortType = "popularity" | "newest";
+export type SortType = 'popularity' | 'newest';
 
-export type BrewType = "all" | "drip" | "espresso";
+export type BrewType = 'all' | 'drip' | 'espresso';
 
 export interface Recipe {
   id: string;
@@ -27,7 +27,7 @@ export interface DripParams {
   coffeeAmount: number; // in grams
   waterTemperature: number; // in Celsius
   grindSize?: string; // grinding degree description
-  brewingType?: "hot" | "ice"; // hot or ice brewing
+  brewingType?: 'hot' | 'ice'; // hot or ice brewing
   extractionSteps: DripStep[];
 }
 
