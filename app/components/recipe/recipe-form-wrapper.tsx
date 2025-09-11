@@ -15,21 +15,21 @@ export function RecipeFormWrapper({
   hiddenInputs = [],
 }: RecipeFormWrapperProps) {
   return (
-    <Form method="post" className="space-y-6">
+    <Form method='post' className='space-y-6'>
       {children}
 
       {hiddenInputs.map((input, index) => (
         <input
           key={index}
-          type="hidden"
+          type='hidden'
           name={input.name}
           value={input.value}
         />
       ))}
 
-      <div className="flex gap-4">
-        <Button type="submit">완료</Button>
-        <Button type="button" variant="outline" onClick={onCancel}>
+      <div className='flex gap-4'>
+        <Button type='submit'>완료</Button>
+        <Button type='button' variant='outline' onClick={onCancel}>
           취소
         </Button>
       </div>

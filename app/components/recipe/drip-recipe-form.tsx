@@ -46,7 +46,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
   const updateStep = (
     index: number,
     field: keyof DripStep,
-    value: string | number | undefined,
+    value: string | number | undefined
   ) => {
     const updatedSteps = [...extractionSteps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
@@ -76,43 +76,43 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
             드립 커피 추출에 필요한 핵심 정보를 입력해주세요
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="grid gap-2">
-              <Label htmlFor="coffeeAmount">원두 양 (g)</Label>
+        <CardContent className='space-y-4'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+            <div className='grid gap-2'>
+              <Label htmlFor='coffeeAmount'>원두 양 (g)</Label>
               <Input
-                id="coffeeAmount"
-                name="coffeeAmount"
-                type="number"
-                min="10"
-                max="30"
-                step="1"
-                placeholder="20"
+                id='coffeeAmount'
+                name='coffeeAmount'
+                type='number'
+                min='10'
+                max='30'
+                step='1'
+                placeholder='20'
                 required
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="waterTemperature">물 온도 (°C)</Label>
+            <div className='grid gap-2'>
+              <Label htmlFor='waterTemperature'>물 온도 (°C)</Label>
               <Input
-                id="waterTemperature"
-                name="waterTemperature"
-                type="number"
-                min="85"
-                max="96"
-                step="1"
-                placeholder="93"
+                id='waterTemperature'
+                name='waterTemperature'
+                type='number'
+                min='85'
+                max='96'
+                step='1'
+                placeholder='93'
                 required
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="grindSize">분쇄도</Label>
+            <div className='grid gap-2'>
+              <Label htmlFor='grindSize'>분쇄도</Label>
               <Input
-                id="grindSize"
-                name="grindSize"
-                type="text"
-                placeholder="예: 중간 분쇄 (1,000-1,100μm)"
+                id='grindSize'
+                name='grindSize'
+                type='text'
+                placeholder='예: 중간 분쇄 (1,000-1,100μm)'
                 required
               />
             </div>
@@ -122,29 +122,29 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
 
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className='flex items-center justify-between'>
             <div>
               <CardTitle>추출 단계</CardTitle>
               <CardDescription>
                 각 단계별 물의 양과 시간을 설정해주세요
               </CardDescription>
             </div>
-            <Button type="button" variant="outline" size="sm" onClick={addStep}>
-              <Plus className="mr-1 h-4 w-4" />
+            <Button type='button' variant='outline' size='sm' onClick={addStep}>
+              <Plus className='mr-1 h-4 w-4' />
               단계 추가
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {extractionSteps.map((step, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-4"
+              className='grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-4'
             >
-              <div className="grid gap-2">
+              <div className='grid gap-2'>
                 <Label>단계 이름</Label>
                 <Input
-                  placeholder="예: Blooming"
+                  placeholder='예: Blooming'
                   value={step.stepName}
                   onChange={(e) =>
                     updateStep(index, 'stepName', e.target.value)
@@ -153,54 +153,54 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
                 />
               </div>
 
-              <div className="grid gap-2">
+              <div className='grid gap-2'>
                 <Label>물의 양 (g)</Label>
                 <Input
-                  type="number"
-                  min="10"
-                  max="200"
-                  step="5"
-                  placeholder="40"
+                  type='number'
+                  min='10'
+                  max='200'
+                  step='5'
+                  placeholder='40'
                   value={step.waterAmount}
                   onChange={(e) =>
                     updateStep(
                       index,
                       'waterAmount',
-                      parseInt(e.target.value) || 0,
+                      parseInt(e.target.value) || 0
                     )
                   }
                   required
                 />
               </div>
 
-              <div className="grid gap-2">
+              <div className='grid gap-2'>
                 <Label>시간 (초) - 선택사항</Label>
                 <Input
-                  type="number"
-                  min="5"
-                  max="120"
-                  step="5"
-                  placeholder="30"
+                  type='number'
+                  min='5'
+                  max='120'
+                  step='5'
+                  placeholder='30'
                   value={step.duration || ''}
                   onChange={(e) =>
                     updateStep(
                       index,
                       'duration',
-                      parseInt(e.target.value) || undefined,
+                      parseInt(e.target.value) || undefined
                     )
                   }
                 />
               </div>
 
-              <div className="flex items-end">
+              <div className='flex items-end'>
                 <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
+                  type='button'
+                  variant='outline'
+                  size='sm'
                   onClick={() => removeStep(index)}
                   disabled={extractionSteps.length === 1}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className='h-4 w-4' />
                 </Button>
               </div>
             </div>

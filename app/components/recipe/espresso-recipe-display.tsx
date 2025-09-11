@@ -10,35 +10,35 @@ export function EspressoRecipeDisplay({ params }: EspressoRecipeDisplayProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="-mx-6 -mt-6 mb-4 rounded-t-lg bg-gray-700 py-3 text-center text-white">
+        <CardTitle className='-mx-6 -mt-6 mb-4 rounded-t-lg bg-gray-700 py-3 text-center text-white'>
           에스프레소 추출 가이드
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className='space-y-6'>
         {/* Quick Reference */}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <div className="bg-muted/20 rounded p-3 text-center">
-            <p className="text-muted-foreground mb-1 text-xs font-bold">온도</p>
-            <p className="text-lg font-bold">{params.waterTemperature}℃</p>
+        <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
+          <div className='bg-muted/20 rounded p-3 text-center'>
+            <p className='text-muted-foreground mb-1 text-xs font-bold'>온도</p>
+            <p className='text-lg font-bold'>{params.waterTemperature}℃</p>
           </div>
 
-          <div className="bg-muted/20 rounded p-3 text-center">
-            <p className="text-muted-foreground mb-1 text-xs font-bold">
+          <div className='bg-muted/20 rounded p-3 text-center'>
+            <p className='text-muted-foreground mb-1 text-xs font-bold'>
               도징량
             </p>
-            <p className="text-lg font-bold">{params.coffeeAmount}g</p>
+            <p className='text-lg font-bold'>{params.coffeeAmount}g</p>
           </div>
-          <div className="bg-muted/20 rounded p-3 text-center">
-            <p className="text-muted-foreground mb-1 text-xs font-bold">
+          <div className='bg-muted/20 rounded p-3 text-center'>
+            <p className='text-muted-foreground mb-1 text-xs font-bold'>
               추출시간
             </p>
-            <p className="text-lg font-bold">{params.extractionTime}초</p>
+            <p className='text-lg font-bold'>{params.extractionTime}초</p>
           </div>
-          <div className="bg-muted/20 rounded p-3 text-center">
-            <p className="text-muted-foreground mb-1 text-xs font-bold">
+          <div className='bg-muted/20 rounded p-3 text-center'>
+            <p className='text-muted-foreground mb-1 text-xs font-bold'>
               추출량
             </p>
-            <p className="text-lg font-bold">{params.extractionAmount}ml</p>
+            <p className='text-lg font-bold'>{params.extractionAmount}ml</p>
           </div>
         </div>
       </CardContent>

@@ -1,4 +1,9 @@
+
 {
+  "singleQuote": true,
+  "semi": true,
+  "jsxSingleQuote": true,
+  "trailingComma": "es5",
   "importOrder": [
     "^.+\\.(css|scss|sass|less|styl|svg|png|jpg|jpeg|gif|webp)$",
     "<THIRD_PARTY_TS_TYPES>",
@@ -14,7 +19,5 @@
     "prettier-plugin-tailwindcss"
   ],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "singleQuote": true,
-  "semi": true
+  "importOrderSortSpecifiers": true  
 }

@@ -21,16 +21,16 @@ export function SortDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant='outline' className='flex items-center gap-2'>
           {selectedSort === 'popularity'
             ? '인기순'
             : selectedSort === 'newest'
               ? '최신순'
               : '정렬 선택'}
-          <ChevronDown className="h-4 w-4" />
+          <ChevronDown className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align='start'>
         <DropdownMenuItem onClick={() => onSortChange('popularity')}>
           인기순
         </DropdownMenuItem>

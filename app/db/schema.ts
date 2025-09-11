@@ -73,9 +73,9 @@ export const reviews = pgTable(
   (table) => ({
     ratingCheck: check(
       'rating_check',
-      sql`${table.rating} >= 1 AND ${table.rating} <= 5`,
+      sql`${table.rating} >= 1 AND ${table.rating} <= 5`
     ),
-  }),
+  })
 );
 
 // Likes table
@@ -95,7 +95,7 @@ export const likes = pgTable(
   },
   (table) => ({
     uniqueUserRecipeLike: unique().on(table.userId, table.recipeId),
-  }),
+  })
 );
 
 // Relations

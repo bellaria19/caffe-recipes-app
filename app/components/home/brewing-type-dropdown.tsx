@@ -19,33 +19,33 @@ export function BrewingTypeDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant='outline' className='flex items-center gap-2'>
           {brewingType === 'hot' ? (
             <>
-              <Thermometer className="h-4 w-4" />
+              <Thermometer className='h-4 w-4' />
               HOT
             </>
           ) : brewingType === 'ice' ? (
             <>
-              <Snowflake className="h-4 w-4" />
+              <Snowflake className='h-4 w-4' />
               ICE
             </>
           ) : (
             '추출 방식'
           )}
-          <ChevronDown className="h-4 w-4" />
+          <ChevronDown className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align='start'>
         <DropdownMenuItem onClick={() => onBrewingTypeChange('')}>
           전체
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onBrewingTypeChange('hot')}>
-          <Thermometer className="mr-2 h-4 w-4" />
+          <Thermometer className='mr-2 h-4 w-4' />
           HOT
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onBrewingTypeChange('ice')}>
-          <Snowflake className="mr-2 h-4 w-4" />
+          <Snowflake className='mr-2 h-4 w-4' />
           ICE
         </DropdownMenuItem>
       </DropdownMenuContent>

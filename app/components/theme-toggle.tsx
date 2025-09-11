@@ -11,9 +11,9 @@ export function ThemeToggle() {
 
   const getIcon = () => {
     return theme === 'dark' ? (
-      <Moon className="h-4 w-4" />
+      <Moon className='h-4 w-4' />
     ) : (
-      <Sun className="h-4 w-4" />
+      <Sun className='h-4 w-4' />
     );
   };
 
@@ -23,14 +23,14 @@ export function ThemeToggle() {
 
   return (
     <Button
-      variant="ghost"
-      size="icon"
+      variant='ghost'
+      size='icon'
       onClick={toggleTheme}
       title={getTooltip()}
-      className="h-9 w-9"
+      className='h-9 w-9'
     >
       {getIcon()}
-      <span className="sr-only">Toggle theme</span>
+      <span className='sr-only'>Toggle theme</span>
     </Button>
   );
 }

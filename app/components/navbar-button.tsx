@@ -18,7 +18,7 @@ export function NavbarButton({
   className,
 }: NavbarButtonProps) {
   return (
-    <Button asChild variant={variant} size="sm">
+    <Button asChild variant={variant} size='sm'>
       <Link to={to} className={cn('flex items-center space-x-1', className)}>
         {icon}
         <span>{children}</span>

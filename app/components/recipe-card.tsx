@@ -27,39 +27,39 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
   };
 
   return (
-    <Card className="flex h-fit max-h-[400px] min-h-[280px] w-full max-w-[400px] min-w-[300px] flex-col transition-shadow hover:shadow-lg hover:dark:shadow-white/20">
-      <CardHeader className="flex-shrink-0 pb-3">
-        <div className="mb-2 flex items-start justify-between">
-          <CardTitle className="line-clamp-2 text-lg leading-tight">
+    <Card className='flex h-fit max-h-[400px] min-h-[280px] w-full max-w-[400px] min-w-[300px] flex-col transition-shadow hover:shadow-lg hover:dark:shadow-white/20'>
+      <CardHeader className='flex-shrink-0 pb-3'>
+        <div className='mb-2 flex items-start justify-between'>
+          <CardTitle className='line-clamp-2 text-lg leading-tight'>
             {recipe.title}
           </CardTitle>
-          <Badge variant="outline" className="ml-2 flex-shrink-0">
+          <Badge variant='outline' className='ml-2 flex-shrink-0'>
             {recipe.brewType}
           </Badge>
         </div>
-        <CardDescription className="line-clamp-2">
+        <CardDescription className='line-clamp-2'>
           {recipe.description}
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex flex-col justify-between py-2">
-        <div className="text-muted-foreground flex items-center justify-between text-sm">
-          <p className="line-clamp-1">{recipe.author}</p>
-          <div className="flex items-center gap-1">
+      <CardContent className='flex flex-col justify-between py-2'>
+        <div className='text-muted-foreground flex items-center justify-between text-sm'>
+          <p className='line-clamp-1'>{recipe.author}</p>
+          <div className='flex items-center gap-1'>
             <Star
-              className="h-4 w-4 flex-shrink-0 text-yellow-500"
-              fill="currentColor"
+              className='h-4 w-4 flex-shrink-0 text-yellow-500'
+              fill='currentColor'
             />
-            <span className="whitespace-nowrap">{recipe.rating}/5</span>
+            <span className='whitespace-nowrap'>{recipe.rating}/5</span>
           </div>
         </div>
       </CardContent>
 
-      <CardFooter className="pt-2">
+      <CardFooter className='pt-2'>
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={handleViewRecipe}
-          className="text-primary hover:text-primary/80 hover:bg-primary/5 h-auto w-full justify-end p-2 font-medium"
+          className='text-primary hover:text-primary/80 hover:bg-primary/5 h-auto w-full justify-end p-2 font-medium'
         >
           <span>레시피 보기</span>
           <span>→</span>

@@ -21,7 +21,7 @@ export function FilterDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant='outline' className='flex items-center gap-2'>
           {selectedFilter === ''
             ? '전체'
             : selectedFilter === 'drip'
@@ -29,10 +29,10 @@ export function FilterDropdown({
               : selectedFilter === 'espresso'
                 ? '에스프레소'
                 : '필터 선택'}
-          <ChevronDown className="h-4 w-4" />
+          <ChevronDown className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align='start'>
         <DropdownMenuItem onClick={() => onFilterChange('')}>
           전체
         </DropdownMenuItem>
