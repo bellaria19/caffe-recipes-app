@@ -23,6 +23,11 @@ export default [
     layout('features/auth/layouts/auth-layout.tsx', [
       route('/login', 'features/auth/screens/login.tsx'),
       route('/join', 'features/auth/screens/join.tsx'),
+      route('/logout', 'features/auth/screens/logout.tsx'),
+      ...prefix('social/:provider', [
+        route('/login', 'features/auth/screens/social-login.tsx'),
+        route('/callback', 'features/auth/screens/social-callback.tsx'),
+      ]),
     ]),
   ]),
   ...prefix('/profile', [

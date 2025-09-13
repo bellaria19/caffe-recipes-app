@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-     "format": "prettier --write \"app/**/*.{ts,tsx,js,jsx,json,css,md,mdx}\""
+     "format": "prettier --write \"app/**/*.{ts,tsx,js,jsx,json,css,md,mdx}\"",
+     "db:typegen": "supabase gen types typescript --project-id wjjvtcbbmelbmfgkmwif > database.types.ts"
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^13.7.0",

@@ -1,17 +1,16 @@
 import { NavbarButton } from '@/components/navbar-button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/lib/hooks/use-auth';
 import { Coffee, Home, LogIn, LogOut, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
 
-export function Navbar() {
-  const { isAuthenticated, logout } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-  };
-
+export function Navbar({
+  isLoggedIn,
+  username,
+}: {
+  isLoggedIn: boolean;
+  username?: string;
+}) {
   return (
     <nav className='bg-background/95 supports-[backdrop-filter]:bg-background/60 fixed top-0 right-0 left-0 z-50 border-b backdrop-blur'>
       <div className='container mx-auto flex h-14 items-center justify-between px-4'>
@@ -25,7 +24,7 @@ export function Navbar() {
           </Link>
 
           {/* Show "내 레시피" only when user is logged in */}
-          {isAuthenticated && (
+          {isLoggedIn && (
             <NavbarButton to='/my-recipes' icon={<Home className='h-4 w-4' />}>
               내 레시피
             </NavbarButton>
@@ -33,16 +32,18 @@ export function Navbar() {
         </div>
 
         <div className='flex items-center space-x-2'>
-          {isAuthenticated ? (
+          {isLoggedIn ? (
             /* Show logout when authenticated */
             <Button
               variant='ghost'
               size='sm'
-              onClick={handleLogout}
+              asChild
               className='flex items-center space-x-1'
             >
-              <LogOut className='h-4 w-4' />
-              <span>로그아웃</span>
+              <Link to='/auth/logout'>
+                <LogOut className='h-4 w-4' />
+                로그아웃
+              </Link>
             </Button>
           ) : (
             /* Show login/signup when not authenticated */

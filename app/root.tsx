@@ -3,7 +3,9 @@ import './app.css';
 import type { Route } from './+types/root';
 
 import { Navbar } from '@/components/navbar';
+import { getUser, getUserById } from '@/features/users/queries';
 import { ThemeProvider } from '@/lib/theme-context';
+import { makeSSRClient } from '@/supa-client';
 import {
   Links,
   Meta,
@@ -44,10 +46,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (user) {
+    const profile = await getUserById(client, { id: user?.id });
+    return { user, profile };
+  }
+  return { user: null, profile: null, profile0: null };
+};
+
+export default function App({ loaderData }: Route.ComponentProps) {
+  const isLoggedIn = loaderData.user !== null;
+
   return (
     <ThemeProvider defaultTheme='light' storageKey='moca-theme'>
-      <Navbar />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        // username={loaderData.profile?.username}
+      />
       <main className='pt-14'>
         <Outlet />
       </main>

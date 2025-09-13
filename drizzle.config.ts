@@ -8,7 +8,7 @@ import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
   // Output directory for generated SQL migrations
-  out: "./app/migrations",
+  out: "./app/sql/migrations",
 
   // Location of schema definition files - looks for all schema.ts files in feature directories
   // schema: "./app/features/**/schema.ts",

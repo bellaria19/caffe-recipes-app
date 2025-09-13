@@ -1,6 +1,8 @@
 import type { BrewType, Recipe, SortType } from '@/lib/types';
 import type { MetaFunction } from 'react-router';
 
+import type { Route } from '.react-router/types/app/features/users/screens/+types/my-recipes';
+
 import { BrewingTypeDropdown } from '@/components/home/brewing-type-dropdown';
 import { FilterDropdown } from '@/components/home/filter-dropdown';
 import { SortDropdown } from '@/components/home/sort-dropdown';
@@ -17,12 +19,28 @@ import {
 } from '@/components/ui/pagination';
 import { mockRecipes } from '@/lib/data/recipes';
 import { useDynamicPagination } from '@/lib/hooks/use-dynamic-pagination';
+import { makeSSRClient } from '@/supa-client';
 import { Plus, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { Link, redirect, useSearchParams } from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'My Recipes | Moca' }];
+};
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (user) {
+    console.log('user');
+    console.log(user);
+    // const userRecipes = await getUserRecipes(client, { userId: user.id });
+  } else {
+    return redirect('/auth/login');
+  }
 };
 
 export default function MyRecipes() {
