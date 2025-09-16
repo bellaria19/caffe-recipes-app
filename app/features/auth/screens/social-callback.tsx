@@ -13,7 +13,7 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
   if (!success) {
     return redirect('/auth/login');
   }
-  const { provider } = data;
+  // const { provider } = data;
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   if (!code) {
