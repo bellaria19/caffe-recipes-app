@@ -1,5 +1,5 @@
-import { NavbarButton } from '@/components/navbar-button';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { NavbarButton } from '@/components/common/navbar-button';
+import { ThemeToggle } from '@/components/common/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Coffee, Home, LogIn, LogOut, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';

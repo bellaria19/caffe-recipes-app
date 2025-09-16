@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/Users/bellaria/Documents/nomad/example/wemake/app/common/components/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

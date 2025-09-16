@@ -8,14 +8,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 interface EspressoRecipeFormProps {
   onCancel?: () => void;
 }
 
 export function EspressoRecipeForm({ onCancel }: EspressoRecipeFormProps) {
+  const [useTimeRange, setUseTimeRange] = useState(false);
+  const [useAmountRange, setUseAmountRange] = useState(false);
+
   const tipPlaceholder =
     '예:\n• 원두는 추출 직전에 갈아주세요\n• 첫 번째 드롭이 나올 때까지의 시간을 체크해보세요\n• 크레마의 색깔로 추출 상태를 확인할 수 있습니다';
 
@@ -41,10 +46,10 @@ export function EspressoRecipeForm({ onCancel }: EspressoRecipeFormProps) {
                 id='waterTemperature'
                 name='waterTemperature'
                 type='number'
-                min='85'
+                min='80'
                 max='96'
-                step='0.1'
-                placeholder='92.0'
+                step='1'
+                placeholder='92'
                 required
               />
             </div>
@@ -64,31 +69,109 @@ export function EspressoRecipeForm({ onCancel }: EspressoRecipeFormProps) {
             </div>
 
             <div className='grid gap-2'>
-              <Label htmlFor='extractionTime'>추출 시간 (초)</Label>
-              <Input
-                id='extractionTime'
-                name='extractionTime'
-                type='number'
-                min='20'
-                max='40'
-                step='1'
-                placeholder='28'
-                required
-              />
+              <div className='flex items-center justify-between'>
+                <Label htmlFor='extractionTime'>추출 시간 (초)</Label>
+                <div className='flex items-center space-x-2'>
+                  <Checkbox
+                    id='useTimeRange'
+                    checked={useTimeRange}
+                    onCheckedChange={(checked) => setUseTimeRange(!!checked)}
+                  />
+                  <Label
+                    htmlFor='useTimeRange'
+                    className='text-muted-foreground text-sm'
+                  >
+                    범위 입력
+                  </Label>
+                </div>
+              </div>
+              {useTimeRange ? (
+                <div className='flex gap-2'>
+                  <Input
+                    name='extractionTimeMin'
+                    type='number'
+                    min='20'
+                    max='40'
+                    step='1'
+                    placeholder='25'
+                    required
+                  />
+                  <span className='flex items-center px-2'>~</span>
+                  <Input
+                    name='extractionTimeMax'
+                    type='number'
+                    min='20'
+                    max='40'
+                    step='1'
+                    placeholder='30'
+                    required
+                  />
+                </div>
+              ) : (
+                <Input
+                  id='extractionTime'
+                  name='extractionTime'
+                  type='number'
+                  min='20'
+                  max='40'
+                  step='1'
+                  placeholder='28'
+                  required
+                />
+              )}
             </div>
 
             <div className='grid gap-2'>
-              <Label htmlFor='extractionAmount'>추출량 (ml)</Label>
-              <Input
-                id='extractionAmount'
-                name='extractionAmount'
-                type='number'
-                min='25'
-                max='60'
-                step='1'
-                placeholder='36'
-                required
-              />
+              <div className='flex items-center justify-between'>
+                <Label htmlFor='extractionAmount'>추출량 (ml)</Label>
+                <div className='flex items-center space-x-2'>
+                  <Checkbox
+                    id='useAmountRange'
+                    checked={useAmountRange}
+                    onCheckedChange={(checked) => setUseAmountRange(!!checked)}
+                  />
+                  <Label
+                    htmlFor='useAmountRange'
+                    className='text-muted-foreground text-sm'
+                  >
+                    범위 입력
+                  </Label>
+                </div>
+              </div>
+              {useAmountRange ? (
+                <div className='flex gap-2'>
+                  <Input
+                    name='extractionAmountMin'
+                    type='number'
+                    min='25'
+                    max='60'
+                    step='1'
+                    placeholder='30'
+                    required
+                  />
+                  <span className='flex items-center px-2'>~</span>
+                  <Input
+                    name='extractionAmountMax'
+                    type='number'
+                    min='25'
+                    max='60'
+                    step='1'
+                    placeholder='40'
+                    required
+                  />
+                </div>
+              ) : (
+                <Input
+                  id='extractionAmount'
+                  name='extractionAmount'
+                  type='number'
+                  min='25'
+                  max='60'
+                  step='1'
+                  placeholder='36'
+                  required
+                />
+              )}
             </div>
           </div>
         </CardContent>

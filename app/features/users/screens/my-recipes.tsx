@@ -3,10 +3,10 @@ import type { MetaFunction } from 'react-router';
 
 import type { Route } from '.react-router/types/app/features/users/screens/+types/my-recipes';
 
+import { RecipeCard } from '@/components/common/recipe-card';
 import { BrewingTypeDropdown } from '@/components/home/brewing-type-dropdown';
 import { FilterDropdown } from '@/components/home/filter-dropdown';
 import { SortDropdown } from '@/components/home/sort-dropdown';
-import { RecipeCard } from '@/components/recipe-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {

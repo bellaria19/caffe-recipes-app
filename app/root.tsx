@@ -2,7 +2,7 @@ import './app.css';
 
 import type { Route } from './+types/root';
 
-import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/common/navbar';
 import { getUser, getUserById } from '@/features/users/queries';
 import { ThemeProvider } from '@/lib/theme-context';
 import { makeSSRClient } from '@/supa-client';

@@ -1,6 +1,5 @@
 import type { DripStep } from '@/lib/types';
 
-import { BrewingTypeSelector } from '@/components/recipe/brewing-type-selector';
 import { RecipeBasicInfo } from '@/components/recipe/recipe-basic-info';
 import { RecipeFormWrapper } from '@/components/recipe/recipe-form-wrapper';
 import { RecipeTipsForm } from '@/components/recipe/recipe-tips-form';
@@ -12,8 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,6 +30,13 @@ interface DripRecipeFormProps {
 
 export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
   const [brewingType, setBrewingType] = useState<'hot' | 'ice'>('hot');
+  const [useGrinder, setUseGrinder] = useState(false);
+  const [dripper, setDripper] = useState('');
+  const [customDripper, setCustomDripper] = useState('');
+  const [grindSize, setGrindSize] = useState('');
+  const [grinder, setGrinder] = useState('');
+  const [customGrinder, setCustomGrinder] = useState('');
+  const [grinderSetting, setGrinderSetting] = useState('');
   const [extractionSteps, setExtractionSteps] = useState<DripStep[]>([
     { stepName: 'Blooming', waterAmount: 40, duration: 30 },
     { stepName: 'Pour 1st', waterAmount: 70 },
@@ -59,15 +73,24 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
       hiddenInputs={[
         { name: 'brewType', value: 'drip' },
         { name: 'brewingType', value: brewingType },
+        {
+          name: 'dripper',
+          value: dripper === 'other' ? customDripper : dripper,
+        },
+        { name: 'grindSize', value: useGrinder ? '' : grindSize },
+        {
+          name: 'grinder',
+          value: useGrinder
+            ? grinder === 'other'
+              ? customGrinder
+              : grinder
+            : '',
+        },
+        { name: 'grinderSetting', value: useGrinder ? grinderSetting : '' },
         { name: 'extractionSteps', value: JSON.stringify(extractionSteps) },
       ]}
     >
       <RecipeBasicInfo />
-
-      <BrewingTypeSelector
-        brewingType={brewingType}
-        onBrewingTypeChange={setBrewingType}
-      />
 
       <Card>
         <CardHeader>
@@ -107,14 +130,108 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
             </div>
 
             <div className='grid gap-2'>
-              <Label htmlFor='grindSize'>분쇄도</Label>
-              <Input
-                id='grindSize'
-                name='grindSize'
-                type='text'
-                placeholder='예: 중간 분쇄 (1,000-1,100μm)'
-                required
-              />
+              <Label htmlFor='brewingType'>추출 방식</Label>
+              <Select
+                value={brewingType}
+                onValueChange={(value) =>
+                  setBrewingType(value as 'hot' | 'ice')
+                }
+              >
+                <SelectTrigger className='w-full'>
+                  <SelectValue placeholder='추출 방식을 선택하세요' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='hot'>Hot</SelectItem>
+                  <SelectItem value='ice'>Ice</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>드리퍼 및 분쇄</CardTitle>
+          <CardDescription>
+            사용하는 드리퍼와 분쇄도를 선택해주세요
+          </CardDescription>
+        </CardHeader>
+        <CardContent className='space-y-6'>
+          <div className='flex flex-col gap-6 md:flex-row'>
+            <div className='flex-1 space-y-2'>
+              <Label htmlFor='dripper'>드리퍼</Label>
+              <Select value={dripper} onValueChange={setDripper}>
+                <SelectTrigger className='w-full'>
+                  <SelectValue placeholder='드리퍼를 선택하세요' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='hario-v60'>Hario V60</SelectItem>
+                  <SelectItem value='kalita'>Kalita Wave</SelectItem>
+                  <SelectItem value='origami'>Origami</SelectItem>
+                  <SelectItem value='orea'>Orea</SelectItem>
+                  <SelectItem value='other'>Other</SelectItem>
+                </SelectContent>
+              </Select>
+              {dripper === 'other' && (
+                <Input
+                  placeholder='드리퍼 이름을 입력하세요'
+                  value={customDripper}
+                  onChange={(e) => setCustomDripper(e.target.value)}
+                />
+              )}
+            </div>
+
+            <div className='flex-1 space-y-2'>
+              <div className='flex items-center justify-between'>
+                <Label>분쇄도</Label>
+                <div className='flex items-center space-x-2'>
+                  <Checkbox
+                    id='useGrinder'
+                    checked={useGrinder}
+                    onCheckedChange={(checked) => setUseGrinder(!!checked)}
+                  />
+                  <Label
+                    htmlFor='useGrinder'
+                    className='text-muted-foreground text-sm'
+                  >
+                    그라인더 추가
+                  </Label>
+                </div>
+              </div>
+
+              {useGrinder ? (
+                <div className='space-y-2'>
+                  <Select value={grinder} onValueChange={setGrinder}>
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='그라인더를 선택하세요' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='comandante'>코만단테 C40</SelectItem>
+                      <SelectItem value='ek43'>Ek43</SelectItem>
+                      <SelectItem value='other'>Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {grinder === 'other' && (
+                    <Input
+                      placeholder='그라인더 이름을 입력하세요'
+                      value={customGrinder}
+                      onChange={(e) => setCustomGrinder(e.target.value)}
+                    />
+                  )}
+                  <Input
+                    placeholder='그라인더 설정 값 (예: 25클릭, 설정 15)'
+                    value={grinderSetting}
+                    onChange={(e) => setGrinderSetting(e.target.value)}
+                  />
+                </div>
+              ) : (
+                <Input
+                  placeholder='분쇄도 (예: 중간 분쇄, 1,000-1,100μm)'
+                  value={grindSize}
+                  onChange={(e) => setGrindSize(e.target.value)}
+                />
+              )}
             </div>
           </div>
         </CardContent>
@@ -174,14 +291,14 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
               </div>
 
               <div className='grid gap-2'>
-                <Label>시간 (초) - 선택사항</Label>
+                <Label>시간 (초)</Label>
                 <Input
                   type='number'
                   min='5'
                   max='120'
                   step='5'
                   placeholder='30'
-                  value={step.duration || ''}
+                  value={step.duration}
                   onChange={(e) =>
                     updateStep(
                       index,
@@ -192,7 +309,7 @@ export function DripRecipeForm({ onCancel }: DripRecipeFormProps) {
                 />
               </div>
 
-              <div className='flex items-end'>
+              <div className='flex items-end justify-end'>
                 <Button
                   type='button'
                   variant='outline'

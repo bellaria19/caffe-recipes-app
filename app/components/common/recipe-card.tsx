@@ -15,15 +15,13 @@ import { useNavigate } from 'react-router';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  onViewRecipe?: (recipe: Recipe) => void;
 }
 
-export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
+export function RecipeCard({ recipe }: RecipeCardProps) {
   const navigate = useNavigate();
 
   const handleViewRecipe = () => {
     navigate(`/recipes/${recipe.id}`);
-    onViewRecipe?.(recipe);
   };
 
   return (
@@ -37,8 +35,8 @@ export function RecipeCard({ recipe, onViewRecipe }: RecipeCardProps) {
             {recipe.brewType}
           </Badge>
         </div>
-        <CardDescription className='line-clamp-2'>
-          {recipe.description}
+        <CardDescription className='line-clamp-2 min-h-[2rem]'>
+          {recipe.description || ' '}
         </CardDescription>
       </CardHeader>
 

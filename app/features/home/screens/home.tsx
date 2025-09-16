@@ -1,27 +1,19 @@
 import type { BrewType, Recipe, SortType } from '@/lib/types';
 import type { MetaFunction } from 'react-router';
 
+import { PageContainer } from '@/components/common/page-container';
+import { RecipePagination } from '@/components/common/pagination';
+import { RecipeCard } from '@/components/common/recipe-card';
 import { BrewingTypeDropdown } from '@/components/home/brewing-type-dropdown';
 import { FilterDropdown } from '@/components/home/filter-dropdown';
 import { SortDropdown } from '@/components/home/sort-dropdown';
-import { PageContainer } from '@/components/page-container';
-import { RecipeCard } from '@/components/recipe-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import { Separator } from '@/components/ui/separator';
 import { mockRecipes } from '@/lib/data/recipes';
 import { useDynamicPagination } from '@/lib/hooks/use-dynamic-pagination';
 import { Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Home | Moca' }];
@@ -104,24 +96,11 @@ export default function Home() {
     pagination.resetPage();
   }, [filteredRecipes.length]);
 
-  const handleViewRecipe = (recipe: Recipe) => {
-    // TODO: Navigate to recipe detail page
-    console.log('View recipe:', recipe.title);
-  };
-
   return (
     <PageContainer className='flex flex-col'>
       <div className='container mx-auto flex flex-1 flex-col p-4 py-10'>
-        {/* <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Moca에 오신 것을 환영합니다</h1>
-          <p className="text-muted-foreground">
-            전 세계의 놀라운 커피 레시피를 발견하고 공유하세요.
-          </p>
-        </div> */}
-
         <div className='mb-6 flex-shrink-0 space-y-10'>
           <div>
-            {/* <div className="flex items-center justify-between mb-4"> */}
             <h2 className='mb-4 text-xl font-semibold'>레시피 검색</h2>
             {/* <Button asChild>
                 <Link
@@ -169,7 +148,6 @@ export default function Home() {
                 onFilterChange={handleFilterChange}
               />
 
-              {/* Conditional Hot/Ice dropdown for drip filter */}
               {selectedFilter === 'drip' && (
                 <BrewingTypeDropdown
                   brewingType={brewingType}
@@ -184,11 +162,7 @@ export default function Home() {
           <div className='flex-1'>
             <div className='grid grid-cols-1 justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {pagination.data.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onViewRecipe={handleViewRecipe}
-                />
+                <RecipeCard key={recipe.id} recipe={recipe} />
               ))}
             </div>
 
@@ -206,50 +180,13 @@ export default function Home() {
             )}
           </div>
 
-          {pagination.totalPages >= 1 && (
-            <div className='flex-shrink-0 py-6'>
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={pagination.goToPreviousPage}
-                      className={
-                        !pagination.hasPreviousPage
-                          ? 'pointer-events-none opacity-50'
-                          : 'cursor-pointer'
-                      }
-                    />
-                  </PaginationItem>
-
-                  {Array.from(
-                    { length: pagination.totalPages },
-                    (_, i) => i + 1
-                  ).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        onClick={() => pagination.goToPage(page)}
-                        isActive={page === pagination.currentPage}
-                        className='cursor-pointer'
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={pagination.goToNextPage}
-                      className={
-                        !pagination.hasNextPage
-                          ? 'pointer-events-none opacity-50'
-                          : 'cursor-pointer'
-                      }
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
-          )}
+          <RecipePagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            goToPage={pagination.goToPage}
+            goToNextPage={pagination.goToNextPage}
+            goToPreviousPage={pagination.goToPreviousPage}
+          />
         </div>
       </div>
     </PageContainer>

@@ -1,4 +1,4 @@
-import { PageContainer } from '@/components/page-container';
+import { PageContainer } from '@/components/common/page-container';
 import { type MetaFunction, Outlet } from 'react-router';
 
 export const meta: MetaFunction = () => {
