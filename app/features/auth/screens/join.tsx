@@ -6,7 +6,13 @@ import { Button } from '@/components/ui/button';
 import { checkUsernameExists } from '@/features/auth/queries';
 import { makeSSRClient } from '@/supa-client';
 import { LoaderCircleIcon } from 'lucide-react';
-import { Form, Link, type MetaFunction, redirect, useNavigation } from 'react-router';
+import {
+  Form,
+  Link,
+  type MetaFunction,
+  redirect,
+  useNavigation,
+} from 'react-router';
 import { z } from 'zod';
 
 export const meta: MetaFunction = () => {
@@ -116,12 +122,18 @@ export default function Join({ actionData }: Route.ComponentProps) {
             />
 
             <Button type='submit' className='w-full' disabled={isSubmitting}>
-              {isSubmitting ? <LoaderCircleIcon className='animate-spin' /> : 'Sign up'}
+              {isSubmitting ? (
+                <LoaderCircleIcon className='animate-spin' />
+              ) : (
+                'Sign up'
+              )}
             </Button>
 
-            {actionData && 'signUpError' in actionData && actionData.signUpError && (
-              <p className='text-sm text-red-500'>{actionData.signUpError}</p>
-            )}
+            {actionData &&
+              'signUpError' in actionData &&
+              actionData.signUpError && (
+                <p className='text-sm text-red-500'>{actionData.signUpError}</p>
+              )}
 
             <SocialAuthButtons />
           </Form>

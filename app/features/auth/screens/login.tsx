@@ -114,12 +114,18 @@ export default function Login({ actionData }: Route.ComponentProps) {
             </FormField>
 
             <Button type='submit' className='w-full' disabled={isSubmitting}>
-              {isSubmitting ? <LoaderCircleIcon className='animate-spin' /> : 'Log in'}
+              {isSubmitting ? (
+                <LoaderCircleIcon className='animate-spin' />
+              ) : (
+                'Log in'
+              )}
             </Button>
 
-            {actionData && 'loginError' in actionData && actionData.loginError && (
-              <p className='text-sm text-red-500'>{actionData.loginError}</p>
-            )}
+            {actionData &&
+              'loginError' in actionData &&
+              actionData.loginError && (
+                <p className='text-sm text-red-500'>{actionData.loginError}</p>
+              )}
 
             <SocialAuthButtons />
           </Form>

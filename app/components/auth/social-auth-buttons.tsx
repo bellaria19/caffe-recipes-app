@@ -12,15 +12,31 @@ export function SocialAuthButtons() {
       </div>
 
       <div className='flex w-full flex-col gap-2'>
-        <Button variant='outline' className='w-full' asChild>
-          <Link to='/auth/social/google/login'>
+        <Button
+          variant='outline'
+          className='w-full'
+          onClick={() => console.log('google')}
+          asChild
+        >
+          <Link
+            to='/auth/social/google/login'
+            onClick={() => console.log('google')}
+          >
             <SiGoogle size={24} />
             Google
           </Link>
         </Button>
 
-        <Button variant='outline' className='w-full' asChild>
-          <Link to='/auth/social/kakao/login'>
+        <Button
+          variant='outline'
+          className='w-full'
+          onClick={() => console.log('kakao')}
+          asChild
+        >
+          <Link
+            to='/auth/social/kakao/login'
+            onClick={() => console.log('kakao')}
+          >
             <SiKakao size={24} />
             Kakao
           </Link>
