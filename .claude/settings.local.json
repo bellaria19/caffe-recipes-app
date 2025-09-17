@@ -5,5 +5,13 @@
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "shadcn"
+  ],
+  "disabledMcpjsonServers": [
+    "shared-server",
+    "supabase"
+  ],
+  "enableAllProjectMcpServers": true
 }
