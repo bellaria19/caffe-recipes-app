@@ -1,4 +1,4 @@
-export type SortType = 'popularity' | 'newest';
+export type SortType = 'popularity' | 'popularity-daily' | 'popularity-weekly' | 'newest';
 
 export type BrewType = 'all' | 'drip' | 'espresso';
 
@@ -14,20 +14,33 @@ export interface Recipe {
   createdAt: Date;
   espressoParams?: EspressoParams;
   dripParams?: DripParams;
+  likesCount?: number;
+  reviewsCount?: number;
+  bean?: string;
+  brewingTool?: string;
+  grindValue?: string;
+  profileImageUrl?: string;
 }
 
 export interface EspressoParams {
   waterTemperature: number; // in Celsius
   coffeeAmount: number; // in grams
-  extractionTime: number; // in seconds
-  extractionAmount: number; // in ml
+  extractionTime?: number; // in seconds (single value)
+  extractionTimeMin?: number; // in seconds (range min)
+  extractionTimeMax?: number; // in seconds (range max)
+  extractionAmount?: number; // in ml (single value)
+  extractionAmountMin?: number; // in ml (range min)
+  extractionAmountMax?: number; // in ml (range max)
 }
 
 export interface DripParams {
   coffeeAmount: number; // in grams
   waterTemperature: number; // in Celsius
-  grindSize?: string; // grinding degree description
   brewingType?: 'hot' | 'ice'; // hot or ice brewing
+  dripper?: string; // dripper type
+  grindSize?: string; // grinding degree description (used when no grinder specified)
+  grinder?: string; // grinder name (when grinder is specified)
+  grinderSetting?: string; // grinder setting (when grinder is specified)
   extractionSteps: DripStep[];
 }
 

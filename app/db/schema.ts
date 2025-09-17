@@ -172,6 +172,66 @@ export const likesRelations = relations(likes, ({ one }) => ({
 }));
 
 /**
+ * Daily Popular Recipes table - 일간 인기순 레시피
+ * Cron job을 통해 매일 계산되는 인기순 데이터
+ */
+export const dailyPopularRecipes = pgTable(
+  'daily_popular_recipes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    recipeId: uuid('recipe_id')
+      .notNull()
+      .references(() => recipes.id),
+    likesCount: integer('likes_count').notNull(),
+    date: timestamp('date', { mode: 'date', withTimezone: false }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    dateIdx: index('idx_daily_popular_date').on(table.date.desc()),
+    recipeIdIdx: index('idx_daily_popular_recipe_id').on(table.recipeId),
+  })
+);
+
+/**
+ * Weekly Popular Recipes table - 주간 인기순 레시피
+ * Cron job을 통해 매주 계산되는 인기순 데이터
+ */
+export const weeklyPopularRecipes = pgTable(
+  'weekly_popular_recipes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    recipeId: uuid('recipe_id')
+      .notNull()
+      .references(() => recipes.id),
+    likesCount: integer('likes_count').notNull(),
+    weekStart: timestamp('week_start', { mode: 'date', withTimezone: false }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    weekStartIdx: index('idx_weekly_popular_week_start').on(table.weekStart.desc()),
+    recipeIdIdx: index('idx_weekly_popular_recipe_id').on(table.recipeId),
+  })
+);
+
+export const dailyPopularRecipesRelations = relations(dailyPopularRecipes, ({ one }) => ({
+  recipe: one(recipes, {
+    fields: [dailyPopularRecipes.recipeId],
+    references: [recipes.id],
+  }),
+}));
+
+export const weeklyPopularRecipesRelations = relations(weeklyPopularRecipes, ({ one }) => ({
+  recipe: one(recipes, {
+    fields: [weeklyPopularRecipes.recipeId],
+    references: [recipes.id],
+  }),
+}));
+
+/**
  * TypeScript 타입 정의
  * Drizzle ORM에서 자동으로 추론되는 타입들
  */
@@ -183,6 +243,10 @@ export type Review = typeof reviews.$inferSelect;
 export type NewReview = typeof reviews.$inferInsert;
 export type Like = typeof likes.$inferSelect;
 export type NewLike = typeof likes.$inferInsert;
+export type DailyPopularRecipe = typeof dailyPopularRecipes.$inferSelect;
+export type NewDailyPopularRecipe = typeof dailyPopularRecipes.$inferInsert;
+export type WeeklyPopularRecipe = typeof weeklyPopularRecipes.$inferSelect;
+export type NewWeeklyPopularRecipe = typeof weeklyPopularRecipes.$inferInsert;
 
 /**
  * 애플리케이션에서 사용하는 레시피 상세 정보 타입

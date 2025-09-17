@@ -54,6 +54,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
   if (user) {
     const profile = await getUserById(client, { id: user?.id });
+    console.log('profile', profile);
     return { user, profile };
   }
   return { user: null, profile: null, profile0: null };
