@@ -82,14 +82,49 @@ export function DripRecipeDisplay({ params }: DripRecipeDisplayProps) {
                   {params.waterTemperature}℃
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell className='bg-muted/30 border-r text-center font-medium'>
-                  입자
-                </TableCell>
-                <TableCell className='text-center text-lg font-bold'>
-                  {params.grindSize}
-                </TableCell>
-              </TableRow>
+              {params.dripper && (
+                <TableRow>
+                  <TableCell className='bg-muted/30 border-r text-center font-medium'>
+                    드리퍼
+                  </TableCell>
+                  <TableCell className='text-center text-lg font-bold'>
+                    {params.dripper}
+                  </TableCell>
+                </TableRow>
+              )}
+              {params.grinder ? (
+                <>
+                  <TableRow>
+                    <TableCell className='bg-muted/30 border-r text-center font-medium'>
+                      그라인더
+                    </TableCell>
+                    <TableCell className='text-center text-lg font-bold'>
+                      {params.grinder}
+                    </TableCell>
+                  </TableRow>
+                  {params.grinderSetting && (
+                    <TableRow>
+                      <TableCell className='bg-muted/30 border-r text-center font-medium'>
+                        그라인더 설정
+                      </TableCell>
+                      <TableCell className='text-center text-lg font-bold'>
+                        {params.grinderSetting}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
+              ) : (
+                params.grindSize && (
+                  <TableRow>
+                    <TableCell className='bg-muted/30 border-r text-center font-medium'>
+                      분쇄도
+                    </TableCell>
+                    <TableCell className='text-center text-lg font-bold'>
+                      {params.grindSize}
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </CardContent>

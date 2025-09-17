@@ -32,13 +32,25 @@ export function EspressoRecipeDisplay({ params }: EspressoRecipeDisplayProps) {
             <p className='text-muted-foreground mb-1 text-xs font-bold'>
               추출시간
             </p>
-            <p className='text-lg font-bold'>{params.extractionTime}초</p>
+            <p className='text-lg font-bold'>
+              {params.extractionTime !== undefined
+                ? `${params.extractionTime}초`
+                : params.extractionTimeMin !== undefined && params.extractionTimeMax !== undefined
+                ? `${params.extractionTimeMin}~${params.extractionTimeMax}초`
+                : '-'}
+            </p>
           </div>
           <div className='bg-muted/20 rounded p-3 text-center'>
             <p className='text-muted-foreground mb-1 text-xs font-bold'>
               추출량
             </p>
-            <p className='text-lg font-bold'>{params.extractionAmount}ml</p>
+            <p className='text-lg font-bold'>
+              {params.extractionAmount !== undefined
+                ? `${params.extractionAmount}ml`
+                : params.extractionAmountMin !== undefined && params.extractionAmountMax !== undefined
+                ? `${params.extractionAmountMin}~${params.extractionAmountMax}ml`
+                : '-'}
+            </p>
           </div>
         </div>
       </CardContent>

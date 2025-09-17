@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { mockRecipes } from '@/lib/data/recipes';
 import { ArrowLeft, ChefHat, Clock, Lightbulb, Star } from 'lucide-react';
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 
 export const meta: MetaFunction = ({ params }) => {
   const { id } = params;
@@ -21,6 +21,10 @@ export const meta: MetaFunction = ({ params }) => {
 
 export default function Recipe() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+
+  // Get back URL from search params, default to home
+  const backUrl = searchParams.get('back') ? decodeURIComponent(searchParams.get('back')!) : '/';
 
   // Find the recipe by ID
   const recipe = mockRecipes.find((r) => r.id === id);
@@ -43,7 +47,7 @@ export default function Recipe() {
     <>
       <div className='flex items-center justify-between pb-10'>
         <Button variant='ghost' asChild>
-          <Link to='/' className='flex items-center gap-2'>
+          <Link to={backUrl} className='flex items-center gap-2'>
             <ArrowLeft className='h-4 w-4' />
             홈으로 돌아가기
           </Link>
