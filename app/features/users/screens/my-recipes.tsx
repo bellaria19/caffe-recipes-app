@@ -12,17 +12,17 @@ import { Input } from '@/components/ui/input';
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { mockRecipes } from '@/lib/data/recipes';
-import { useDynamicPagination } from '@/lib/hooks/use-dynamic-pagination';
 import { makeSSRClient } from '@/supa-client';
 import { Plus, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, redirect, useSearchParams } from 'react-router';
+import { Link, redirect, useNavigate, useSearchParams } from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'My Recipes | Moca' }];
@@ -43,11 +43,16 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   }
 };
 
+const ITEMS_PER_PAGE = 12;
+
 export default function MyRecipes() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const initialFilter = (searchParams.get('type') as BrewType) || '';
   const initialSort = (searchParams.get('sort') as SortType) || 'newest';
   const initialQuery = searchParams.get('q') || '';
+  const initialPage = parseInt(searchParams.get('page') || '1', 10);
 
   const [selectedFilter, setSelectedFilter] = useState<BrewType | ''>(
     initialFilter
@@ -55,6 +60,7 @@ export default function MyRecipes() {
   const [selectedSort, setSelectedSort] = useState<SortType | ''>(initialSort);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [brewingType, setBrewingType] = useState<'hot' | 'ice' | ''>(''); // For drip filtering
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   // TODO: Replace with actual user recipes from API/database
   // For now, filtering mockRecipes by author to simulate user's recipes
@@ -99,7 +105,29 @@ export default function MyRecipes() {
     return results;
   }, [selectedFilter, selectedSort, searchQuery, brewingType, userRecipes]);
 
-  const pagination = useDynamicPagination(filteredRecipes);
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredRecipes.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedRecipes = filteredRecipes.slice(startIndex, endIndex);
+
+  // Function to update URL with current state
+  const updateURL = (page: number = currentPage) => {
+    const params = new URLSearchParams();
+    if (selectedFilter) params.set('type', selectedFilter);
+    if (selectedSort) params.set('sort', selectedSort);
+    if (searchQuery) params.set('q', searchQuery);
+    if (page > 1) params.set('page', page.toString());
+
+    const newURL = params.toString() ? `/my-recipes?${params.toString()}` : '/my-recipes';
+    navigate(newURL, { replace: true });
+  };
+
+  // Custom pagination handlers that update URL
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    updateURL(page);
+  };
 
   const handleFilterChange = (filter: BrewType | '') => {
     setSelectedFilter(filter);
@@ -107,23 +135,63 @@ export default function MyRecipes() {
     if (filter !== 'drip') {
       setBrewingType('');
     }
-    pagination.resetPage();
+    setCurrentPage(1);
+    updateURL(1);
   };
 
   const handleSortChange = (sort: SortType) => {
     setSelectedSort(sort);
-    pagination.resetPage();
+    setCurrentPage(1);
+    updateURL(1);
   };
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
-    pagination.resetPage();
+    setCurrentPage(1);
+    updateURL(1);
   };
 
   // Reset pagination when filters change
   useEffect(() => {
-    pagination.resetPage();
+    setCurrentPage(1);
+    updateURL(1);
   }, [filteredRecipes.length]);
+
+  // Pagination link generator
+  const getPaginationItems = () => {
+    const items = [];
+    const showEllipsis = totalPages > 7;
+
+    if (!showEllipsis) {
+      for (let i = 1; i <= totalPages; i++) {
+        items.push(i);
+      }
+    } else {
+      if (currentPage <= 4) {
+        for (let i = 1; i <= 5; i++) {
+          items.push(i);
+        }
+        items.push('ellipsis');
+        items.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        items.push(1);
+        items.push('ellipsis');
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          items.push(i);
+        }
+      } else {
+        items.push(1);
+        items.push('ellipsis');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          items.push(i);
+        }
+        items.push('ellipsis');
+        items.push(totalPages);
+      }
+    }
+
+    return items;
+  };
 
   const handleViewRecipe = (recipe: Recipe) => {
     // TODO: Navigate to recipe detail page
@@ -201,12 +269,8 @@ export default function MyRecipes() {
         <div className='flex flex-1 flex-col'>
           <div className='flex-1'>
             <div className='grid grid-cols-1 justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              {pagination.data.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onViewRecipe={handleViewRecipe}
-                />
+              {paginatedRecipes.map((recipe: Recipe) => (
+                <RecipeCard key={recipe.id} recipe={recipe} />
               ))}
             </div>
 
@@ -254,49 +318,53 @@ export default function MyRecipes() {
             )}
           </div>
 
-          {pagination.totalPages > 1 && (
-            <div className='flex-shrink-0 pt-6'>
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={pagination.goToPreviousPage}
-                      className={
-                        !pagination.hasPreviousPage
-                          ? 'pointer-events-none opacity-50'
-                          : 'cursor-pointer'
-                      }
-                    />
-                  </PaginationItem>
+          {totalPages > 1 && (
+            <Pagination className='mt-8'>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() =>
+                      currentPage > 1 && handlePageChange(currentPage - 1)
+                    }
+                    className={
+                      currentPage <= 1
+                        ? 'pointer-events-none opacity-50'
+                        : 'cursor-pointer'
+                    }
+                  />
+                </PaginationItem>
 
-                  {Array.from(
-                    { length: pagination.totalPages },
-                    (_, i) => i + 1
-                  ).map((page) => (
-                    <PaginationItem key={page}>
+                {getPaginationItems().map((item, index) => (
+                  <PaginationItem key={index}>
+                    {item === 'ellipsis' ? (
+                      <PaginationEllipsis />
+                    ) : (
                       <PaginationLink
-                        onClick={() => pagination.goToPage(page)}
-                        isActive={page === pagination.currentPage}
+                        onClick={() => handlePageChange(item as number)}
+                        isActive={currentPage === item}
                         className='cursor-pointer'
                       >
-                        {page}
+                        {item}
                       </PaginationLink>
-                    </PaginationItem>
-                  ))}
-
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={pagination.goToNextPage}
-                      className={
-                        !pagination.hasNextPage
-                          ? 'pointer-events-none opacity-50'
-                          : 'cursor-pointer'
-                      }
-                    />
+                    )}
                   </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() =>
+                      currentPage < totalPages &&
+                      handlePageChange(currentPage + 1)
+                    }
+                    className={
+                      currentPage >= totalPages
+                        ? 'pointer-events-none opacity-50'
+                        : 'cursor-pointer'
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           )}
         </div>
       </div>
