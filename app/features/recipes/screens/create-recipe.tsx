@@ -1,14 +1,28 @@
+import type { Route } from '.react-router/types/app/features/recipes/screens/+types/create-recipe';
+
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { makeSSRClient } from '@/supa-client';
 import { Coffee, Droplets } from 'lucide-react';
-import { Link, type MetaFunction } from 'react-router';
+import { Link, redirect, type MetaFunction } from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Create Recipe | Moca' }];
+};
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (!user) {
+    return redirect('/auth/login');
+  }
 };
 
 export default function CreateRecipe() {

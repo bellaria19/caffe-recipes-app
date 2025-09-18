@@ -1,4 +1,5 @@
 import type { DripStep } from '@/lib/types';
+import type { Route } from '.react-router/types/app/features/recipes/screens/+types/create-drip';
 
 import { RecipeBasicInfo } from '@/components/recipe/recipe-basic-info';
 import { RecipeFormWrapper } from '@/components/recipe/recipe-form-wrapper';
@@ -21,12 +22,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { makeSSRClient } from '@/supa-client';
 import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { Link, type MetaFunction } from 'react-router';
+import { Link, redirect, type MetaFunction } from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Create Drip Recipe | Moca' }];
+};
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (!user) {
+    return redirect('/auth/login');
+  }
 };
 
 export default function CreateDrip() {

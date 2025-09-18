@@ -53,6 +53,34 @@ export function EspressoRecipeDisplay({ params }: EspressoRecipeDisplayProps) {
             </p>
           </div>
         </div>
+
+        {/* Grind Information */}
+        {(params.grindSize || params.grinder) && (
+          <div className='space-y-3'>
+            <h4 className='text-muted-foreground text-sm font-semibold'>분쇄 정보</h4>
+            <div className='bg-muted/10 rounded-lg p-4'>
+              {params.grinder ? (
+                <div className='space-y-2'>
+                  <div>
+                    <span className='text-muted-foreground text-sm'>그라인더:</span>
+                    <span className='ml-2 font-medium'>{params.grinder}</span>
+                  </div>
+                  {params.grinderSetting && (
+                    <div>
+                      <span className='text-muted-foreground text-sm'>설정:</span>
+                      <span className='ml-2 font-medium'>{params.grinderSetting}</span>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <span className='text-muted-foreground text-sm'>분쇄도:</span>
+                  <span className='ml-2 font-medium'>{params.grindSize}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
