@@ -7,9 +7,9 @@ as $$
 begin
     if new.raw_app_meta_data is not null then
         if new.raw_app_meta_data ? 'provider' AND new.raw_app_meta_data ->> 'provider' = 'email' then
-            if new.raw_app_meta_data ? 'username' then
+            if new.raw_user_meta_data ? 'username' then
                 insert into public.profiles (id, username)
-                values (new.id, new.raw_app_meta_data ->> 'username');
+                values (new.id, new.raw_user_meta_data ->> 'username');
             else
                 insert into public.profiles (id, username)
                 values (new.id, 'email_' || substr(md5(random()::text), 1, 8));
@@ -17,9 +17,9 @@ begin
         end if;
 
         if new.raw_app_meta_data ? 'provider' AND new.raw_app_meta_data ->> 'provider' = 'google' then
-            if new.raw_app_meta_data ? 'username' then
+            if new.raw_user_meta_data ? 'username' then
             insert into public.profiles (id, username)
-            values (new.id, new.raw_app_meta_data ->> 'username');
+            values (new.id, new.raw_user_meta_data ->> 'username');
             else
                 insert into public.profiles (id, username)
                 values (new.id, 'google_' || substr(md5(random()::text), 1, 8));
@@ -27,9 +27,9 @@ begin
         end if;
 
         if new.raw_app_meta_data ? 'provider' AND new.raw_app_meta_data ->> 'provider' = 'kakao' then
-            if new.raw_app_meta_data ? 'username' then
+            if new.raw_user_meta_data ? 'username' then
                 insert into public.profiles (id, username)
-                values (new.id, new.raw_app_meta_data ->> 'username');
+                values (new.id, new.raw_user_meta_data ->> 'username');
             else
                 insert into public.profiles (id, username)
                 values (new.id, 'kakao_' || substr(md5(random()::text), 1, 8));

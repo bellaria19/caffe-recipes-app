@@ -15,11 +15,10 @@ import {
 /**
  * Profiles table - 사용자 정보
  * Supabase Auth와 연동되는 사용자 프로필 정보
+ * 인증 정보는 Supabase Auth에서 관리, 서비스 정보만 저장
  */
 export const profiles = pgTable('profiles', {
   id: uuid('id').primaryKey().defaultRandom(),
-  email: text('email').notNull().unique(),
-  password: text('password').notNull(),
   username: text('username').notNull().unique(),
   profileImageUrl: text('profile_image_url'),
   createdAt: timestamp('created_at', { withTimezone: true })
@@ -32,8 +31,8 @@ export const profiles = pgTable('profiles', {
 
 /**
  * Recipes table - 커피 레시피
- * 에스프레소 및 드립 커피 레시피 정보 저장
- * recipe_details JSONB 필드에 상세 추출 파라미터 저장
+ * 에스프레소 및 드립 커피 레시피의 핵심 정보만 저장
+ * 집계 데이터(좋아요, 리뷰 수 등)는 실시간 계산으로 처리
  */
 export const recipes = pgTable(
   'recipes',
@@ -44,14 +43,11 @@ export const recipes = pgTable(
       .references(() => profiles.id),
     title: text('title').notNull(),
     description: text('description'),
-    bean: text('bean'), // 사용된 원두 정보
-    recipeType: text('recipe_type'), // 'espresso' | 'drip'
-    brewingTool: text('brewing_tool'), // V60, French Press, etc.
-    grindValue: text('grind_value'), // 분쇄도 정보
-    recipeDetails: jsonb('recipe_details'), // EspressoParams | DripParams
-    rating: numeric('rating').notNull().default('0'), // 평균 평점
-    likesCount: integer('likes_count').default(0).notNull(),
-    reviewsCount: integer('reviews_count').default(0).notNull(),
+    bean: text('bean'), // 선택사항: 사용한 원두
+    recipeType: text('recipe_type').notNull(), // 'espresso' | 'drip'
+    brewingTool: text('brewing_tool'), // 선택사항: 사용한 도구
+    tips: text('tips'), // 선택사항: 사용자 팁
+    recipeDetails: jsonb('recipe_details').notNull(), // EspressoParams | DripParams
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -64,7 +60,6 @@ export const recipes = pgTable(
     profileIdIdx: index('idx_recipes_profile_id').on(table.profileId),
     recipeTypeIdx: index('idx_recipes_recipe_type').on(table.recipeType),
     createdAtIdx: index('idx_recipes_created_at').on(table.createdAt.desc()),
-    ratingIdx: index('idx_recipes_rating').on(table.rating.desc()),
   })
 );
 
@@ -206,30 +201,41 @@ export const weeklyPopularRecipes = pgTable(
       .notNull()
       .references(() => recipes.id),
     likesCount: integer('likes_count').notNull(),
-    weekStart: timestamp('week_start', { mode: 'date', withTimezone: false }).notNull(),
+    weekStart: timestamp('week_start', {
+      mode: 'date',
+      withTimezone: false,
+    }).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
   },
   (table) => ({
-    weekStartIdx: index('idx_weekly_popular_week_start').on(table.weekStart.desc()),
+    weekStartIdx: index('idx_weekly_popular_week_start').on(
+      table.weekStart.desc()
+    ),
     recipeIdIdx: index('idx_weekly_popular_recipe_id').on(table.recipeId),
   })
 );
 
-export const dailyPopularRecipesRelations = relations(dailyPopularRecipes, ({ one }) => ({
-  recipe: one(recipes, {
-    fields: [dailyPopularRecipes.recipeId],
-    references: [recipes.id],
-  }),
-}));
+export const dailyPopularRecipesRelations = relations(
+  dailyPopularRecipes,
+  ({ one }) => ({
+    recipe: one(recipes, {
+      fields: [dailyPopularRecipes.recipeId],
+      references: [recipes.id],
+    }),
+  })
+);
 
-export const weeklyPopularRecipesRelations = relations(weeklyPopularRecipes, ({ one }) => ({
-  recipe: one(recipes, {
-    fields: [weeklyPopularRecipes.recipeId],
-    references: [recipes.id],
-  }),
-}));
+export const weeklyPopularRecipesRelations = relations(
+  weeklyPopularRecipes,
+  ({ one }) => ({
+    recipe: one(recipes, {
+      fields: [weeklyPopularRecipes.recipeId],
+      references: [recipes.id],
+    }),
+  })
+);
 
 /**
  * TypeScript 타입 정의
@@ -255,20 +261,30 @@ export type NewWeeklyPopularRecipe = typeof weeklyPopularRecipes.$inferInsert;
 export interface EspressoParams {
   waterTemperature: number; // 온도 (°C)
   coffeeAmount: number; // 원두량 (g)
-  extractionTime: number; // 추출시간 (초)
-  extractionAmount: number; // 추출량 (ml)
+  extractionTime?: number; // 추출시간 단일값 (초)
+  extractionTimeMin?: number; // 추출시간 최소값 (초)
+  extractionTimeMax?: number; // 추출시간 최대값 (초)
+  extractionAmount?: number; // 추출량 단일값 (ml)
+  extractionAmountMin?: number; // 추출량 최소값 (ml)
+  extractionAmountMax?: number; // 추출량 최대값 (ml)
+  grindSize?: string; // 분쇄도 설명
+  grinder?: string; // 그라인더명
+  grinderSetting?: string; // 그라인더 설정
 }
 
 export interface DripParams {
   coffeeAmount: number; // 원두량 (g)
   waterTemperature: number; // 온도 (°C)
-  grindSize?: string; // 분쇄도
   brewingType?: 'hot' | 'ice'; // 추출방식
+  dripper?: string; // 드리퍼 종류
+  grindSize?: string; // 분쇄도 설명
+  grinder?: string; // 그라인더명
+  grinderSetting?: string; // 그라인더 설정
   extractionSteps: DripStep[]; // 추출단계
 }
 
 export interface DripStep {
   stepName: string; // 단계명 (예: "Blooming", "Pour 1st")
-  waterAmount: number; // 물의 양 (ml)
-  duration?: number; // 시간 (초)
+  waterAmount: number; // 물의 양 (g)
+  duration?: number; // 시간 (초, 선택사항)
 }

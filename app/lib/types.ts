@@ -31,6 +31,9 @@ export interface EspressoParams {
   extractionAmount?: number; // in ml (single value)
   extractionAmountMin?: number; // in ml (range min)
   extractionAmountMax?: number; // in ml (range max)
+  grindSize?: string; // grinding degree description (used when no grinder specified)
+  grinder?: string; // grinder name (when grinder is specified)
+  grinderSetting?: string; // grinder setting (when grinder is specified)
 }
 
 export interface DripParams {
