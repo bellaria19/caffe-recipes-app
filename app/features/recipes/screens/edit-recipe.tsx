@@ -1,4 +1,14 @@
+import type { Route } from '.react-router/types/app/features/recipes/screens/+types/edit-recipe';
+
+import { getLoggedInUserId } from '@/features/users/queries';
+import { makeSSRClient } from '@/supa-client';
 import { Form, useParams } from 'react-router';
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+
+  const userId = await getLoggedInUserId(client);
+};
 
 export default function EditRecipe() {
   const { id } = useParams();

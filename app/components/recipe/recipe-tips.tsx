@@ -9,12 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Lightbulb } from 'lucide-react';
 
-interface RecipeTipsFormProps {
-  placeholder: string;
-  rows?: number;
-}
+export function RecipeTips() {
+  const placeholder =
+    '• 원두는 추출 직전에 갈아주세요\n• 첫 번째 드롭이 나올 때까지의 시간을 체크해보세요\n• 크레마의 색깔로 추출 상태를 확인할 수 있습니다';
 
-export function RecipeTipsForm({ placeholder, rows = 4 }: RecipeTipsFormProps) {
   return (
     <Card>
       <CardHeader>
@@ -33,7 +31,7 @@ export function RecipeTipsForm({ placeholder, rows = 4 }: RecipeTipsFormProps) {
             id='tips'
             name='tips'
             placeholder={placeholder}
-            rows={rows}
+            className='resize-none'
           />
         </div>
       </CardContent>

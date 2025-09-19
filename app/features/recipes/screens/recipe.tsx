@@ -1,7 +1,7 @@
 import type { MetaFunction } from 'react-router';
 
-import { DripRecipeDisplay } from '@/components/recipe/drip-recipe-display';
-import { EspressoRecipeDisplay } from '@/components/recipe/espresso-recipe-display';
+import { DripRecipeDisplay } from '@/components/recipe/drip/drip-recipe-display';
+import { EspressoRecipeDisplay } from '@/components/recipe/espresso/espresso-recipe-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,7 +24,9 @@ export default function Recipe() {
   const [searchParams] = useSearchParams();
 
   // Get back URL from search params, default to home
-  const backUrl = searchParams.get('back') ? decodeURIComponent(searchParams.get('back')!) : '/';
+  const backUrl = searchParams.get('back')
+    ? decodeURIComponent(searchParams.get('back')!)
+    : '/';
 
   // Find the recipe by ID
   const recipe = mockRecipes.find((r) => r.id === id);

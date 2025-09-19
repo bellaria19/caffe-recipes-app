@@ -8,16 +8,16 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
-// interface RecipeBasicInfoProps {
-//   titlePlaceholder: string;
-// }
+import { NotebookPen } from 'lucide-react';
 
 export function RecipeBasicInfo() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>기본 정보</CardTitle>
+        <div className='flex items-center gap-2'>
+          <NotebookPen className='h-5 w-5 text-blue-500' />
+          <CardTitle>기본 정보</CardTitle>
+        </div>
         <CardDescription>레시피의 기본 정보를 입력해주세요</CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
@@ -38,7 +38,7 @@ export function RecipeBasicInfo() {
             id='description'
             name='description'
             placeholder='레시피에 대한 간단한 설명'
-            rows={3}
+            className='resize-none'
           />
         </div>
       </CardContent>
