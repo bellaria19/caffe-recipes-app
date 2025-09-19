@@ -258,6 +258,7 @@ export type NewWeeklyPopularRecipe = typeof weeklyPopularRecipes.$inferInsert;
  * 애플리케이션에서 사용하는 레시피 상세 정보 타입
  * recipe_details JSONB 필드에 저장되는 데이터 구조
  */
+/**
 export interface EspressoParams {
   waterTemperature: number; // 온도 (°C)
   coffeeAmount: number; // 원두량 (g)
@@ -288,3 +289,4 @@ export interface DripStep {
   waterAmount: number; // 물의 양 (g)
   duration?: number; // 시간 (초, 선택사항)
 }
+*/

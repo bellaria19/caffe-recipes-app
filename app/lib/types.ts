@@ -1,4 +1,8 @@
-export type SortType = 'popularity' | 'popularity-daily' | 'popularity-weekly' | 'newest';
+export type SortType =
+  | 'popularity'
+  | 'popularity-daily'
+  | 'popularity-weekly'
+  | 'newest';
 
 export type BrewType = 'all' | 'drip' | 'espresso';
 
@@ -23,32 +27,32 @@ export interface Recipe {
 }
 
 export interface EspressoParams {
-  waterTemperature: number; // in Celsius
-  coffeeAmount: number; // in grams
-  extractionTime?: number; // in seconds (single value)
-  extractionTimeMin?: number; // in seconds (range min)
-  extractionTimeMax?: number; // in seconds (range max)
-  extractionAmount?: number; // in ml (single value)
-  extractionAmountMin?: number; // in ml (range min)
-  extractionAmountMax?: number; // in ml (range max)
-  grindSize?: string; // grinding degree description (used when no grinder specified)
-  grinder?: string; // grinder name (when grinder is specified)
-  grinderSetting?: string; // grinder setting (when grinder is specified)
+  waterTemperature: number; // 온도 (°C)
+  coffeeAmount: number; // 원두량 (g)
+  extractionTime?: number; // 추출시간 단일값 (초)
+  extractionTimeMin?: number; // 추출시간 최소값 (초)
+  extractionTimeMax?: number; // 추출시간 최대값 (초)
+  extractionAmount?: number; // 추출량 단일값 (ml)
+  extractionAmountMin?: number; // 추출량 최소값 (ml)
+  extractionAmountMax?: number; // 추출량 최대값 (ml)
+  grindSize?: string; // 분쇄도 설명
+  grinder?: string; // 그라인더명
+  grinderSetting?: string; // 그라인더 설정
 }
 
 export interface DripParams {
-  coffeeAmount: number; // in grams
-  waterTemperature: number; // in Celsius
-  brewingType?: 'hot' | 'ice'; // hot or ice brewing
-  dripper?: string; // dripper type
-  grindSize?: string; // grinding degree description (used when no grinder specified)
-  grinder?: string; // grinder name (when grinder is specified)
-  grinderSetting?: string; // grinder setting (when grinder is specified)
-  extractionSteps: DripStep[];
+  coffeeAmount: number; // 원두량 (g)
+  waterTemperature: number; // 온도 (°C)
+  brewingType?: 'hot' | 'ice'; // 추출방식
+  dripper?: string; // 드리퍼 종류
+  grindSize?: string; // 분쇄도 설명
+  grinder?: string; // 그라인더명
+  grinderSetting?: string; // 그라인더 설정
+  extractionSteps: DripStep[]; // 추출단계
 }
 
 export interface DripStep {
-  stepName: string; // e.g., "Blooming", "Pour 1st", "2nd", "3rd"
-  waterAmount: number; // in grams
-  duration?: number; // in seconds (optional for blooming time)
+  stepName: string; // 단계명 (예: "Blooming", "Pour 1st")
+  waterAmount: number; // 물의 양 (g)
+  duration?: number; // 시간 (초, 선택사항)
 }
