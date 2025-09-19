@@ -10,11 +10,11 @@ export default function AuthLayout() {
     <PageContainer className='bg-background grid items-center justify-center overflow-hidden lg:grid-cols-2'>
       <Outlet />
 
-      <div className='bg-muted relative hidden h-full md:block'>
+      <div className='bg-muted relative hidden h-full lg:block'>
         <img
           src='/images/placeholder2.jpg'
           alt='Image'
-          className='absolute inset-0 w-full object-cover'
+          className='absolute inset-0 h-full w-full object-cover'
         />
       </div>
     </PageContainer>

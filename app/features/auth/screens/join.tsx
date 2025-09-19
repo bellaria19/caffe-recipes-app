@@ -20,9 +20,25 @@ export const meta: MetaFunction = () => {
 };
 
 const formSchema = z.object({
-  username: z.string().min(4),
-  email: z.string().email(),
-  password: z.string().min(8),
+  username: z
+    .string({
+      required_error: 'Username is required',
+    })
+    .min(4, {
+      message: 'Username must be at least 4 characters',
+    }),
+  email: z
+    .string({
+      required_error: 'Email is required',
+    })
+    .email('Invalid email address'),
+  password: z
+    .string({
+      required_error: 'Password is required',
+    })
+    .min(8, {
+      message: 'Password must be at least 8 characters',
+    }),
 });
 
 export const action = async ({ request }: Route.ActionArgs) => {
@@ -38,7 +54,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
     username: data.username,
   });
   if (usernameExists) {
-    return { formErrors: { username: 'Username already exists' } };
+    return { formErrors: { username: ['Username already exists'] } };
   }
 
   const { client, headers } = makeSSRClient(request);
@@ -69,57 +85,60 @@ export default function Join({ actionData }: Route.ComponentProps) {
 
   return (
     <div className='flex flex-1 items-center justify-center'>
-      <div className='w-full max-w-sm'>
+      <div className='w-full max-w-sm p-4'>
         <div className='flex flex-col gap-6'>
           <div className='flex flex-col items-center gap-2 text-center'>
             <h1 className='text-2xl font-bold'>Sign up to your account</h1>
           </div>
 
-          <Form className='grid gap-6 space-y-3' method='post'>
+          <Form className='space-y-6' method='post'>
             <FormField
               label='Username'
               name='username'
+              id='username'
               type='text'
               placeholder='Enter your username'
               required
-              error={
-                actionData && 'formErrors' in actionData
-                  ? actionData?.formErrors?.username
-                  : undefined
-              }
             />
+            {actionData &&
+              'formErrors' in actionData &&
+              actionData.formErrors?.username && (
+                <p className='text-sm text-red-500'>
+                  {actionData.formErrors?.username}
+                </p>
+              )}
 
             <FormField
               label='Email'
               name='email'
+              id='email'
               type='email'
               placeholder='moca@example.com'
               required
-              error={
-                actionData &&
-                'formErrors' in actionData &&
-                actionData.formErrors &&
-                'email' in actionData.formErrors
-                  ? actionData.formErrors.email
-                  : undefined
-              }
             />
+            {actionData &&
+              'formErrors' in actionData &&
+              actionData.formErrors?.email && (
+                <p className='text-sm text-red-500'>
+                  {actionData.formErrors?.email}
+                </p>
+              )}
 
             <FormField
               label='Password'
               name='password'
+              id='password'
               type='password'
               placeholder='password'
               required
-              error={
-                actionData &&
-                'formErrors' in actionData &&
-                actionData.formErrors &&
-                'password' in actionData.formErrors
-                  ? actionData.formErrors.password
-                  : undefined
-              }
             />
+            {actionData &&
+              'formErrors' in actionData &&
+              actionData.formErrors?.password && (
+                <p className='text-sm text-red-500'>
+                  {actionData.formErrors?.password}
+                </p>
+              )}
 
             <Button type='submit' className='w-full' disabled={isSubmitting}>
               {isSubmitting ? (

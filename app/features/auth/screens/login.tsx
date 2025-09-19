@@ -64,54 +64,52 @@ export default function Login({ actionData }: Route.ComponentProps) {
 
   return (
     <div className='flex flex-1 items-center justify-center'>
-      <div className='w-full max-w-sm'>
+      <div className='w-full max-w-sm p-4'>
         <div className='flex flex-col gap-6'>
           <div className='flex flex-col items-center gap-2 text-center'>
             <h1 className='text-2xl font-bold'>Login to your account</h1>
-            <p className='text-muted-foreground text-sm text-balance'>
-              Enter your email below to login to your account
-            </p>
           </div>
 
-          <Form className='grid gap-6 space-y-3' method='post'>
+          <Form className='space-y-6' method='post'>
             <FormField
               label='Email'
               name='email'
+              id='email'
               type='email'
               placeholder='moca@example.com'
               required
-              error={
-                actionData &&
-                'formErrors' in actionData &&
-                actionData.formErrors &&
-                'email' in actionData.formErrors
-                  ? actionData.formErrors?.email
-                  : undefined
-              }
             />
+            {actionData &&
+              'formErrors' in actionData &&
+              actionData.formErrors?.email && (
+                <p className='text-sm text-red-500'>
+                  {actionData.formErrors?.email}
+                </p>
+              )}
 
             <FormField
               label='Password'
               name='password'
+              id='password'
               type='password'
               placeholder='password'
               required
-              error={
-                actionData &&
-                'formErrors' in actionData &&
-                actionData.formErrors &&
-                'password' in actionData.formErrors
-                  ? actionData.formErrors.password
-                  : undefined
-              }
             >
               <Link
                 to='#'
-                className='ml-auto text-sm underline-offset-4 hover:underline'
+                className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
               >
                 Forgot your password?
               </Link>
             </FormField>
+
+            {actionData &&
+              'formErrors' in actionData &&
+              actionData.formErrors?.password && (
+                <p className='text-sm text-red-500'>
+                  {actionData.formErrors?.password}
+                </p>
+              )}
 
             <Button type='submit' className='w-full' disabled={isSubmitting}>
               {isSubmitting ? (
