@@ -1,6 +1,6 @@
 import type { Route } from '.react-router/types/app/features/auth/screens/+types/join';
 
-import { FormField } from '@/components/auth/form-field';
+import { AuthInputField } from '@/components/auth/auth-input-field';
 import { SocialAuthButtons } from '@/components/auth/social-auth-buttons';
 import { Button } from '@/components/ui/button';
 import { checkUsernameExists } from '@/features/auth/queries';
@@ -92,7 +92,7 @@ export default function Join({ actionData }: Route.ComponentProps) {
           </div>
 
           <Form className='space-y-6' method='post'>
-            <FormField
+            <AuthInputField
               label='Username'
               name='username'
               id='username'
@@ -108,7 +108,7 @@ export default function Join({ actionData }: Route.ComponentProps) {
                 </p>
               )}
 
-            <FormField
+            <AuthInputField
               label='Email'
               name='email'
               id='email'
@@ -124,7 +124,7 @@ export default function Join({ actionData }: Route.ComponentProps) {
                 </p>
               )}
 
-            <FormField
+            <AuthInputField
               label='Password'
               name='password'
               id='password'

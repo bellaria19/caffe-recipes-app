@@ -2,7 +2,7 @@ import type { MetaFunction } from 'react-router';
 
 import type { Route } from '.react-router/types/app/features/auth/screens/+types/login';
 
-import { FormField } from '@/components/auth/form-field';
+import { AuthInputField } from '@/components/auth/auth-input-field';
 import { SocialAuthButtons } from '@/components/auth/social-auth-buttons';
 import { Button } from '@/components/ui/button';
 import { makeSSRClient } from '@/supa-client';
@@ -71,7 +71,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
           </div>
 
           <Form className='space-y-6' method='post'>
-            <FormField
+            <AuthInputField
               label='Email'
               name='email'
               id='email'
@@ -87,7 +87,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 </p>
               )}
 
-            <FormField
+            <AuthInputField
               label='Password'
               name='password'
               id='password'
@@ -101,7 +101,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
               >
                 Forgot your password?
               </Link>
-            </FormField>
+            </AuthInputField>
 
             {actionData &&
               'formErrors' in actionData &&
