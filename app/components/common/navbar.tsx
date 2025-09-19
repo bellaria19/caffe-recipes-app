@@ -25,7 +25,10 @@ export function Navbar({
 
           {/* Show "내 레시피" only when user is logged in */}
           {isLoggedIn && (
-            <NavbarButton to='/my-recipes' icon={<Home className='h-4 w-4' />}>
+            <NavbarButton
+              to={`/users/${username}/my-recipes`}
+              icon={<Home className='h-4 w-4' />}
+            >
               내 레시피
             </NavbarButton>
           )}

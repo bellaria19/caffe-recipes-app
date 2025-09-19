@@ -3,7 +3,7 @@ import './app.css';
 import type { Route } from './+types/root';
 
 import { Navbar } from '@/components/common/navbar';
-import { getUser, getUserById } from '@/features/users/queries';
+import { getUserById } from '@/features/users/queries';
 import { ThemeProvider } from '@/lib/theme-context';
 import { makeSSRClient } from '@/supa-client';
 import {
@@ -54,10 +54,11 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
   if (user) {
     const profile = await getUserById(client, { id: user?.id });
+    console.log('user', user);
     console.log('profile', profile);
     return { user, profile };
   }
-  return { user: null, profile: null, profile0: null };
+  return { user: null, profile: null };
 };
 
 export default function App({ loaderData }: Route.ComponentProps) {
@@ -67,7 +68,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
     <ThemeProvider defaultTheme='light' storageKey='moca-theme'>
       <Navbar
         isLoggedIn={isLoggedIn}
-        // username={loaderData.profile?.username}
+        username={loaderData.user?.user_metadata.username}
       />
       <main className='pt-14'>
         <Outlet />

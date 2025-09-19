@@ -35,8 +35,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   } = await client.auth.getUser();
 
   if (user) {
-    console.log('user');
-    console.log(user);
+    console.log('user', user);
     // const userRecipes = await getUserRecipes(client, { userId: user.id });
   } else {
     return redirect('/auth/login');
@@ -45,7 +44,8 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 const ITEMS_PER_PAGE = 12;
 
-export default function MyRecipes() {
+export default function MyRecipes({ params }: Route.ComponentProps) {
+  const { username } = params;
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -119,7 +119,9 @@ export default function MyRecipes() {
     if (searchQuery) params.set('q', searchQuery);
     if (page > 1) params.set('page', page.toString());
 
-    const newURL = params.toString() ? `/my-recipes?${params.toString()}` : '/my-recipes';
+    const newURL = params.toString()
+      ? `/users/${username}/my-recipes?${params.toString()}`
+      : `/users/${username}/my-recipes`;
     navigate(newURL, { replace: true });
   };
 
