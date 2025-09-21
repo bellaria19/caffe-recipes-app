@@ -1,12 +1,12 @@
 import type { MetaFunction } from 'react-router';
 
-import { DripRecipeDisplay } from '@/components/recipe/drip/drip-recipe-display';
-import { EspressoRecipeDisplay } from '@/components/recipe/espresso/espresso-recipe-display';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DisplayBasicInfo } from '@/features/recipes/components/display-basic-info';
+import { DisplayOptionalInfo } from '@/features/recipes/components/display-optional-info';
+import { DisplayParameters } from '@/features/recipes/components/display-parameters';
+import { DisplayTips } from '@/features/recipes/components/display-tips';
 import { mockRecipes } from '@/lib/data/recipes';
-import { ArrowLeft, ChefHat, Clock, Lightbulb, Star } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Link, useParams, useSearchParams } from 'react-router';
 
 export const meta: MetaFunction = ({ params }) => {
@@ -55,83 +55,25 @@ export default function Recipe() {
           </Link>
         </Button>
 
-        <div className='flex gap-3'>
+        {/* <div className='flex gap-3'>
           <Button asChild>
             <Link to={`/recipes/edit/${id}`}>레시피 수정</Link>
           </Button>
           <Button variant='outline'>레시피 공유</Button>
-        </div>
+        </div> */}
       </div>
 
-      <article className='space-y-6'>
-        {/* Recipe Header */}
-        <Card>
-          <CardHeader>
-            <div className='flex items-start justify-between'>
-              <div className='flex-1'>
-                <div className='mb-2 flex items-center gap-3'>
-                  <h1 className='text-3xl font-bold'>{recipe.title}</h1>
-                  <Badge
-                    variant={
-                      recipe.brewType === 'espresso' ? 'default' : 'outline'
-                    }
-                  >
-                    {recipe.brewType === 'espresso' ? '에스프레소' : '드립'}
-                  </Badge>
-                </div>
-                <p className='text-muted-foreground mb-4 text-lg'>
-                  {recipe.description}
-                </p>
-
-                <div className='text-muted-foreground flex items-center gap-6 text-sm'>
-                  <div className='flex items-center gap-1'>
-                    <ChefHat className='h-4 w-4' />
-                    <span>{recipe.author}</span>
-                  </div>
-                  <div className='flex items-center gap-1'>
-                    <Star
-                      className='h-4 w-4 text-yellow-500'
-                      fill='currentColor'
-                    />
-                    <span>{recipe.rating}/5</span>
-                  </div>
-                  <div className='flex items-center gap-1'>
-                    <Clock className='h-4 w-4' />
-                    <span>
-                      {new Date(recipe.createdAt).toLocaleDateString('ko-KR')}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
-
+      {/* Recipe Header */}
+      <div className='space-y-6'>
+        {/* Basic Info */}
+        <DisplayBasicInfo recipe={recipe} />
         {/* Recipe Parameters */}
-        {recipe.espressoParams && (
-          <EspressoRecipeDisplay params={recipe.espressoParams} />
-        )}
-
-        {recipe.dripParams && <DripRecipeDisplay params={recipe.dripParams} />}
-
+        <DisplayParameters recipe={recipe} />
+        {/* Optional Info */}
+        <DisplayOptionalInfo recipe={recipe} />
         {/* Tips */}
-        {recipe.tips && (
-          <Card>
-            <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <Lightbulb className='h-5 w-5 text-yellow-500' />팁
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className='prose prose-sm max-w-none'>
-                <pre className='font-sans text-sm leading-relaxed whitespace-pre-wrap'>
-                  {recipe.tips}
-                </pre>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </article>
+        {recipe.tips && <DisplayTips recipe={recipe} />}
+      </div>
     </>
   );
 }

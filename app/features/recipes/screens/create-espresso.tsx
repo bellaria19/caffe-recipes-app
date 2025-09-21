@@ -1,12 +1,13 @@
 import type { Route } from '.react-router/types/app/features/recipes/screens/+types/create-espresso';
 
-import { EspressoParameters } from '@/components/recipe/espresso/espresso-parameters';
-import { RecipeBasicInfo } from '@/components/recipe/recipe-basic-info';
-import { RecipeGrindSettings } from '@/components/recipe/recipe-grind-settings';
-import { RecipeTips } from '@/components/recipe/recipe-tips';
 import { Button } from '@/components/ui/button';
+import { EspressoParameters } from '@/features/recipes/components/espresso-parameters';
+import { RecipeBasicInfo } from '@/features/recipes/components/recipe-basic-info';
+import { RecipeOptionalInfo } from '@/features/recipes/components/recipe-optional-info';
+import { RecipeTips } from '@/features/recipes/components/recipe-tips';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
+import { Save } from 'lucide-react';
 import { Form, Link, type MetaFunction } from 'react-router';
 import { z } from 'zod';
 
@@ -198,7 +199,7 @@ export default function CreateEspresso({ actionData }: Route.ComponentProps) {
       <Form method='post' className='space-y-6'>
         <RecipeBasicInfo />
         <EspressoParameters />
-        <RecipeGrindSettings
+        <RecipeOptionalInfo
           recipeType='espresso'
           description='원두 및 분쇄도를 입력해주세요'
         />
@@ -215,8 +216,12 @@ export default function CreateEspresso({ actionData }: Route.ComponentProps) {
         )}
 
         <div className='flex gap-4'>
-          <Button type='submit' className='flex-1'>
-            레시피 저장
+          <Button
+            type='submit'
+            variant='default'
+            className='flex-1 py-3 font-semibold'
+          >
+            <Save className='mr-2 h-4 w-4' />내 레시피 저장하기
           </Button>
         </div>
       </Form>

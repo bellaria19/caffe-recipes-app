@@ -10,59 +10,90 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Star } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { Heart, Star } from 'lucide-react';
+import { Link } from 'react-router';
 
 interface RecipeCardProps {
   recipe: Recipe;
+  isSaved?: boolean;
+  onSave?: (recipeId: string) => void;
+  onUnsave?: (recipeId: string) => void;
 }
 
-export function RecipeCard({ recipe }: RecipeCardProps) {
-  const navigate = useNavigate();
-
-  const handleViewRecipe = () => {
-    navigate(`/recipes/${recipe.id}`);
+export function RecipeCard({
+  recipe,
+  isSaved = false,
+  onSave,
+  onUnsave,
+}: RecipeCardProps) {
+  const handleSaveToggle = () => {
+    if (isSaved) {
+      onUnsave?.(recipe.id);
+    } else {
+      onSave?.(recipe.id);
+    }
   };
 
   return (
-    <Card className='flex h-fit max-h-[400px] min-h-[280px] w-full max-w-[400px] min-w-[300px] flex-col transition-shadow hover:shadow-lg hover:dark:shadow-white/20'>
-      <CardHeader className='flex-shrink-0 pb-3'>
-        <div className='mb-2 flex items-start justify-between'>
-          <CardTitle className='line-clamp-2 text-lg leading-tight'>
-            {recipe.title}
-          </CardTitle>
-          <Badge variant='outline' className='ml-2 flex-shrink-0'>
-            {recipe.brewType}
-          </Badge>
-        </div>
-        <CardDescription className='line-clamp-2 min-h-[2rem]'>
-          {recipe.description || ' '}
-        </CardDescription>
-      </CardHeader>
+    <Link to={`/recipes/${recipe.id}`} className='block'>
+      <Card className='flex h-[240px] w-full flex-col transition-shadow hover:shadow-lg'>
+        <CardHeader className='h-[40px] flex-shrink-0 pb-2'>
+          <div className='flex items-start justify-between'>
+            <CardTitle className='line-clamp-2 h-[2.5rem] text-lg leading-tight'>
+              {recipe.title}
+            </CardTitle>
+            <Badge variant='outline' className='ml-2 flex-shrink-0'>
+              {recipe.brewType === 'espresso' ? '에스프레소' : '드립'}
+            </Badge>
+          </div>
+        </CardHeader>
 
-      <CardContent className='flex flex-col justify-between py-2'>
-        <div className='text-muted-foreground flex items-center justify-between text-sm'>
-          <p className='line-clamp-1'>{recipe.author}</p>
+        <CardContent className='flex h-[100px] flex-col gap-2 pt-0'>
+          <CardDescription className='line-clamp-2 overflow-hidden text-sm leading-relaxed'>
+            {recipe.description || '레시피 설명이 없습니다.'}
+          </CardDescription>
+          <div className='text-muted-foreground mt-auto flex items-center text-sm'>
+            <p className='line-clamp-1'>{recipe.author}</p>
+          </div>
+        </CardContent>
+
+        <CardFooter className='flex h-[100px] items-center justify-between px-6 py-3'>
           <div className='flex items-center gap-1'>
             <Star
               className='h-4 w-4 flex-shrink-0 text-yellow-500'
               fill='currentColor'
             />
-            <span className='whitespace-nowrap'>{recipe.rating}/5</span>
+            <span className='text-foreground text-sm'>{recipe.rating}/5</span>
           </div>
-        </div>
-      </CardContent>
-
-      <CardFooter className='pt-2'>
-        <Button
-          variant='ghost'
-          onClick={handleViewRecipe}
-          className='text-primary hover:text-primary/80 hover:bg-primary/5 h-auto w-full justify-end p-2 font-medium'
-        >
-          <span>레시피 보기</span>
-          <span>→</span>
-        </Button>
-      </CardFooter>
-    </Card>
+          <div className='flex items-center gap-3'>
+            {(onSave || onUnsave) && (
+              <div className='flex items-center gap-1'>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleSaveToggle();
+                  }}
+                  className='h-auto p-1 hover:bg-transparent'
+                >
+                  <Heart
+                    className={`h-4 w-4 ${
+                      isSaved
+                        ? 'fill-red-500 text-red-500'
+                        : 'text-muted-foreground hover:text-red-500'
+                    } transition-colors`}
+                  />
+                </Button>
+                <span className='text-muted-foreground text-sm'>
+                  {recipe.likesCount || 0}
+                </span>
+              </div>
+            )}
+          </div>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 }

@@ -25,9 +25,9 @@ export default function CreateRecipe() {
   return (
     <>
       <div>
-        <h1 className='mb-6 text-3xl font-bold'>새 레시피 만들기</h1>
+        <h1 className='mb-6 text-3xl font-bold'>나만의 커피 레시피 만들기</h1>
         <p className='text-lg font-medium'>
-          추출 노하우와 팁을 레시피로 공유해보세요
+          지금 바로 추출 노하우와 팁을 레시피로 공유하고 커피 애호가들과 소통해보세요
         </p>
       </div>
 
@@ -42,7 +42,7 @@ export default function CreateRecipe() {
                 <Coffee className='text-primary mx-auto mb-4 h-12 w-12' />
                 <CardTitle>에스프레소</CardTitle>
                 <CardDescription className='pt-4'>
-                  에스프레소 레시피를 만들어보세요.
+                  완벽한 에스프레소 추출법을 지금 공유해보세요
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -54,7 +54,7 @@ export default function CreateRecipe() {
                 <Droplets className='text-primary mx-auto mb-4 h-12 w-12' />
                 <CardTitle>드립 커피</CardTitle>
                 <CardDescription className='pt-4'>
-                  드립 커피 레시피를 만들어보세요.
+                  특별한 드립 커피 노하우를 지금 공유해보세요
                 </CardDescription>
               </CardHeader>
             </Card>

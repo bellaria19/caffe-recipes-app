@@ -8,6 +8,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'drip',
     rating: 4.5,
     author: '김사라',
+    likesCount: 12,
     dripParams: {
       coffeeAmount: 25,
       waterTemperature: 93,
@@ -32,6 +33,8 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.8,
     author: '마르코 로시',
+    likesCount: 28,
+    bean: '콜롬비아 수프리모',
     espressoParams: {
       waterTemperature: 92,
       coffeeAmount: 18,
@@ -39,6 +42,9 @@ export const mockRecipes: Recipe[] = [
       extractionTimeMax: 30,
       extractionAmountMin: 34,
       extractionAmountMax: 38,
+      grinder: 'C40',
+      grinderSetting: '25클릭',
+      grindSize: '중간 분쇄 (800-900μm)',
     },
     tips: '• 원두는 추출 직전에 갈아주세요\n• 첫 번째 드롭이 나올 때까지의 시간을 체크해보세요\n• 크레마의 색깔로 추출 상태를 확인할 수 있습니다',
     createdAt: new Date('2024-01-20'),
@@ -50,6 +56,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'drip',
     rating: 4.2,
     author: '엠마 존슨',
+    likesCount: 34,
     dripParams: {
       coffeeAmount: 30,
       waterTemperature: 93,
@@ -70,6 +77,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.7,
     author: '안토니오 비안키',
+    likesCount: 42,
     espressoParams: {
       waterTemperature: 91,
       coffeeAmount: 18,
@@ -86,6 +94,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'drip',
     rating: 4.4,
     author: '제이크 마르티네즈',
+    likesCount: 18,
     dripParams: {
       coffeeAmount: 100,
       waterTemperature: 20,
@@ -107,6 +116,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.1,
     author: '리사 박',
+    likesCount: 26,
     espressoParams: {
       waterTemperature: 93,
       coffeeAmount: 18,
@@ -124,6 +134,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.6,
     author: '이민수',
+    likesCount: 39,
     espressoParams: {
       waterTemperature: 92,
       coffeeAmount: 36,
@@ -140,6 +151,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'drip',
     rating: 4.3,
     author: '박지훈',
+    likesCount: 15,
     dripParams: {
       coffeeAmount: 22,
       waterTemperature: 93,
@@ -163,6 +175,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.5,
     author: '최수진',
+    likesCount: 47,
     espressoParams: {
       waterTemperature: 91,
       coffeeAmount: 36,
@@ -179,6 +192,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.2,
     author: '김정호',
+    likesCount: 31,
     espressoParams: {
       waterTemperature: 93,
       coffeeAmount: 36,
@@ -195,6 +209,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'drip',
     rating: 4.6,
     author: '김미영',
+    likesCount: 23,
     dripParams: {
       coffeeAmount: 20,
       waterTemperature: 92,
@@ -219,6 +234,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'espresso',
     rating: 4.9,
     author: '이바리스타',
+    likesCount: 8,
     espressoParams: {
       waterTemperature: 93,
       coffeeAmount: 19,
@@ -237,6 +253,7 @@ export const mockRecipes: Recipe[] = [
     brewType: 'drip',
     rating: 4.6,
     author: '김미영',
+    likesCount: 36,
     dripParams: {
       coffeeAmount: 20,
       waterTemperature: 92,

@@ -2,10 +2,6 @@ import type { DripStep } from '@/lib/types';
 
 import type { Route } from '.react-router/types/app/features/recipes/screens/+types/create-drip';
 
-import { DripParameters } from '@/components/recipe/drip/drip-parameters';
-import { RecipeBasicInfo } from '@/components/recipe/recipe-basic-info';
-import { RecipeGrindSettings } from '@/components/recipe/recipe-grind-settings';
-import { RecipeTips } from '@/components/recipe/recipe-tips';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -17,9 +13,13 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DripParameters } from '@/features/recipes/components/drip-parameters';
+import { RecipeBasicInfo } from '@/features/recipes/components/recipe-basic-info';
+import { RecipeOptionalInfo } from '@/features/recipes/components/recipe-optional-info';
+import { RecipeTips } from '@/features/recipes/components/recipe-tips';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
-import { DropletsIcon, Plus, Trash2 } from 'lucide-react';
+import { DropletsIcon, Plus, Save, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, type MetaFunction } from 'react-router';
 import { z } from 'zod';
@@ -207,7 +207,7 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
 
         <DripParameters />
 
-        <RecipeGrindSettings
+        <RecipeOptionalInfo
           recipeType='drip'
           description='사용하는 드리퍼와 분쇄도, 원두를 입력해주세요'
         />
@@ -226,9 +226,9 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
             {extractionSteps.map((step, index) => (
               <div
                 key={index}
-                className='grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-4'
+                className='flex flex-col gap-4 rounded-lg border p-4 md:flex-row md:items-end'
               >
-                <div className='grid gap-2'>
+                <div className='grid flex-1 gap-2'>
                   <Label htmlFor='stepName'>단계 이름</Label>
                   <Input
                     id='stepName'
@@ -243,7 +243,7 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
                   />
                 </div>
 
-                <div className='grid gap-2'>
+                <div className='grid flex-1 gap-2'>
                   <Label htmlFor='waterAmount'>물의 양 (g)</Label>
                   <Input
                     id='waterAmount'
@@ -265,7 +265,7 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
                   />
                 </div>
 
-                <div className='grid gap-2'>
+                <div className='grid flex-1 gap-2'>
                   <Label htmlFor='duration'>시간 (초)</Label>
                   <Input
                     id='duration'
@@ -286,7 +286,7 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
                   />
                 </div>
 
-                <div className='flex items-end justify-end'>
+                <div className='flex items-end justify-end md:ml-4'>
                   <Button
                     type='button'
                     variant='outline'
@@ -329,8 +329,12 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
         )}
 
         <div className='flex gap-4'>
-          <Button type='submit' className='flex-1'>
-            레시피 저장
+          <Button
+            type='submit'
+            variant='default'
+            className='flex-1 py-3 font-semibold'
+          >
+            <Save className='mr-2 h-4 w-4' />내 레시피 저장하기
           </Button>
         </div>
       </Form>

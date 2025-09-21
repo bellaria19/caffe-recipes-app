@@ -26,7 +26,7 @@ const dripperOptions = [
   { value: 'other', label: 'Other' },
 ];
 
-export function RecipeGrindSettings({
+export function RecipeOptionalInfo({
   recipeType,
   description,
 }: {
