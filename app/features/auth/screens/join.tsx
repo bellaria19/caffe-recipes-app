@@ -5,7 +5,7 @@ import { SocialAuthButtons } from '@/components/auth/social-auth-buttons';
 import { Button } from '@/components/ui/button';
 import { checkUsernameExists } from '@/features/auth/queries';
 import { makeSSRClient } from '@/supa-client';
-import { LoaderCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon, UserPlus } from 'lucide-react';
 import {
   Form,
   Link,
@@ -140,11 +140,19 @@ export default function Join({ actionData }: Route.ComponentProps) {
                 </p>
               )}
 
-            <Button type='submit' className='w-full' disabled={isSubmitting}>
+            <Button
+              type='submit'
+              variant='default'
+              className='w-full py-3 font-semibold'
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <LoaderCircleIcon className='animate-spin' />
               ) : (
-                'Sign up'
+                <>
+                  <UserPlus className='mr-2 h-4 w-4' />
+                  회원가입
+                </>
               )}
             </Button>
 

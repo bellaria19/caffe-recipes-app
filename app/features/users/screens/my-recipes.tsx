@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/pagination';
 import { mockRecipes } from '@/lib/data/recipes';
 import { makeSSRClient } from '@/supa-client';
-import { Plus, Search, X } from 'lucide-react';
+import { Bookmark, Plus, Search, User, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, redirect, useNavigate, useSearchParams } from 'react-router';
 
@@ -61,6 +61,7 @@ export default function MyRecipes({ params }: Route.ComponentProps) {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [brewingType, setBrewingType] = useState<'hot' | 'ice' | ''>(''); // For drip filtering
   const [currentPage, setCurrentPage] = useState(initialPage);
+  const [activeTab, setActiveTab] = useState<'my-recipes' | 'saved-recipes'>('my-recipes');
 
   // TODO: Replace with actual user recipes from API/database
   // For now, filtering mockRecipes by author to simulate user's recipes
@@ -68,8 +69,14 @@ export default function MyRecipes({ params }: Route.ComponentProps) {
     (recipe) => recipe.author === 'John Coffee Lover' // This should be current user
   );
 
+  // TODO: Replace with actual saved recipes from API/database
+  // For now, using a subset of mockRecipes to simulate saved recipes
+  const savedRecipes = mockRecipes.filter(
+    (recipe) => recipe.author !== 'John Coffee Lover' && recipe.rating >= 4
+  );
+
   const filteredRecipes = useMemo(() => {
-    let results = userRecipes;
+    let results = activeTab === 'my-recipes' ? userRecipes : savedRecipes;
 
     if (searchQuery) {
       results = results.filter(
@@ -103,7 +110,7 @@ export default function MyRecipes({ params }: Route.ComponentProps) {
     }
 
     return results;
-  }, [selectedFilter, selectedSort, searchQuery, brewingType, userRecipes]);
+  }, [selectedFilter, selectedSort, searchQuery, brewingType, activeTab, userRecipes, savedRecipes]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredRecipes.length / ITEMS_PER_PAGE);
@@ -218,6 +225,28 @@ export default function MyRecipes({ params }: Route.ComponentProps) {
           </Button>
         </div>
 
+        {/* Recipe Type Tabs */}
+        <div className='mb-6 flex space-x-1 rounded-lg bg-muted p-1'>
+          <Button
+            variant={activeTab === 'my-recipes' ? 'default' : 'ghost'}
+            size='sm'
+            onClick={() => setActiveTab('my-recipes')}
+            className='flex-1'
+          >
+            <User className='mr-2 h-4 w-4' />
+            내 레시피 ({userRecipes.length})
+          </Button>
+          <Button
+            variant={activeTab === 'saved-recipes' ? 'default' : 'ghost'}
+            size='sm'
+            onClick={() => setActiveTab('saved-recipes')}
+            className='flex-1'
+          >
+            <Bookmark className='mr-2 h-4 w-4' />
+            저장된 레시피 ({savedRecipes.length})
+          </Button>
+        </div>
+
         <div className='mb-6 flex-shrink-0 space-y-4'>
           <div>
             <h2 className='mb-4 text-xl font-semibold'>레시피 검색</h2>
@@ -270,7 +299,7 @@ export default function MyRecipes({ params }: Route.ComponentProps) {
 
         <div className='flex flex-1 flex-col'>
           <div className='flex-1'>
-            <div className='grid grid-cols-1 justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {paginatedRecipes.map((recipe: Recipe) => (
                 <RecipeCard key={recipe.id} recipe={recipe} />
               ))}
@@ -311,7 +340,7 @@ export default function MyRecipes({ params }: Route.ComponentProps) {
                     <Button asChild variant='outline'>
                       <Link to='/' className='flex items-center space-x-2'>
                         <Search className='h-4 w-4' />
-                        <span>레시피 둘러보기</span>
+                        <span>인기 레시피 둘러보기</span>
                       </Link>
                     </Button>
                   </div>

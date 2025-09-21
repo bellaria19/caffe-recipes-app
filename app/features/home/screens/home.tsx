@@ -17,8 +17,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { mockRecipes } from '@/lib/data/recipes';
 import { getPopularRecipes } from '@/lib/data/popular-recipes';
+import { mockRecipes } from '@/lib/data/recipes';
 import { Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
@@ -32,6 +32,21 @@ const ITEMS_PER_PAGE = 12;
 export default function Home() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // TODO: Replace with actual saved recipes from API/database
+  const [savedRecipeIds, setSavedRecipeIds] = useState<string[]>([]);
+
+  const handleSaveRecipe = (recipeId: string) => {
+    setSavedRecipeIds((prev) => [...prev, recipeId]);
+    // TODO: API call to save recipe
+    console.log('Saving recipe:', recipeId);
+  };
+
+  const handleUnsaveRecipe = (recipeId: string) => {
+    setSavedRecipeIds((prev) => prev.filter((id) => id !== recipeId));
+    // TODO: API call to unsave recipe
+    console.log('Unsaving recipe:', recipeId);
+  };
 
   const initialFilter = (searchParams.get('type') as BrewType) || '';
   const initialSort = (searchParams.get('sort') as SortType) || '';
@@ -70,9 +85,10 @@ export default function Home() {
 
   const filteredRecipes = useMemo(() => {
     // Use popular recipes for popularity sorts, otherwise use mock data
-    let results = selectedSort.startsWith('popularity') && popularRecipes.length > 0
-      ? [...popularRecipes]
-      : [...mockRecipes];
+    let results =
+      selectedSort.startsWith('popularity') && popularRecipes.length > 0
+        ? [...popularRecipes]
+        : [...mockRecipes];
 
     if (searchQuery) {
       results = results.filter(
@@ -221,7 +237,7 @@ export default function Home() {
                   type='text'
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
-                  placeholder='이름, 설명, 작성자 또는 재료로 레시피를 검색하세요...'
+                  placeholder='이름, 설명, 작성자로 레시피를 검색하세요...'
                   className='pl-10'
                 />
               </div>
@@ -262,9 +278,15 @@ export default function Home() {
 
         <div className='flex flex-1 flex-col'>
           <div className='flex-1'>
-            <div className='grid grid-cols-1 justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {paginatedRecipes.map((recipe: Recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  isSaved={savedRecipeIds.includes(recipe.id)}
+                  onSave={handleSaveRecipe}
+                  onUnsave={handleUnsaveRecipe}
+                />
               ))}
             </div>
 

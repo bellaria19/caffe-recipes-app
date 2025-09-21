@@ -1,3 +1,4 @@
+import { Save } from 'lucide-react';
 import { Form, Link } from 'react-router';
 
 export default function EditProfile() {
@@ -156,6 +157,7 @@ export default function EditProfile() {
               type='submit'
               className='rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none'
             >
+              <Save className='mr-2 h-4 w-4 inline' />
               변경사항 저장
             </button>
             <Link
