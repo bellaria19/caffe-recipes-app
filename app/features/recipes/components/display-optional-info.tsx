@@ -24,7 +24,9 @@ export function DisplayOptionalInfo({ recipe }: { recipe: Recipe }) {
     dripParams?.grindSize ||
     dripParams?.grinder;
 
-  if (!hasOptionalInfo) return null;
+  if (!hasOptionalInfo) {
+    return null;
+  }
 
   return (
     <Card>

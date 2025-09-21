@@ -2,6 +2,7 @@ import type { MetaFunction } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { DisplayBasicInfo } from '@/features/recipes/components/display-basic-info';
+import { ExtractionStepsDisplay } from '@/features/recipes/components/display-extraction-steps';
 import { DisplayOptionalInfo } from '@/features/recipes/components/display-optional-info';
 import { DisplayParameters } from '@/features/recipes/components/display-parameters';
 import { DisplayTips } from '@/features/recipes/components/display-tips';
@@ -71,8 +72,10 @@ export default function Recipe() {
         <DisplayParameters recipe={recipe} />
         {/* Optional Info */}
         <DisplayOptionalInfo recipe={recipe} />
+        {/* Extraction Steps */}
+        <ExtractionStepsDisplay recipe={recipe} />
         {/* Tips */}
-        {recipe.tips && <DisplayTips recipe={recipe} />}
+        <DisplayTips recipe={recipe} />
       </div>
     </>
   );

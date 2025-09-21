@@ -4,6 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lightbulb } from 'lucide-react';
 
 export function DisplayTips({ recipe }: { recipe: Recipe }) {
+  if (!recipe.tips) {
+    return null;
+  }
+
   return (
     <Card>
       <CardHeader>

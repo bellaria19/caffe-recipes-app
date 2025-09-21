@@ -30,7 +30,9 @@ export function DisplayParameters({ recipe }: { recipe: Recipe }) {
 function EspressoParametersDisplay({ recipe }: { recipe: Recipe }) {
   const params = recipe.espressoParams;
 
-  if (!params) return null;
+  if (!params) {
+    return null;
+  }
 
   return (
     <Card>
