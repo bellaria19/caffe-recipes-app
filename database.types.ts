@@ -108,6 +108,7 @@ export type Database = {
       }
       recipes: {
         Row: {
+          author: string | null
           bean: string | null
           brewing_tool: string | null
           created_at: string
@@ -121,6 +122,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          author?: string | null
           bean?: string | null
           brewing_tool?: string | null
           created_at?: string
@@ -134,6 +136,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          author?: string | null
           bean?: string | null
           brewing_tool?: string | null
           created_at?: string

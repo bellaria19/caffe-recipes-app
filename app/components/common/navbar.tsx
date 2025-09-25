@@ -1,7 +1,7 @@
 import { NavbarButton } from '@/components/common/navbar-button';
 import { ThemeToggle } from '@/components/common/theme-toggle';
 import { Button } from '@/components/ui/button';
-import { Coffee, Home, LogIn, LogOut, UserPlus } from 'lucide-react';
+import { Coffee, LogIn, LogOut, User, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
 
 export function Navbar({
@@ -27,7 +27,7 @@ export function Navbar({
           {isLoggedIn && (
             <NavbarButton
               to={`/users/${username}/my-recipes`}
-              icon={<Home className='h-4 w-4' />}
+              icon={<User className='h-4 w-4' />}
             >
               내 레시피
             </NavbarButton>
@@ -36,18 +36,25 @@ export function Navbar({
 
         <div className='flex items-center space-x-2'>
           {isLoggedIn ? (
-            /* Show logout when authenticated */
-            <Button
-              variant='ghost'
-              size='sm'
-              asChild
-              className='flex items-center space-x-1'
-            >
-              <Link to='/auth/logout'>
-                <LogOut className='h-4 w-4' />
-                로그아웃
-              </Link>
-            </Button>
+            /* Show username and logout when authenticated */
+            <>
+              {username && (
+                <span className='text-muted-foreground text-sm'>
+                  {username}님
+                </span>
+              )}
+              <Button
+                variant='ghost'
+                size='sm'
+                asChild
+                className='flex items-center space-x-1'
+              >
+                <Link to='/auth/logout'>
+                  <LogOut className='h-4 w-4' />
+                  로그아웃
+                </Link>
+              </Button>
+            </>
           ) : (
             /* Show login/signup when not authenticated */
             <>

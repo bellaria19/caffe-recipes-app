@@ -2,10 +2,12 @@ import './app.css';
 
 import type { Route } from './+types/root';
 
+import { AuthStateSync } from '@/components/auth/auth-state-sync';
 import { Navbar } from '@/components/common/navbar';
+import { Toaster } from '@/components/ui/sonner';
 import { getUserById } from '@/features/users/queries';
-import { ThemeProvider } from '@/lib/theme-context';
 import { makeSSRClient } from '@/supa-client';
+import { ThemeProvider } from 'next-themes';
 import {
   Links,
   Meta,
@@ -53,9 +55,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   } = await client.auth.getUser();
 
   if (user) {
-    const profile = await getUserById(client, { id: user?.id });
-    console.log('user', user);
-    console.log('profile', profile);
+    const profile = await getUserById(client, user?.id);
     return { user, profile };
   }
   return { user: null, profile: null };
@@ -65,14 +65,24 @@ export default function App({ loaderData }: Route.ComponentProps) {
   const isLoggedIn = loaderData.user !== null;
 
   return (
-    <ThemeProvider defaultTheme='light' storageKey='moca-theme'>
+    <ThemeProvider
+      attribute='class'
+      defaultTheme='light'
+      storageKey='moca-theme'
+      enableSystem={false}
+    >
+      <AuthStateSync isInitiallyLoggedIn={isLoggedIn} />
       <Navbar
         isLoggedIn={isLoggedIn}
-        username={loaderData.user?.user_metadata.username}
+        username={
+          loaderData.profile?.username ||
+          loaderData.user?.user_metadata.username
+        }
       />
       <main className='pt-14'>
         <Outlet />
       </main>
+      <Toaster />
     </ThemeProvider>
   );
 }
