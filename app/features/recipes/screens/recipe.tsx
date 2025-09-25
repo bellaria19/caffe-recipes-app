@@ -1,4 +1,4 @@
-import type { MetaFunction } from 'react-router';
+import type { Route } from '.react-router/types/app/features/recipes/screens/+types/recipe';
 
 import { Button } from '@/components/ui/button';
 import { DisplayBasicInfo } from '@/features/recipes/components/display-basic-info';
@@ -6,13 +6,13 @@ import { DisplayExtractionSteps } from '@/features/recipes/components/display-ex
 import { DisplayOptionalInfo } from '@/features/recipes/components/display-optional-info';
 import { DisplayParameters } from '@/features/recipes/components/display-parameters';
 import { DisplayTips } from '@/features/recipes/components/display-tips';
-import { mockRecipes } from '@/lib/data/recipes';
+import { getRecipeById } from '@/features/recipes/queries';
+import { makeSSRClient } from '@/supa-client';
 import { ArrowLeft } from 'lucide-react';
-import { Link, useParams, useSearchParams } from 'react-router';
+import { Link, useSearchParams, type MetaFunction } from 'react-router';
 
-export const meta: MetaFunction = ({ params }) => {
-  const { id } = params;
-  const recipe = mockRecipes.find((r) => r.id === id);
+export const meta: MetaFunction = ({ data }) => {
+  const recipe = (data as any)?.recipe;
   return [
     {
       title: recipe ? `${recipe.title} | Moca` : 'Recipe | Moca',
@@ -20,8 +20,20 @@ export const meta: MetaFunction = ({ params }) => {
   ];
 };
 
-export default function Recipe() {
-  const { id } = useParams();
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+  const { id } = params;
+
+  try {
+    const recipe = await getRecipeById(client, id);
+    return { recipe };
+  } catch (error) {
+    console.error('Failed to fetch recipe:', error);
+    throw new Response('Recipe not found', { status: 404 });
+  }
+};
+
+export default function Recipe({ loaderData }: Route.ComponentProps) {
   const [searchParams] = useSearchParams();
 
   // Get back URL from search params, default to home
@@ -29,8 +41,7 @@ export default function Recipe() {
     ? decodeURIComponent(searchParams.get('back')!)
     : '/';
 
-  // Find the recipe by ID
-  const recipe = mockRecipes.find((r) => r.id === id);
+  const recipe = loaderData.recipe;
 
   if (!recipe) {
     return (

@@ -1,64 +1,153 @@
-import type { BrewType, Recipe, SortType } from '@/lib/types';
-import type { MetaFunction } from 'react-router';
+import type { Recipe, RecipeType, SortType } from '@/lib/types';
+
+import type { Route } from '.react-router/types/app/features/home/screens/+types/home';
 
 import { PageContainer } from '@/components/common/page-container';
 import { RecipeCard } from '@/components/common/recipe-card';
-import { BrewingTypeDropdown } from '@/components/home/brewing-type-dropdown';
+import { RecipePagination } from '@/components/common/recipe-pagination';
 import { FilterDropdown } from '@/components/home/filter-dropdown';
 import { SortDropdown } from '@/components/home/sort-dropdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import { addLike, removeLike } from '@/features/home/mutations';
+import { getUserLikes } from '@/features/home/queries';
+import { getRecipes } from '@/features/recipes/queries';
+import { getLoggedInUserId } from '@/features/users/queries';
 import { getPopularRecipes } from '@/lib/data/popular-recipes';
-import { mockRecipes } from '@/lib/data/recipes';
+import { browserClient, makeSSRClient } from '@/supa-client';
 import { Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { type MetaFunction, useNavigate, useSearchParams } from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Home | Moca' }];
 };
 
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const { client } = makeSSRClient(request);
+
+  const url = new URL(request.url);
+  const recipeType = url.searchParams.get('type') as
+    | 'espresso'
+    | 'drip'
+    | undefined;
+  const sortBy = url.searchParams.get('sort') as
+    | 'newest'
+    | 'popularity'
+    | 'popularity-daily'
+    | 'popularity-weekly'
+    | undefined;
+  const page = parseInt(url.searchParams.get('page') || '1', 10);
+
+  const ITEMS_PER_PAGE = 12;
+  const offset = (page - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const recipes = await getRecipes(client, {
+      recipeType: recipeType || undefined,
+      sortBy: sortBy || 'newest',
+      limit: ITEMS_PER_PAGE,
+      offset,
+    });
+
+    // Try to get user likes, but don't fail if user is not authenticated
+    let userLikes: string[] = [];
+    let currentUserId: string | null = null;
+    try {
+      const userId = await getLoggedInUserId(client);
+      userLikes = await getUserLikes(client, userId);
+      currentUserId = userId;
+    } catch (authError) {
+      // User is not authenticated, continue without likes data
+    }
+
+    return { recipes, userLikes, currentUserId };
+  } catch (error) {
+    console.error('Failed to fetch recipes:', error);
+    return { recipes: [], userLikes: [], currentUserId: null };
+  }
+};
+
 const ITEMS_PER_PAGE = 12;
 
-export default function Home() {
+export default function Home({ loaderData }: Route.ComponentProps) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // TODO: Replace with actual saved recipes from API/database
-  const [savedRecipeIds, setSavedRecipeIds] = useState<string[]>([]);
+  // Initialize liked recipes from server data
+  const [likedRecipeIds, setLikedRecipeIds] = useState<string[]>(
+    loaderData.userLikes || []
+  );
 
-  const handleSaveRecipe = (recipeId: string) => {
-    setSavedRecipeIds((prev) => [...prev, recipeId]);
-    // TODO: API call to save recipe
-    console.log('Saving recipe:', recipeId);
+  // Initialize recipes state for dynamic updates
+  const [recipes, setRecipes] = useState<Recipe[]>(loaderData.recipes || []);
+
+  const handleLikeRecipe = async (recipeId: string) => {
+    try {
+      setLikedRecipeIds((prev) => [...prev, recipeId]);
+      // Optimistically update likes count
+      setRecipes((prev) =>
+        prev.map(recipe =>
+          recipe.id === recipeId
+            ? { ...recipe, likesCount: (recipe.likesCount || 0) + 1 }
+            : recipe
+        )
+      );
+
+      const userId = await getLoggedInUserId(browserClient);
+      await addLike(browserClient, { userId, recipeId });
+    } catch (error) {
+      // Revert optimistic updates on error
+      setLikedRecipeIds((prev) => prev.filter((id) => id !== recipeId));
+      setRecipes((prev) =>
+        prev.map(recipe =>
+          recipe.id === recipeId
+            ? { ...recipe, likesCount: Math.max((recipe.likesCount || 0) - 1, 0) }
+            : recipe
+        )
+      );
+      console.error('Error liking recipe:', error);
+    }
   };
 
-  const handleUnsaveRecipe = (recipeId: string) => {
-    setSavedRecipeIds((prev) => prev.filter((id) => id !== recipeId));
-    // TODO: API call to unsave recipe
-    console.log('Unsaving recipe:', recipeId);
+  const handleUnlikeRecipe = async (recipeId: string) => {
+    try {
+      setLikedRecipeIds((prev) => prev.filter((id) => id !== recipeId));
+      // Optimistically update likes count
+      setRecipes((prev) =>
+        prev.map(recipe =>
+          recipe.id === recipeId
+            ? { ...recipe, likesCount: Math.max((recipe.likesCount || 0) - 1, 0) }
+            : recipe
+        )
+      );
+
+      const userId = await getLoggedInUserId(browserClient);
+      await removeLike(browserClient, { userId, recipeId });
+    } catch (error) {
+      // Revert optimistic updates on error
+      setLikedRecipeIds((prev) => [...prev, recipeId]);
+      setRecipes((prev) =>
+        prev.map(recipe =>
+          recipe.id === recipeId
+            ? { ...recipe, likesCount: (recipe.likesCount || 0) + 1 }
+            : recipe
+        )
+      );
+      console.error('Error unliking recipe:', error);
+    }
   };
 
-  const initialFilter = (searchParams.get('type') as BrewType) || '';
+  const initialFilter = (searchParams.get('type') as RecipeType) || '';
   const initialSort = (searchParams.get('sort') as SortType) || '';
   const initialQuery = searchParams.get('q') || '';
   const initialPage = parseInt(searchParams.get('page') || '1', 10);
 
-  const [selectedFilter, setSelectedFilter] = useState<BrewType | ''>(
+  const [selectedFilter, setSelectedFilter] = useState<RecipeType | ''>(
     initialFilter
   );
   const [selectedSort, setSelectedSort] = useState<SortType>(initialSort);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [brewingType, setBrewingType] = useState<'hot' | 'ice' | ''>(''); // For drip filtering
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [popularRecipes, setPopularRecipes] = useState<Recipe[]>([]);
 
@@ -84,11 +173,11 @@ export default function Home() {
   }, [selectedSort]);
 
   const filteredRecipes = useMemo(() => {
-    // Use popular recipes for popularity sorts, otherwise use mock data
+    // Use popular recipes for popularity sorts, otherwise use state recipes data
     let results =
       selectedSort.startsWith('popularity') && popularRecipes.length > 0
         ? [...popularRecipes]
-        : [...mockRecipes];
+        : [...recipes];
 
     if (searchQuery) {
       results = results.filter(
@@ -105,12 +194,6 @@ export default function Home() {
     if (selectedFilter) {
       results = results.filter((recipe) => recipe.brewType === selectedFilter);
 
-      // Additional filtering for drip brewing type (hot/ice)
-      if (selectedFilter === 'drip' && brewingType) {
-        results = results.filter(
-          (recipe) => recipe.dripParams?.brewingType === brewingType
-        );
-      }
     }
 
     // Handle sorting for non-popularity sorts
@@ -124,7 +207,7 @@ export default function Home() {
     }
 
     return results;
-  }, [selectedFilter, selectedSort, searchQuery, brewingType, popularRecipes]);
+  }, [selectedFilter, selectedSort, searchQuery, popularRecipes, recipes]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredRecipes.length / ITEMS_PER_PAGE);
@@ -150,12 +233,8 @@ export default function Home() {
     updateURL(page);
   };
 
-  const handleFilterChange = (filter: BrewType | '') => {
+  const handleFilterChange = (filter: RecipeType | '') => {
     setSelectedFilter(filter);
-    // Reset brewing type when filter changes
-    if (filter !== 'drip') {
-      setBrewingType('');
-    }
     setCurrentPage(1);
     updateURL(1);
   };
@@ -178,41 +257,6 @@ export default function Home() {
     updateURL(1);
   }, [filteredRecipes.length]);
 
-  // Pagination link generator
-  const getPaginationItems = () => {
-    const items = [];
-    const showEllipsis = totalPages > 7;
-
-    if (!showEllipsis) {
-      for (let i = 1; i <= totalPages; i++) {
-        items.push(i);
-      }
-    } else {
-      if (currentPage <= 4) {
-        for (let i = 1; i <= 5; i++) {
-          items.push(i);
-        }
-        items.push('ellipsis');
-        items.push(totalPages);
-      } else if (currentPage >= totalPages - 3) {
-        items.push(1);
-        items.push('ellipsis');
-        for (let i = totalPages - 4; i <= totalPages; i++) {
-          items.push(i);
-        }
-      } else {
-        items.push(1);
-        items.push('ellipsis');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          items.push(i);
-        }
-        items.push('ellipsis');
-        items.push(totalPages);
-      }
-    }
-
-    return items;
-  };
 
   return (
     <PageContainer className='flex flex-col'>
@@ -266,12 +310,6 @@ export default function Home() {
                 onFilterChange={handleFilterChange}
               />
 
-              {selectedFilter === 'drip' && (
-                <BrewingTypeDropdown
-                  brewingType={brewingType}
-                  onBrewingTypeChange={setBrewingType}
-                />
-              )}
             </div>
           </div>
         </div>
@@ -279,15 +317,19 @@ export default function Home() {
         <div className='flex flex-1 flex-col'>
           <div className='flex-1'>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              {paginatedRecipes.map((recipe: Recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  isSaved={savedRecipeIds.includes(recipe.id)}
-                  onSave={handleSaveRecipe}
-                  onUnsave={handleUnsaveRecipe}
-                />
-              ))}
+              {paginatedRecipes.map((recipe: Recipe) => {
+                const isOwnRecipe = loaderData.currentUserId === recipe.profile_id;
+                return (
+                  <RecipeCard
+                    key={recipe.id}
+                    recipe={recipe}
+                    isLiked={likedRecipeIds.includes(recipe.id)}
+                    onLike={handleLikeRecipe}
+                    onUnlike={handleUnlikeRecipe}
+                    disabled={isOwnRecipe}
+                  />
+                );
+              })}
             </div>
 
             {filteredRecipes.length === 0 && (
@@ -304,54 +346,11 @@ export default function Home() {
             )}
           </div>
 
-          {totalPages > 1 && (
-            <Pagination className='mt-8'>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    onClick={() =>
-                      currentPage > 1 && handlePageChange(currentPage - 1)
-                    }
-                    className={
-                      currentPage <= 1
-                        ? 'pointer-events-none opacity-50'
-                        : 'cursor-pointer'
-                    }
-                  />
-                </PaginationItem>
-
-                {getPaginationItems().map((item, index) => (
-                  <PaginationItem key={index}>
-                    {item === 'ellipsis' ? (
-                      <PaginationEllipsis />
-                    ) : (
-                      <PaginationLink
-                        onClick={() => handlePageChange(item as number)}
-                        isActive={currentPage === item}
-                        className='cursor-pointer'
-                      >
-                        {item}
-                      </PaginationLink>
-                    )}
-                  </PaginationItem>
-                ))}
-
-                <PaginationItem>
-                  <PaginationNext
-                    onClick={() =>
-                      currentPage < totalPages &&
-                      handlePageChange(currentPage + 1)
-                    }
-                    className={
-                      currentPage >= totalPages
-                        ? 'pointer-events-none opacity-50'
-                        : 'cursor-pointer'
-                    }
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )}
+          <RecipePagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </PageContainer>

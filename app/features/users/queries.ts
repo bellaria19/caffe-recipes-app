@@ -20,21 +20,19 @@ export const getUser = async (
 
 export const getUserById = async (
   client: SupabaseClient<Database>,
-  { id }: { id: string }
+  id: string
 ) => {
-  console.log('id getUserById', id);
   const { data, error } = await client
     .from('profiles')
     .select('*')
-    .eq('id', id);
+    .eq('id', id)
+    .maybeSingle();
 
   if (error) {
     throw error;
   }
-  console.log('data getUserById', data);
-  console.log('error getUserById', error);
 
-  return data;
+  return data; // null if not found, user object if found
 };
 
 export const getLoggedInUserId = async (client: SupabaseClient<Database>) => {

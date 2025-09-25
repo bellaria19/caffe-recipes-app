@@ -1,4 +1,4 @@
-import type { BrewType } from '@/lib/types';
+import type { RecipeType } from '@/lib/types';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,8 +10,8 @@ import {
 import { ChevronDown } from 'lucide-react';
 
 interface FilterDropdownProps {
-  selectedFilter: BrewType | '';
-  onFilterChange: (filter: BrewType | '') => void;
+  selectedFilter: RecipeType | '';
+  onFilterChange: (filter: RecipeType | '') => void;
 }
 
 export function FilterDropdown({

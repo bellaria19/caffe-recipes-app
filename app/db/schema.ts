@@ -43,6 +43,7 @@ export const recipes = pgTable(
       .references(() => profiles.id),
     title: text('title').notNull(),
     description: text('description'),
+    author: text('author'), // 작성자명 (username 캐시)
     bean: text('bean'), // 선택사항: 사용한 원두
     recipeType: text('recipe_type').notNull(), // 'espresso' | 'drip'
     brewingTool: text('brewing_tool'), // 선택사항: 사용한 도구
@@ -126,6 +127,33 @@ export const likes = pgTable(
 );
 
 /**
+ * Saved Recipes table - 저장된 레시피
+ * 사용자가 저장한(북마크한) 레시피 정보
+ */
+export const savedRecipes = pgTable(
+  'saved_recipes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    profileId: uuid('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    recipeId: uuid('recipe_id')
+      .notNull()
+      .references(() => recipes.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    // 동일 사용자가 같은 레시피를 중복 저장하지 않도록 제약
+    uniqueProfileRecipeSave: unique().on(table.profileId, table.recipeId),
+    // 성능 최적화를 위한 인덱스
+    recipeIdIdx: index('idx_saved_recipes_recipe_id').on(table.recipeId),
+    profileIdIdx: index('idx_saved_recipes_profile_id').on(table.profileId),
+  })
+);
+
+/**
  * Drizzle ORM Relations 정의
  * 테이블 간 관계를 정의하여 조인 쿼리 최적화
  */
@@ -133,6 +161,7 @@ export const profilesRelations = relations(profiles, ({ many }) => ({
   recipes: many(recipes),
   reviews: many(reviews),
   likes: many(likes),
+  savedRecipes: many(savedRecipes),
 }));
 
 export const recipesRelations = relations(recipes, ({ one, many }) => ({
@@ -142,6 +171,7 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   }),
   reviews: many(reviews),
   likes: many(likes),
+  savedRecipes: many(savedRecipes),
 }));
 
 export const reviewsRelations = relations(reviews, ({ one }) => ({
@@ -162,6 +192,17 @@ export const likesRelations = relations(likes, ({ one }) => ({
   }),
   recipe: one(recipes, {
     fields: [likes.recipeId],
+    references: [recipes.id],
+  }),
+}));
+
+export const savedRecipesRelations = relations(savedRecipes, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [savedRecipes.profileId],
+    references: [profiles.id],
+  }),
+  recipe: one(recipes, {
+    fields: [savedRecipes.recipeId],
     references: [recipes.id],
   }),
 }));

@@ -4,15 +4,17 @@ export type SortType =
   | 'popularity-weekly'
   | 'newest';
 
-export type BrewType = 'all' | 'drip' | 'espresso';
+export type RecipeType = 'all' | 'drip' | 'espresso';
+export type BrewType = 'drip' | 'espresso';
 
 export interface Recipe {
   id: string;
+  profile_id: string;
+  author: string;
   title: string;
   description?: string;
   brewType: BrewType;
   rating: number; // 1-5 stars
-  author: string;
   image?: string;
   tips?: string; // optional tips for other users
   createdAt: Date;
@@ -35,7 +37,7 @@ export interface EspressoParams {
   extractionAmount?: number; // 추출량 단일값 (ml)
   extractionAmountMin?: number; // 추출량 최소값 (ml)
   extractionAmountMax?: number; // 추출량 최대값 (ml)
-  grindSize?: string; // 분쇄도 설명
+  grindSize?: string; // 분쇄도
   grinder?: string; // 그라인더명
   grinderSetting?: string; // 그라인더 설정
 }

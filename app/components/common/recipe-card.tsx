@@ -15,27 +15,40 @@ import { Link } from 'react-router';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  isSaved?: boolean;
-  onSave?: (recipeId: string) => void;
-  onUnsave?: (recipeId: string) => void;
+  isLiked?: boolean;
+  onLike?: (recipeId: string) => void;
+  onUnlike?: (recipeId: string) => void;
+  disabled?: boolean;
+  backUrl?: string;
 }
 
 export function RecipeCard({
   recipe,
-  isSaved = false,
-  onSave,
-  onUnsave,
+  isLiked = false,
+  onLike,
+  onUnlike,
+  disabled = false,
+  backUrl,
 }: RecipeCardProps) {
-  const handleSaveToggle = () => {
-    if (isSaved) {
-      onUnsave?.(recipe.id);
+  const handleLikeToggle = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation when clicking heart button
+    e.stopPropagation();
+
+    if (disabled) return; // Don't execute if disabled
+
+    if (isLiked) {
+      onUnlike?.(recipe.id);
     } else {
-      onSave?.(recipe.id);
+      onLike?.(recipe.id);
     }
   };
 
+  const recipeUrl = backUrl
+    ? `/recipes/${recipe.id}?back=${encodeURIComponent(backUrl)}`
+    : `/recipes/${recipe.id}`;
+
   return (
-    <Link to={`/recipes/${recipe.id}`} className='block'>
+    <Link to={recipeUrl} className='block'>
       <Card className='flex h-[240px] w-full flex-col transition-shadow hover:shadow-lg'>
         <CardHeader className='h-[40px] flex-shrink-0 pb-2'>
           <div className='flex items-start justify-between'>
@@ -66,27 +79,32 @@ export function RecipeCard({
             <span className='text-foreground text-sm'>{recipe.rating}/5</span>
           </div>
           <div className='flex items-center gap-3'>
-            {(onSave || onUnsave) && (
+            {(onLike || onUnlike || disabled) && (
               <div className='flex items-center gap-1'>
                 <Button
                   variant='ghost'
                   size='sm'
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleSaveToggle();
-                  }}
-                  className='h-auto p-1 hover:bg-transparent'
+                  onClick={handleLikeToggle}
+                  disabled={disabled}
+                  className={`h-auto p-1 ${
+                    disabled
+                      ? 'cursor-not-allowed opacity-50'
+                      : 'hover:bg-transparent'
+                  }`}
                 >
                   <Heart
                     className={`h-4 w-4 ${
-                      isSaved
+                      disabled
                         ? 'fill-red-500 text-red-500'
-                        : 'text-muted-foreground hover:text-red-500'
+                        : isLiked
+                          ? 'fill-red-500 text-red-500'
+                          : 'text-muted-foreground hover:text-red-500'
                     } transition-colors`}
                   />
                 </Button>
-                <span className='text-muted-foreground text-sm'>
+                <span
+                  className={`text-sm ${disabled ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}
+                >
                   {recipe.likesCount || 0}
                 </span>
               </div>

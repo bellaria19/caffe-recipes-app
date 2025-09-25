@@ -5,10 +5,11 @@ import { EspressoParameters } from '@/features/recipes/components/espresso-param
 import { RecipeBasicInfo } from '@/features/recipes/components/recipe-basic-info';
 import { RecipeOptionalInfo } from '@/features/recipes/components/recipe-optional-info';
 import { RecipeTips } from '@/features/recipes/components/recipe-tips';
+import { createEspressoRecipe } from '@/features/recipes/mutations';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
 import { Save } from 'lucide-react';
-import { Form, Link, type MetaFunction } from 'react-router';
+import { Form, Link, type MetaFunction, redirect } from 'react-router';
 import { z } from 'zod';
 
 export const meta: MetaFunction = () => {
@@ -171,6 +172,7 @@ const formSchema = z
 export const action = async ({ request }: Route.ActionArgs) => {
   const { client } = makeSSRClient(request);
   const userId = await getLoggedInUserId(client);
+  // const username = await getUserById(client, userId);
 
   const formData = await request.formData();
   const { success, data, error } = formSchema.safeParse(
@@ -178,14 +180,39 @@ export const action = async ({ request }: Route.ActionArgs) => {
   );
 
   if (!success) {
-    return { formErrors: error.flatten().fieldErrors };
+    return { fieldErrors: error.flatten().fieldErrors };
   }
 
-  const { ...espressoParams } = data;
-  // TODO: Create espresso recipe with validated data
-  console.log('Validated espresso recipe data:', espressoParams);
+  try {
+    const recipe = await createEspressoRecipe(client, {
+      userId,
+      title: data.title,
+      description: data.description || undefined,
+      bean: data.bean || undefined,
+      tips: data.tips || undefined,
+      waterTemperature: data.waterTemperature,
+      coffeeAmount: data.coffeeAmount,
+      extractionTime: data.extractionTime,
+      extractionTimeMin: data.extractionTimeMin,
+      extractionTimeMax: data.extractionTimeMax,
+      extractionAmount: data.extractionAmount,
+      extractionAmountMin: data.extractionAmountMin,
+      extractionAmountMax: data.extractionAmountMax,
+      grinder: data.grinder || undefined,
+      otherGrinder: data.otherGrinder || undefined,
+      grindSize: data.grindSize || undefined,
+      grinderSetting: data.grinderSetting || undefined,
+    });
 
-  return { success: true };
+    return redirect(`/recipes/${recipe[0].id}`);
+  } catch (err) {
+    console.error('Failed to create espresso recipe:', err);
+    return {
+      fieldErrors: {
+        title: ['레시피 저장에 실패했습니다. 다시 시도해주세요.'],
+      },
+    };
+  }
 };
 
 export default function CreateEspresso({ actionData }: Route.ComponentProps) {
@@ -205,9 +232,9 @@ export default function CreateEspresso({ actionData }: Route.ComponentProps) {
         />
         <RecipeTips />
 
-        {actionData?.formErrors && (
+        {actionData?.fieldErrors && (
           <div className='text-red-500'>
-            {Object.entries(actionData.formErrors).map(([field, errors]) => (
+            {Object.entries(actionData.fieldErrors).map(([field, errors]) => (
               <div key={field}>
                 {field}: {errors?.join(', ')}
               </div>

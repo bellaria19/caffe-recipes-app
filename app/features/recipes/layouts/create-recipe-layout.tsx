@@ -8,7 +8,7 @@ export const meta: MetaFunction = () => {
 export default function CreateRecipeLayout() {
   return (
     <PageContainer>
-      <div className='container mx-auto max-w-3xl p-4'>
+      <div className='container mx-auto max-w-3xl p-4 pb-20'>
         <Outlet />
       </div>
     </PageContainer>

@@ -17,11 +17,12 @@ import { DripParameters } from '@/features/recipes/components/drip-parameters';
 import { RecipeBasicInfo } from '@/features/recipes/components/recipe-basic-info';
 import { RecipeOptionalInfo } from '@/features/recipes/components/recipe-optional-info';
 import { RecipeTips } from '@/features/recipes/components/recipe-tips';
+import { createDripRecipe } from '@/features/recipes/mutations';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
 import { DropletsIcon, Plus, Save, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { Form, Link, type MetaFunction } from 'react-router';
+import { Form, Link, redirect, type MetaFunction } from 'react-router';
 import { z } from 'zod';
 
 export const meta: MetaFunction = () => {
@@ -145,22 +146,48 @@ export const action = async ({ request }: Route.ActionArgs) => {
       );
     } catch (e) {
       console.error('Failed to parse extractionSteps:', e);
-      // formObject.extractionSteps = [] as unknown as DripStep[];
+      return {
+        formErrors: {
+          extractionSteps: ['추출 단계 데이터 처리에 실패했습니다.']
+        }
+      };
     }
   }
 
   const { success, data, error } = formSchema.safeParse(formObject);
 
   if (!success) {
-    console.log('error', error);
     return { formErrors: error.flatten().fieldErrors };
   }
 
-  const { ...dripParams } = data;
-  // TODO: Create drip recipe with validated data
-  console.log('Validated drip recipe data:', dripParams);
+  try {
+    const recipe = await createDripRecipe(client, {
+      userId,
+      title: data.title,
+      description: data.description || undefined,
+      bean: data.bean || undefined,
+      tips: data.tips || undefined,
+      waterTemperature: data.waterTemperature,
+      coffeeAmount: data.coffeeAmount,
+      dripType: data.dripType,
+      dripper: data.dripper || undefined,
+      otherDripper: data.otherDripper || undefined,
+      grinder: data.grinder || undefined,
+      otherGrinder: data.otherGrinder || undefined,
+      grindSize: data.grindSize || undefined,
+      grinderSetting: data.grinderSetting || undefined,
+      extractionSteps: data.extractionSteps,
+    });
 
-  return { success: true };
+    return redirect(`/recipes/${recipe[0].id}`);
+  } catch (err) {
+    console.error('Failed to create drip recipe:', err);
+    return {
+      formErrors: {
+        title: ['레시피 저장에 실패했습니다. 다시 시도해주세요.']
+      }
+    };
+  }
 };
 
 const defaultExtractionSteps: DripStep[] = [
