@@ -12,6 +12,7 @@ export function SelectField({
   placeholder,
   options,
   value,
+  defaultValue,
   onValueChange,
 }: {
   name: string;
@@ -19,11 +20,13 @@ export function SelectField({
   placeholder: string;
   options: { value: string; label: string }[];
   value?: string;
+  defaultValue?: string;
   onValueChange?: (value: string) => void;
 }) {
   return (
     <Select
       value={value}
+      defaultValue={defaultValue}
       onValueChange={onValueChange}
       name={name}
       required={required}

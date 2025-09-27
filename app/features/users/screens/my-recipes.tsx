@@ -5,11 +5,9 @@ import type { Route } from '.react-router/types/app/features/users/screens/+type
 
 import { RecipeCard } from '@/components/common/recipe-card';
 import { RecipePagination } from '@/components/common/recipe-pagination';
-import { FilterDropdown } from '@/components/home/filter-dropdown';
-import { SortDropdown } from '@/components/home/sort-dropdown';
+import { RecipeSearchAndFilter } from '@/components/common/recipe-search-and-filter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { addLike, removeLike } from '@/features/home/mutations';
 import { getUserLikes } from '@/features/home/queries';
 import { getLikedRecipes, getUserRecipes } from '@/features/recipes/queries';
@@ -58,7 +56,7 @@ export default function MyRecipes({
   const [selectedFilter, setSelectedFilter] = useState<RecipeType | ''>(
     initialFilter
   );
-  const [selectedSort, setSelectedSort] = useState<SortType | ''>(initialSort);
+  const [selectedSort, setSelectedSort] = useState<SortType>(initialSort || 'newest');
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [activeTab, setActiveTab] = useState<'my-recipes' | 'saved-recipes'>(
@@ -304,71 +302,15 @@ export default function MyRecipes({
         {/* Enhanced Search and Filter Section */}
         <Card className='mb-6'>
           <CardContent>
-            <div className='space-y-5'>
-              {/* Search Section */}
-              <div className='flex items-center gap-2'>
-                <Search className='text-muted-foreground h-5 w-5' />
-                <h2 className='text-base font-semibold sm:text-lg'>
-                  레시피 검색
-                </h2>
-              </div>
-              <div className='flex gap-3'>
-                <div className='relative flex-1'>
-                  <Search className='text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 transform' />
-                  <Input
-                    type='text'
-                    value={searchQuery}
-                    onChange={(e) => handleSearchChange(e.target.value)}
-                    placeholder='레시피 제목이나 설명으로 검색하세요...'
-                    className='border-muted-foreground/20 focus:border-primary h-11 pl-11 transition-colors'
-                  />
-                </div>
-                {searchQuery && (
-                  <Button
-                    variant='outline'
-                    size='icon'
-                    onClick={() => handleSearchChange('')}
-                    className='hover:bg-destructive hover:text-destructive-foreground h-11 w-11 transition-colors'
-                  >
-                    <X className='h-4 w-4' />
-                  </Button>
-                )}
-              </div>
-
-              {/* Filter Section */}
-              <div className='flex items-center gap-2'>
-                <svg
-                  className='text-muted-foreground h-5 w-5'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={1.5}
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z'
-                  />
-                </svg>
-                <h2 className='text-base font-semibold sm:text-lg'>
-                  정렬 및 필터
-                </h2>
-              </div>
-              <div className='flex flex-wrap gap-3'>
-                <div className='flex-none'>
-                  <SortDropdown
-                    selectedSort={selectedSort}
-                    onSortChange={handleSortChange}
-                  />
-                </div>
-                <div className='flex-none'>
-                  <FilterDropdown
-                    selectedFilter={selectedFilter}
-                    onFilterChange={handleFilterChange}
-                  />
-                </div>
-              </div>
-            </div>
+            <RecipeSearchAndFilter
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              selectedType={selectedFilter}
+              onTypeChange={handleFilterChange}
+              selectedSort={selectedSort}
+              onSortChange={handleSortChange}
+              placeholder='레시피 제목이나 설명으로 검색하세요...'
+            />
           </CardContent>
         </Card>
 

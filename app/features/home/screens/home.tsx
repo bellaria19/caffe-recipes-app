@@ -5,17 +5,13 @@ import type { Route } from '.react-router/types/app/features/home/screens/+types
 import { PageContainer } from '@/components/common/page-container';
 import { RecipeCard } from '@/components/common/recipe-card';
 import { RecipePagination } from '@/components/common/recipe-pagination';
-import { FilterDropdown } from '@/components/home/filter-dropdown';
-import { SortDropdown } from '@/components/home/sort-dropdown';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { RecipeSearchAndFilter } from '@/components/common/recipe-search-and-filter';
 import { addLike, removeLike } from '@/features/home/mutations';
 import { getUserLikes } from '@/features/home/queries';
 import { getRecipes } from '@/features/recipes/queries';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { getPopularRecipes } from '@/lib/data/popular-recipes';
 import { browserClient, makeSSRClient } from '@/supa-client';
-import { Search, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { type MetaFunction, useNavigate, useSearchParams } from 'react-router';
 
@@ -87,7 +83,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       setLikedRecipeIds((prev) => [...prev, recipeId]);
       // Optimistically update likes count
       setRecipes((prev) =>
-        prev.map(recipe =>
+        prev.map((recipe) =>
           recipe.id === recipeId
             ? { ...recipe, likesCount: (recipe.likesCount || 0) + 1 }
             : recipe
@@ -100,9 +96,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       // Revert optimistic updates on error
       setLikedRecipeIds((prev) => prev.filter((id) => id !== recipeId));
       setRecipes((prev) =>
-        prev.map(recipe =>
+        prev.map((recipe) =>
           recipe.id === recipeId
-            ? { ...recipe, likesCount: Math.max((recipe.likesCount || 0) - 1, 0) }
+            ? {
+                ...recipe,
+                likesCount: Math.max((recipe.likesCount || 0) - 1, 0),
+              }
             : recipe
         )
       );
@@ -115,9 +114,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       setLikedRecipeIds((prev) => prev.filter((id) => id !== recipeId));
       // Optimistically update likes count
       setRecipes((prev) =>
-        prev.map(recipe =>
+        prev.map((recipe) =>
           recipe.id === recipeId
-            ? { ...recipe, likesCount: Math.max((recipe.likesCount || 0) - 1, 0) }
+            ? {
+                ...recipe,
+                likesCount: Math.max((recipe.likesCount || 0) - 1, 0),
+              }
             : recipe
         )
       );
@@ -128,7 +130,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       // Revert optimistic updates on error
       setLikedRecipeIds((prev) => [...prev, recipeId]);
       setRecipes((prev) =>
-        prev.map(recipe =>
+        prev.map((recipe) =>
           recipe.id === recipeId
             ? { ...recipe, likesCount: (recipe.likesCount || 0) + 1 }
             : recipe
@@ -193,7 +195,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     // Handle brew type filtering
     if (selectedFilter) {
       results = results.filter((recipe) => recipe.brewType === selectedFilter);
-
     }
 
     // Handle sorting for non-popularity sorts
@@ -257,68 +258,26 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     updateURL(1);
   }, [filteredRecipes.length]);
 
-
   return (
     <PageContainer className='flex flex-col'>
       <div className='container mx-auto flex flex-1 flex-col p-4 py-10'>
-        <div className='mb-6 flex-shrink-0 space-y-10'>
-          <div>
-            <h2 className='mb-4 text-xl font-semibold'>레시피 검색</h2>
-            {/* <Button asChild>
-                <Link
-                  to="/recipes/create"
-                  className="flex items-center space-x-2"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>레시피 추가</span>
-                </Link>
-              </Button> */}
-            {/* </div> */}
-            <div className='flex gap-2'>
-              <div className='relative flex-1'>
-                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
-                <Input
-                  type='text'
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  placeholder='이름, 설명, 작성자로 레시피를 검색하세요...'
-                  className='pl-10'
-                />
-              </div>
-              {searchQuery && (
-                <Button
-                  variant='outline'
-                  size='icon'
-                  onClick={() => handleSearchChange('')}
-                >
-                  <X className='h-4 w-4' />
-                </Button>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <h2 className='mb-4 text-xl font-semibold'>정렬 및 필터</h2>
-            <div className='flex flex-wrap gap-4'>
-              <SortDropdown
-                selectedSort={selectedSort}
-                onSortChange={handleSortChange}
-              />
-
-              <FilterDropdown
-                selectedFilter={selectedFilter}
-                onFilterChange={handleFilterChange}
-              />
-
-            </div>
-          </div>
+        <div className='mb-6'>
+          <RecipeSearchAndFilter
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            selectedType={selectedFilter}
+            onTypeChange={handleFilterChange}
+            selectedSort={selectedSort}
+            onSortChange={handleSortChange}
+          />
         </div>
 
         <div className='flex flex-1 flex-col'>
           <div className='flex-1'>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {paginatedRecipes.map((recipe: Recipe) => {
-                const isOwnRecipe = loaderData.currentUserId === recipe.profile_id;
+                const isOwnRecipe =
+                  loaderData.currentUserId === recipe.profile_id;
                 return (
                   <RecipeCard
                     key={recipe.id}
