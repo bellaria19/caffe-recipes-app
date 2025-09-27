@@ -8,7 +8,7 @@ import { RecipeTips } from '@/features/recipes/components/recipe-tips';
 import { createEspressoRecipe } from '@/features/recipes/mutations';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
-import { Save } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { Form, Link, type MetaFunction, redirect } from 'react-router';
 import { z } from 'zod';
 
@@ -22,7 +22,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   const userId = await getLoggedInUserId(client);
 };
 
-const formSchema = z
+export const espressoFormSchema = z
   .object({
     // Basic recipe info
     title: z
@@ -175,12 +175,12 @@ export const action = async ({ request }: Route.ActionArgs) => {
   // const username = await getUserById(client, userId);
 
   const formData = await request.formData();
-  const { success, data, error } = formSchema.safeParse(
+  const { success, data, error } = espressoFormSchema.safeParse(
     Object.fromEntries(formData)
   );
 
   if (!success) {
-    return { fieldErrors: error.flatten().fieldErrors };
+    return { formErrors: error.flatten().fieldErrors };
   }
 
   try {
@@ -208,7 +208,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
   } catch (err) {
     console.error('Failed to create espresso recipe:', err);
     return {
-      fieldErrors: {
+      formErrors: {
         title: ['레시피 저장에 실패했습니다. 다시 시도해주세요.'],
       },
     };
@@ -219,7 +219,10 @@ export default function CreateEspresso({ actionData }: Route.ComponentProps) {
   return (
     <>
       <Button variant='ghost' asChild className='mb-4'>
-        <Link to='/recipes/create'>← 뒤로 가기</Link>
+        <Link to='/recipes/create'>
+          <ArrowLeft className='h-4 w-4' />
+          뒤로 가기
+        </Link>
       </Button>
       <h1 className='mb-6 text-3xl font-bold'>에스프레소 레시피 만들기</h1>
 
@@ -232,9 +235,9 @@ export default function CreateEspresso({ actionData }: Route.ComponentProps) {
         />
         <RecipeTips />
 
-        {actionData?.fieldErrors && (
+        {actionData?.formErrors && (
           <div className='text-red-500'>
-            {Object.entries(actionData.fieldErrors).map(([field, errors]) => (
+            {Object.entries(actionData.formErrors).map(([field, errors]) => (
               <div key={field}>
                 {field}: {errors?.join(', ')}
               </div>
@@ -242,7 +245,7 @@ export default function CreateEspresso({ actionData }: Route.ComponentProps) {
           </div>
         )}
 
-        <div className='flex gap-4'>
+        <div className='flex'>
           <Button
             type='submit'
             variant='default'

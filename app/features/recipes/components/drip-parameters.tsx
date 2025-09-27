@@ -10,7 +10,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BeakerIcon } from 'lucide-react';
 
-export function DripParameters() {
+export function DripParameters({
+  defaultWaterTemperature,
+  defaultCoffeeAmount,
+  defaultDripType,
+}: {
+  defaultWaterTemperature?: number;
+  defaultCoffeeAmount?: number;
+  defaultDripType?: 'hot' | 'ice';
+}) {
   return (
     <Card>
       <CardHeader>
@@ -34,6 +42,7 @@ export function DripParameters() {
               max='100'
               step='1'
               placeholder='92'
+              defaultValue={defaultWaterTemperature}
               required
             />
           </div>
@@ -48,16 +57,18 @@ export function DripParameters() {
               max='30'
               step='1'
               placeholder='18'
+              defaultValue={defaultCoffeeAmount}
               required
             />
           </div>
 
           <div className='grid gap-2'>
-            <Label htmlFor='brewingType'>추출 방식</Label>
+            <Label htmlFor='dripType'>추출 방식</Label>
             <SelectField
               name='dripType'
               required
               placeholder='추출 방식을 선택하세요'
+              defaultValue={defaultDripType}
               options={[
                 { value: 'hot', label: 'Hot' },
                 { value: 'ice', label: 'Ice' },

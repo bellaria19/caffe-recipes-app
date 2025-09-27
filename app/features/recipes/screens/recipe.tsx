@@ -7,8 +7,9 @@ import { DisplayOptionalInfo } from '@/features/recipes/components/display-optio
 import { DisplayParameters } from '@/features/recipes/components/display-parameters';
 import { DisplayTips } from '@/features/recipes/components/display-tips';
 import { getRecipeById } from '@/features/recipes/queries';
+import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Edit } from 'lucide-react';
 import { Link, useSearchParams, type MetaFunction } from 'react-router';
 
 export const meta: MetaFunction = ({ data }) => {
@@ -26,7 +27,16 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
   try {
     const recipe = await getRecipeById(client, id);
-    return { recipe };
+
+    // Try to get current user (might be null if not logged in)
+    let currentUserId: string | null = null;
+    try {
+      currentUserId = await getLoggedInUserId(client);
+    } catch (error) {
+      // User is not logged in, continue without user info
+    }
+
+    return { recipe, currentUserId };
   } catch (error) {
     console.error('Failed to fetch recipe:', error);
     throw new Response('Recipe not found', { status: 404 });
@@ -42,6 +52,10 @@ export default function Recipe({ loaderData }: Route.ComponentProps) {
     : '/';
 
   const recipe = loaderData.recipe;
+  const currentUserId = loaderData.currentUserId;
+
+  // Check if current user is the owner of this recipe
+  const isOwner = currentUserId && recipe?.profile_id === currentUserId;
 
   if (!recipe) {
     return (
@@ -67,12 +81,16 @@ export default function Recipe({ loaderData }: Route.ComponentProps) {
           </Link>
         </Button>
 
-        {/* <div className='flex gap-3'>
-          <Button asChild>
-            <Link to={`/recipes/edit/${id}`}>레시피 수정</Link>
-          </Button>
-          <Button variant='outline'>레시피 공유</Button>
-        </div> */}
+        {isOwner && (
+          <div className='flex gap-3'>
+            <Button asChild>
+              <Link to={`/recipes/edit/${recipe.brewType}/${recipe.id}`} className='flex items-center gap-2'>
+                <Edit className='h-4 w-4' />
+                레시피 수정
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Recipe Header */}

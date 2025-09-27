@@ -156,3 +156,148 @@ export const createDripRecipe = async (
   }
   return data;
 };
+
+export const updateDripRecipe = async (
+  client: SupabaseClient<Database>,
+  recipeId: string,
+  {
+    userId,
+    title,
+    description,
+    bean,
+    tips,
+    waterTemperature,
+    coffeeAmount,
+    dripType,
+    dripper,
+    otherDripper,
+    grinder,
+    otherGrinder,
+    grindSize,
+    grinderSetting,
+    extractionSteps,
+  }: {
+    userId: string;
+    title: string;
+    description?: string;
+    bean?: string;
+    tips?: string;
+    waterTemperature: number;
+    coffeeAmount: number;
+    dripType: 'hot' | 'ice';
+    dripper?: string;
+    otherDripper?: string;
+    grinder?: string;
+    otherGrinder?: string;
+    grindSize?: string;
+    grinderSetting?: string;
+    extractionSteps: Array<{
+      stepName: string;
+      waterAmount: number;
+      duration?: number;
+    }>;
+  }
+) => {
+  const dripParams: DripParams = {
+    coffeeAmount,
+    waterTemperature,
+    brewingType: dripType,
+    dripper: dripper === 'other' ? otherDripper : dripper,
+    grindSize,
+    grinder: grinder === 'other' ? otherGrinder : grinder,
+    grinderSetting,
+    extractionSteps,
+  };
+
+  const { data, error } = await client
+    .from('recipes')
+    .update({
+      title,
+      description,
+      bean,
+      tips,
+      recipe_details: dripParams as any,
+    })
+    .eq('id', recipeId)
+    .eq('profile_id', userId) // Ensure user owns this recipe
+    .select();
+
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+export const updateEspressoRecipe = async (
+  client: SupabaseClient<Database>,
+  recipeId: string,
+  {
+    userId,
+    title,
+    description,
+    bean,
+    tips,
+    waterTemperature,
+    coffeeAmount,
+    extractionTime,
+    extractionTimeMin,
+    extractionTimeMax,
+    extractionAmount,
+    extractionAmountMin,
+    extractionAmountMax,
+    grinder,
+    otherGrinder,
+    grindSize,
+    grinderSetting,
+  }: {
+    userId: string;
+    title: string;
+    description?: string;
+    bean?: string;
+    tips?: string;
+    waterTemperature: number;
+    coffeeAmount: number;
+    extractionTime?: number;
+    extractionTimeMin?: number;
+    extractionTimeMax?: number;
+    extractionAmount?: number;
+    extractionAmountMin?: number;
+    extractionAmountMax?: number;
+    grinder?: string;
+    otherGrinder?: string;
+    grindSize?: string;
+    grinderSetting?: string;
+  }
+) => {
+  const espressoParams: EspressoParams = {
+    waterTemperature,
+    coffeeAmount,
+    extractionTime,
+    extractionTimeMin,
+    extractionTimeMax,
+    extractionAmount,
+    extractionAmountMin,
+    extractionAmountMax,
+    grindSize,
+    grinder: grinder === 'other' ? otherGrinder : grinder,
+    grinderSetting,
+  };
+
+  const { data, error } = await client
+    .from('recipes')
+    .update({
+      title,
+      description,
+      bean,
+      tips,
+      recipe_details: espressoParams as any,
+    })
+    .eq('id', recipeId)
+    .eq('profile_id', userId) // Ensure user owns this recipe
+    .select();
+
+  if (error) {
+    throw error;
+  }
+  return data;
+};

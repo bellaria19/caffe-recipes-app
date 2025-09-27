@@ -12,30 +12,68 @@ import { Label } from '@/components/ui/label';
 import { BeanIcon } from 'lucide-react';
 import { useState } from 'react';
 
-const grinderOptions = [
+const baseGrinderOptions = [
   { value: 'c40', label: 'C40' },
   { value: 'ek43', label: 'Ek43' },
-  { value: 'other', label: 'Other' },
 ];
 
-const dripperOptions = [
+const baseDripperOptions = [
   { value: 'hario-v60', label: 'Hario V60' },
   { value: 'kalita', label: 'Kalita Wave' },
   { value: 'origami', label: 'Origami' },
   { value: 'orea', label: 'Orea' },
-  { value: 'other', label: 'Other' },
 ];
+
+// Dynamic option generators
+const getDripperOptions = (currentValue?: string) => {
+  const options = [...baseDripperOptions];
+
+  // Add current value if it's not in base options
+  if (currentValue && !options.find(opt => opt.value === currentValue)) {
+    options.push({ value: currentValue, label: currentValue });
+  }
+
+  return [...options, { value: 'other', label: 'Other' }];
+};
+
+const getGrinderOptions = (currentValue?: string) => {
+  const options = [...baseGrinderOptions];
+
+  // Add current value if it's not in base options
+  if (currentValue && !options.find(opt => opt.value === currentValue)) {
+    options.push({ value: currentValue, label: currentValue });
+  }
+
+  return [...options, { value: 'other', label: 'Other' }];
+};
 
 export function RecipeOptionalInfo({
   recipeType,
   description,
+  defaultBean,
+  defaultDripper,
+  defaultGrinder,
+  defaultGrindSize,
+  defaultGrinderSetting,
 }: {
   recipeType: 'espresso' | 'drip';
   description: string;
+  defaultBean?: string;
+  defaultDripper?: string;
+  defaultGrinder?: string;
+  defaultGrindSize?: string;
+  defaultGrinderSetting?: string;
 }) {
-  const [useGrinder, setUseGrinder] = useState(false);
-  const [grinder, setGrinder] = useState('');
-  const [dripper, setDripper] = useState('');
+  // Initialize state based on existing data
+  const [useGrinder, setUseGrinder] = useState(
+    !!(defaultGrinder || defaultGrinderSetting)
+  );
+  const [grinder, setGrinder] = useState(defaultGrinder || '');
+  const [dripper, setDripper] = useState(defaultDripper || '');
+
+  // Generate dynamic options
+  const dripperOptions = getDripperOptions(defaultDripper);
+  const grinderOptions = getGrinderOptions(defaultGrinder);
 
   return (
     <Card>
@@ -54,6 +92,7 @@ export function RecipeOptionalInfo({
             name='bean'
             type='text'
             placeholder='원두 이름을 입력하세요'
+            defaultValue={defaultBean}
           />
         </div>
 
@@ -64,6 +103,7 @@ export function RecipeOptionalInfo({
               value={dripper}
               onValueChange={setDripper}
               name='dripper'
+              defaultValue={defaultDripper}
               required
               placeholder='드리퍼를 선택하세요'
               options={dripperOptions}
@@ -120,6 +160,7 @@ export function RecipeOptionalInfo({
                 name='grinderSetting'
                 type='text'
                 placeholder='그라인더 클릭 값 (예: 25)'
+                defaultValue={defaultGrinderSetting}
               />
             </div>
           ) : (
@@ -128,6 +169,7 @@ export function RecipeOptionalInfo({
               name='grindSize'
               type='text'
               placeholder='1000 (μm)'
+              defaultValue={defaultGrindSize}
             />
           )}
         </div>

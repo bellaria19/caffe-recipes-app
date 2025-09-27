@@ -10,7 +10,18 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { NotebookPen } from 'lucide-react';
 
-export function RecipeBasicInfo() {
+interface RecipeBasicInfoProps {
+  defaultTitle?: string;
+  defaultDescription?: string;
+}
+
+export function RecipeBasicInfo({
+  defaultTitle,
+  defaultDescription,
+}: {
+  defaultTitle?: string;
+  defaultDescription?: string;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -28,6 +39,7 @@ export function RecipeBasicInfo() {
             name='title'
             type='text'
             placeholder='레시피 이름'
+            defaultValue={defaultTitle}
             required
           />
         </div>
@@ -38,6 +50,7 @@ export function RecipeBasicInfo() {
             id='description'
             name='description'
             placeholder='레시피에 대한 간단한 설명'
+            defaultValue={defaultDescription}
             className='resize-none'
           />
         </div>

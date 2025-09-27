@@ -11,9 +11,36 @@ import { Label } from '@/components/ui/label';
 import { Beaker } from 'lucide-react';
 import { useState } from 'react';
 
-export function EspressoParameters() {
-  const [useTimeRange, setUseTimeRange] = useState(false);
-  const [useAmountRange, setUseAmountRange] = useState(false);
+interface EspressoParametersProps {
+  defaultWaterTemperature?: number;
+  defaultCoffeeAmount?: number;
+  defaultExtractionTime?: number;
+  defaultExtractionTimeMin?: number;
+  defaultExtractionTimeMax?: number;
+  defaultExtractionAmount?: number;
+  defaultExtractionAmountMin?: number;
+  defaultExtractionAmountMax?: number;
+}
+
+export function EspressoParameters({
+  defaultWaterTemperature,
+  defaultCoffeeAmount,
+  defaultExtractionTime,
+  defaultExtractionTimeMin,
+  defaultExtractionTimeMax,
+  defaultExtractionAmount,
+  defaultExtractionAmountMin,
+  defaultExtractionAmountMax,
+}: EspressoParametersProps = {}) {
+  // Determine if we should use range inputs based on existing data
+  const [useTimeRange, setUseTimeRange] = useState(
+    (defaultExtractionTimeMin !== undefined && defaultExtractionTimeMax !== undefined) ||
+    (!defaultExtractionTime && !defaultExtractionTimeMin && !defaultExtractionTimeMax)
+  );
+  const [useAmountRange, setUseAmountRange] = useState(
+    (defaultExtractionAmountMin !== undefined && defaultExtractionAmountMax !== undefined) ||
+    (!defaultExtractionAmount && !defaultExtractionAmountMin && !defaultExtractionAmountMax)
+  );
 
   return (
     <Card>
@@ -38,6 +65,7 @@ export function EspressoParameters() {
               max='100'
               step='1'
               placeholder='92'
+              defaultValue={defaultWaterTemperature}
               required
             />
           </div>
@@ -52,6 +80,7 @@ export function EspressoParameters() {
               max='30'
               step='1'
               placeholder='18'
+              defaultValue={defaultCoffeeAmount}
               required
             />
           </div>
@@ -83,6 +112,7 @@ export function EspressoParameters() {
                   max='60'
                   step='1'
                   placeholder='25'
+                  defaultValue={defaultExtractionTimeMin}
                   required
                 />
                 <span className='flex items-center px-2'>~</span>
@@ -94,6 +124,7 @@ export function EspressoParameters() {
                   max='60'
                   step='1'
                   placeholder='30'
+                  defaultValue={defaultExtractionTimeMax}
                   required
                 />
               </div>
@@ -106,6 +137,7 @@ export function EspressoParameters() {
                 max='60'
                 step='1'
                 placeholder='28'
+                defaultValue={defaultExtractionTime}
                 required
               />
             )}
@@ -138,6 +170,7 @@ export function EspressoParameters() {
                   max='60'
                   step='1'
                   placeholder='30'
+                  defaultValue={defaultExtractionAmountMin}
                   required
                 />
                 <span className='flex items-center px-2'>~</span>
@@ -149,6 +182,7 @@ export function EspressoParameters() {
                   max='60'
                   step='1'
                   placeholder='40'
+                  defaultValue={defaultExtractionAmountMax}
                   required
                 />
               </div>
@@ -161,6 +195,7 @@ export function EspressoParameters() {
                 max='60'
                 step='1'
                 placeholder='36'
+                defaultValue={defaultExtractionAmount}
                 required
               />
             )}

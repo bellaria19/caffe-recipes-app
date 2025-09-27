@@ -1,6 +1,6 @@
 import type { DripStep } from '@/lib/types';
 
-import type { Route } from '.react-router/types/app/features/recipes/screens/+types/create-drip';
+import type { Route } from '.react-router/types/app/features/recipes/screens/+types/edit-drip';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,151 +17,91 @@ import { DripParameters } from '@/features/recipes/components/drip-parameters';
 import { RecipeBasicInfo } from '@/features/recipes/components/recipe-basic-info';
 import { RecipeOptionalInfo } from '@/features/recipes/components/recipe-optional-info';
 import { RecipeTips } from '@/features/recipes/components/recipe-tips';
-import { createDripRecipe } from '@/features/recipes/mutations';
+import { updateDripRecipe } from '@/features/recipes/mutations';
+import { getRecipeById } from '@/features/recipes/queries';
+import { dripFormSchema } from '@/features/recipes/screens/create-drip';
 import { getLoggedInUserId } from '@/features/users/queries';
 import { makeSSRClient } from '@/supa-client';
-import { DropletsIcon, Plus, Save, Trash2 } from 'lucide-react';
+import { ArrowLeft, DropletsIcon, Plus, Save, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Form, Link, type MetaFunction, redirect } from 'react-router';
-import { z } from 'zod';
 
-export const meta: MetaFunction = () => {
-  return [{ title: 'Create Drip Recipe | Moca' }];
+export const meta: MetaFunction = ({ data }) => {
+  const recipe = (data as any)?.recipe;
+  return [
+    {
+      title: recipe ? `Edit ${recipe.title} | Moca` : 'Edit Drip Recipe | Moca',
+    },
+  ];
 };
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
   const { client } = makeSSRClient(request);
-
-  const userId = await getLoggedInUserId(client);
-};
-
-export const dripFormSchema = z
-  .object({
-    // Basic recipe info
-    title: z
-      .string()
-      .min(1, '제목을 입력해주세요')
-      .max(50, '제목은 50자 이하로 입력해주세요'),
-    description: z.string().optional(),
-    bean: z.string().optional(),
-    tips: z.string().optional(),
-
-    // Drip parameters
-    waterTemperature: z.coerce
-      .number({
-        required_error: '물 온도를 입력해주세요',
-      })
-      .min(80)
-      .max(100),
-    coffeeAmount: z.coerce
-      .number({
-        required_error: '원두 양을 입력해주세요',
-      })
-      .min(0)
-      .max(30),
-    dripType: z.enum(['hot', 'ice']),
-
-    // Grind settings
-    dripper: z.string().optional(),
-    otherDripper: z.string().optional(),
-    grinder: z.string().optional(),
-    otherGrinder: z.string().optional(),
-    grindSize: z.string().optional(),
-    grinderSetting: z.string().optional(),
-
-    extractionSteps: z.array(
-      z.object({
-        stepName: z.string(),
-        waterAmount: z.number(),
-        duration: z.number(),
-      })
-    ),
-  })
-  .refine(
-    (data) => {
-      // If dripper is 'other', otherDripper must be provided
-      if (data.dripper === 'other') {
-        return data.otherDripper && data.otherDripper.trim().length > 0;
-      }
-      return true;
-    },
-    {
-      message: '커스텀 드리퍼 이름을 입력해주세요',
-      path: ['otherDripper'],
-    }
-  )
-  .refine(
-    (data) => {
-      // If grinder is 'other', otherGrinder must be provided
-      if (data.grinder === 'other') {
-        return data.otherGrinder && data.otherGrinder.trim().length > 0;
-      }
-      return true;
-    },
-    {
-      message: '커스텀 그라인더 이름을 입력해주세요',
-      path: ['otherGrinder'],
-    }
-  )
-  .refine(
-    (data) => {
-      // If grinder is selected (not 'other'), grinderSetting must be provided
-      if (data.grinder && data.grinder !== 'other') {
-        return data.grinderSetting && data.grinderSetting.trim().length > 0;
-      }
-      return true;
-    },
-    {
-      message: '그라인더 클릭 값을 입력해주세요',
-      path: ['grinderSetting'],
-    }
-  )
-  .refine(
-    (data) => {
-      // If grinder is 'other', both otherGrinder and grinderSetting must be provided
-      if (data.grinder === 'other') {
-        return data.grinderSetting && data.grinderSetting.trim().length > 0;
-      }
-      return true;
-    },
-    {
-      message: '커스텀 그라인더의 클릭 값을 입력해주세요',
-      path: ['grinderSetting'],
-    }
-  );
-
-export const action = async ({ request }: Route.ActionArgs) => {
-  const { client } = makeSSRClient(request);
-
-  const userId = await getLoggedInUserId(client);
-
-  const formData = await request.formData();
-  const formObject = Object.fromEntries(formData);
-
-  // Parse extractionSteps from JSON string
-  if (formObject.extractionSteps) {
-    try {
-      formObject.extractionSteps = JSON.parse(
-        formObject.extractionSteps as string
-      );
-    } catch (e) {
-      console.error('Failed to parse extractionSteps:', e);
-      return {
-        formErrors: {
-          extractionSteps: ['추출 단계 데이터 처리에 실패했습니다.'],
-        },
-      };
-    }
-  }
-
-  const { success, data, error } = dripFormSchema.safeParse(formObject);
-
-  if (!success) {
-    return { formErrors: error.flatten().fieldErrors };
-  }
+  const { id } = params;
 
   try {
-    const recipe = await createDripRecipe(client, {
+    // Get the recipe
+    const recipe = await getRecipeById(client, id);
+
+    // Check if it's a drip recipe
+    if (recipe.brewType !== 'drip') {
+      return redirect(`/recipes/edit/espresso/${id}`);
+    }
+
+    // Check if user is logged in and is the owner
+    let currentUserId: string | null = null;
+    try {
+      currentUserId = await getLoggedInUserId(client);
+    } catch (error) {
+      // User is not logged in, redirect to login
+      return redirect('/auth/login');
+    }
+
+    // Check if user owns this recipe
+    if (!currentUserId || recipe.profile_id !== currentUserId) {
+      // User doesn't own this recipe, redirect to recipe page
+      return redirect(`/recipes/${id}`);
+    }
+
+    return { recipe, currentUserId };
+  } catch (error) {
+    console.error('Failed to fetch recipe for editing:', error);
+    throw new Response('Recipe not found', { status: 404 });
+  }
+};
+
+export const action = async ({ request, params }: Route.ActionArgs) => {
+  const { client } = makeSSRClient(request);
+  const { id } = params;
+
+  try {
+    const userId = await getLoggedInUserId(client);
+    const formData = await request.formData();
+    const formObject = Object.fromEntries(formData);
+
+    // Parse extractionSteps from JSON string
+    if (formObject.extractionSteps) {
+      try {
+        formObject.extractionSteps = JSON.parse(
+          formObject.extractionSteps as string
+        );
+      } catch (e) {
+        console.error('Failed to parse extractionSteps:', e);
+        return {
+          formErrors: {
+            extractionSteps: ['추출 단계 데이터 처리에 실패했습니다.'],
+          },
+        };
+      }
+    }
+
+    const { success, data, error } = dripFormSchema.safeParse(formObject);
+
+    if (!success) {
+      return { formErrors: error.flatten().fieldErrors };
+    }
+
+    await updateDripRecipe(client, id, {
       userId,
       title: data.title,
       description: data.description || undefined,
@@ -179,27 +119,26 @@ export const action = async ({ request }: Route.ActionArgs) => {
       extractionSteps: data.extractionSteps,
     });
 
-    return redirect(`/recipes/${recipe[0].id}`);
-  } catch (err) {
-    console.error('Failed to create drip recipe:', err);
+    return redirect(`/recipes/${id}`);
+  } catch (error) {
+    console.error('Failed to update drip recipe:', error);
     return {
       formErrors: {
-        title: ['레시피 저장에 실패했습니다. 다시 시도해주세요.'],
+        title: ['레시피 수정에 실패했습니다. 다시 시도해주세요.'],
       },
     };
   }
 };
 
-const defaultExtractionSteps: DripStep[] = [
-  { stepName: 'Blooming', waterAmount: 40, duration: 40 },
-  { stepName: 'Pour 1st', waterAmount: 40, duration: 40 },
-  { stepName: '2nd', waterAmount: 40, duration: 40 },
-  { stepName: '3rd', waterAmount: 40, duration: 40 },
-];
+export default function EditDrip({
+  loaderData,
+  actionData,
+}: Route.ComponentProps) {
+  const { recipe } = loaderData;
 
-export default function CreateDrip({ actionData }: Route.ComponentProps) {
+  // Initialize form state with existing recipe data
   const [extractionSteps, setExtractionSteps] = useState<DripStep[]>(
-    defaultExtractionSteps
+    recipe.dripParams?.extractionSteps || []
   );
 
   const addStep = () => {
@@ -225,18 +164,34 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
   return (
     <>
       <Button variant='ghost' asChild className='mb-4'>
-        <Link to='/recipes/create'>← 뒤로 가기</Link>
+        <Link to={`/recipes/${recipe.id}`} className='flex items-center gap-2'>
+          <ArrowLeft className='h-4 w-4' />
+          레시피로 돌아가기
+        </Link>
       </Button>
-      <h1 className='mb-6 text-3xl font-bold'>드립 커피 레시피 만들기</h1>
+
+      <div className='mb-8'>
+        <div className='flex items-center gap-3'>
+          <DropletsIcon className='text-primary h-6 w-6' />
+          <h1 className='text-2xl font-bold'>드립 레시피 수정</h1>
+        </div>
+        <p className='text-muted-foreground mt-2'>
+          드립 커피 레시피의 세부 정보를 수정하세요
+        </p>
+      </div>
 
       <Form method='post' className='space-y-6'>
-        <RecipeBasicInfo />
+        {/* Basic Recipe Info */}
+        <RecipeBasicInfo
+          defaultTitle={recipe.title}
+          defaultDescription={recipe.description || ''}
+        />
 
-        <DripParameters />
-
-        <RecipeOptionalInfo
-          recipeType='drip'
-          description='사용하는 드리퍼와 분쇄도, 원두를 입력해주세요'
+        {/* Drip Parameters */}
+        <DripParameters
+          defaultWaterTemperature={recipe.dripParams?.waterTemperature}
+          defaultCoffeeAmount={recipe.dripParams?.coffeeAmount}
+          defaultDripType={recipe.dripParams?.brewingType}
         />
 
         <Card>
@@ -336,7 +291,17 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
           </CardFooter>
         </Card>
 
-        <RecipeTips />
+        <RecipeOptionalInfo
+          recipeType='drip'
+          description='사용하는 드리퍼와 분쇄도, 원두를 입력해주세요'
+          defaultBean={recipe.bean || ''}
+          defaultDripper={recipe.dripParams?.dripper || ''}
+          defaultGrinder={recipe.dripParams?.grinder || ''}
+          defaultGrindSize={recipe.dripParams?.grindSize || ''}
+          defaultGrinderSetting={recipe.dripParams?.grinderSetting || ''}
+        />
+
+        <RecipeTips defaultTips={recipe.tips || ''} />
 
         {/* Hidden input for extraction steps */}
         <input
@@ -361,7 +326,8 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
             variant='default'
             className='flex-1 py-3 font-semibold'
           >
-            <Save className='mr-2 h-4 w-4' />내 레시피 저장하기
+            <Save className='mr-2 h-4 w-4' />
+            레시피 수정
           </Button>
         </div>
       </Form>
