@@ -14,13 +14,13 @@ export const espressoFormSchema = z
     // Espresso parameters
     waterTemperature: z.coerce
       .number({
-        required_error: '물 온도를 입력해주세요',
+        message: '물 온도를 입력해주세요',
       })
       .min(80)
       .max(100),
     coffeeAmount: z.coerce
       .number({
-        required_error: '원두 양을 입력해주세요',
+        message: '원두 양을 입력해주세요',
       })
       .min(0)
       .max(30),
@@ -28,7 +28,7 @@ export const espressoFormSchema = z
     // Extraction time (single or range)
     extractionTime: z.coerce
       .number({
-        required_error: '추출 시간을 입력해주세요',
+        message: '추출 시간을 입력해주세요',
       })
       .min(0)
       .max(60)
@@ -161,13 +161,13 @@ export const dripFormSchema = z
     // Drip parameters
     waterTemperature: z.coerce
       .number({
-        required_error: '물 온도를 입력해주세요',
+        message: '물 온도를 입력해주세요',
       })
       .min(80)
       .max(100),
     coffeeAmount: z.coerce
       .number({
-        required_error: '원두 양을 입력해주세요',
+        message: '원두 양을 입력해주세요',
       })
       .min(0)
       .max(30),

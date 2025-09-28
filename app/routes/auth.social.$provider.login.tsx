@@ -1,15 +1,12 @@
 import type { Route } from '.react-router/types/app/routes/+types/auth.social.$provider.login';
 
 import { makeSSRClient } from '@/supa-client';
+import { socialProviderParamSchema } from '@/schemas/auth-schemas';
 import { redirect } from 'react-router';
-import { z } from 'zod';
 
-const paramSchema = z.object({
-  provider: z.enum(['google', 'kakao']),
-});
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
-  const { success, data } = paramSchema.safeParse(params);
+  const { success, data } = socialProviderParamSchema.safeParse(params);
   if (!success) {
     return redirect('/auth/login');
   }

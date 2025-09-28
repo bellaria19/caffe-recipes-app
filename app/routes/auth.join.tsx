@@ -13,37 +13,16 @@ import {
   redirect,
   useNavigation,
 } from 'react-router';
-import { z } from 'zod';
+import { joinFormSchema } from '@/schemas/auth-schemas';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Join | Moca' }];
 };
 
-const formSchema = z.object({
-  username: z
-    .string({
-      required_error: 'Username is required',
-    })
-    .min(4, {
-      message: 'Username must be at least 4 characters',
-    }),
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email('Invalid email address'),
-  password: z
-    .string({
-      required_error: 'Password is required',
-    })
-    .min(8, {
-      message: 'Password must be at least 8 characters',
-    }),
-});
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
-  const { success, data, error } = formSchema.safeParse(
+  const { success, data, error } = joinFormSchema.safeParse(
     Object.fromEntries(formData)
   );
   if (!success) {

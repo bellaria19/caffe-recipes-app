@@ -8,31 +8,16 @@ import { Button } from '@/components/ui/button';
 import { makeSSRClient } from '@/supa-client';
 import { LoaderCircleIcon, LogIn } from 'lucide-react';
 import { Form, Link, redirect, useNavigation } from 'react-router';
-import { z } from 'zod';
+import { loginFormSchema } from '@/schemas/auth-schemas';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Login | Moca' }];
 };
 
-const formSchema = z.object({
-  email: z
-    .string({
-      required_error: 'Email is required',
-      invalid_type_error: 'Email is invalid',
-    })
-    .email('Invalid email address'),
-  password: z
-    .string({
-      required_error: 'Password is required',
-    })
-    .min(8, {
-      message: 'Password must be at least 8 characters',
-    }),
-});
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
-  const { success, data, error } = formSchema.safeParse(
+  const { success, data, error } = loginFormSchema.safeParse(
     Object.fromEntries(formData)
   );
   if (!success) {
