@@ -1,0 +1,443 @@
+{
+  "buildManifest": {
+    "serverBundles": {
+      "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0": {
+        "id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+        "file": "build/server/nodejs_eyJydW50aW1lIjoibm9kZWpzIn0/index.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    },
+    "routeIdToServerBundleId": {
+      "routes/users.$username.my-recipes": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/profile.edit": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.create.espresso": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.create._index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.create.drip": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.edit": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.edit.espresso.$id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.edit.drip.$id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.$id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/recipes.$id.reviews": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/_index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.social.$provider.callback": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.social.$provider.login": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.logout": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.login": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.join": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "app/root.tsx",
+        "path": "",
+        "config": {}
+      },
+      "routes/users.$username.my-recipes": {
+        "id": "routes/users.$username.my-recipes",
+        "parentId": "root",
+        "file": "app/routes/users.$username.my-recipes.tsx",
+        "path": "users/:username/my-recipes",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/profile.edit": {
+        "id": "routes/profile.edit",
+        "parentId": "root",
+        "file": "app/routes/profile.edit.tsx",
+        "path": "profile/edit",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/recipes": {
+        "id": "routes/recipes",
+        "parentId": "root",
+        "file": "app/routes/recipes.tsx",
+        "path": "recipes",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/recipes.create": {
+        "id": "routes/recipes.create",
+        "parentId": "routes/recipes",
+        "file": "app/routes/recipes.create.tsx",
+        "path": "create",
+        "config": {}
+      },
+      "routes/recipes.create.espresso": {
+        "id": "routes/recipes.create.espresso",
+        "parentId": "routes/recipes.create",
+        "file": "app/routes/recipes.create.espresso.tsx",
+        "path": "espresso",
+        "config": {}
+      },
+      "routes/recipes.create._index": {
+        "id": "routes/recipes.create._index",
+        "parentId": "routes/recipes.create",
+        "file": "app/routes/recipes.create._index.tsx",
+        "index": true,
+        "config": {}
+      },
+      "routes/recipes.create.drip": {
+        "id": "routes/recipes.create.drip",
+        "parentId": "routes/recipes.create",
+        "file": "app/routes/recipes.create.drip.tsx",
+        "path": "drip",
+        "config": {}
+      },
+      "routes/recipes.edit": {
+        "id": "routes/recipes.edit",
+        "parentId": "routes/recipes",
+        "file": "app/routes/recipes.edit.tsx",
+        "path": "edit",
+        "config": {}
+      },
+      "routes/recipes.edit.espresso.$id": {
+        "id": "routes/recipes.edit.espresso.$id",
+        "parentId": "routes/recipes.edit",
+        "file": "app/routes/recipes.edit.espresso.$id.tsx",
+        "path": "espresso/:id",
+        "config": {}
+      },
+      "routes/recipes.edit.drip.$id": {
+        "id": "routes/recipes.edit.drip.$id",
+        "parentId": "routes/recipes.edit",
+        "file": "app/routes/recipes.edit.drip.$id.tsx",
+        "path": "drip/:id",
+        "config": {}
+      },
+      "routes/recipes.$id": {
+        "id": "routes/recipes.$id",
+        "parentId": "routes/recipes",
+        "file": "app/routes/recipes.$id.tsx",
+        "path": ":id",
+        "config": {}
+      },
+      "routes/recipes.$id.reviews": {
+        "id": "routes/recipes.$id.reviews",
+        "parentId": "routes/recipes.$id",
+        "file": "app/routes/recipes.$id.reviews.tsx",
+        "path": "reviews",
+        "config": {}
+      },
+      "routes/_index": {
+        "id": "routes/_index",
+        "parentId": "root",
+        "file": "app/routes/_index.tsx",
+        "index": true,
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/auth": {
+        "id": "routes/auth",
+        "parentId": "root",
+        "file": "app/routes/auth.tsx",
+        "path": "auth",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/auth.social.$provider.callback": {
+        "id": "routes/auth.social.$provider.callback",
+        "parentId": "routes/auth",
+        "file": "app/routes/auth.social.$provider.callback.tsx",
+        "path": "social/:provider/callback",
+        "config": {}
+      },
+      "routes/auth.social.$provider.login": {
+        "id": "routes/auth.social.$provider.login",
+        "parentId": "routes/auth",
+        "file": "app/routes/auth.social.$provider.login.tsx",
+        "path": "social/:provider/login",
+        "config": {}
+      },
+      "routes/auth.logout": {
+        "id": "routes/auth.logout",
+        "parentId": "routes/auth",
+        "file": "app/routes/auth.logout.tsx",
+        "path": "logout",
+        "config": {}
+      },
+      "routes/auth.login": {
+        "id": "routes/auth.login",
+        "parentId": "routes/auth",
+        "file": "app/routes/auth.login.tsx",
+        "path": "login",
+        "config": {}
+      },
+      "routes/auth.join": {
+        "id": "routes/auth.join",
+        "parentId": "routes/auth",
+        "file": "app/routes/auth.join.tsx",
+        "path": "join",
+        "config": {}
+      }
+    }
+  },
+  "reactRouterConfig": {
+    "appDirectory": "/Users/bellaria/Documents/nomad/caffe-recipes-app/app",
+    "basename": "/",
+    "buildDirectory": "/Users/bellaria/Documents/nomad/caffe-recipes-app/build",
+    "future": {
+      "v8_middleware": false,
+      "unstable_optimizeDeps": false,
+      "unstable_splitRouteModules": false,
+      "unstable_subResourceIntegrity": false,
+      "unstable_viteEnvironmentApi": false
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "root.tsx",
+        "path": ""
+      },
+      "routes/users.$username.my-recipes": {
+        "id": "routes/users.$username.my-recipes",
+        "parentId": "root",
+        "file": "routes/users.$username.my-recipes.tsx",
+        "path": "users/:username/my-recipes"
+      },
+      "routes/profile.edit": {
+        "id": "routes/profile.edit",
+        "parentId": "root",
+        "file": "routes/profile.edit.tsx",
+        "path": "profile/edit"
+      },
+      "routes/recipes": {
+        "id": "routes/recipes",
+        "parentId": "root",
+        "file": "routes/recipes.tsx",
+        "path": "recipes"
+      },
+      "routes/recipes.create": {
+        "id": "routes/recipes.create",
+        "parentId": "routes/recipes",
+        "file": "routes/recipes.create.tsx",
+        "path": "create"
+      },
+      "routes/recipes.create.espresso": {
+        "id": "routes/recipes.create.espresso",
+        "parentId": "routes/recipes.create",
+        "file": "routes/recipes.create.espresso.tsx",
+        "path": "espresso"
+      },
+      "routes/recipes.create._index": {
+        "id": "routes/recipes.create._index",
+        "parentId": "routes/recipes.create",
+        "file": "routes/recipes.create._index.tsx",
+        "index": true
+      },
+      "routes/recipes.create.drip": {
+        "id": "routes/recipes.create.drip",
+        "parentId": "routes/recipes.create",
+        "file": "routes/recipes.create.drip.tsx",
+        "path": "drip"
+      },
+      "routes/recipes.edit": {
+        "id": "routes/recipes.edit",
+        "parentId": "routes/recipes",
+        "file": "routes/recipes.edit.tsx",
+        "path": "edit"
+      },
+      "routes/recipes.edit.espresso.$id": {
+        "id": "routes/recipes.edit.espresso.$id",
+        "parentId": "routes/recipes.edit",
+        "file": "routes/recipes.edit.espresso.$id.tsx",
+        "path": "espresso/:id"
+      },
+      "routes/recipes.edit.drip.$id": {
+        "id": "routes/recipes.edit.drip.$id",
+        "parentId": "routes/recipes.edit",
+        "file": "routes/recipes.edit.drip.$id.tsx",
+        "path": "drip/:id"
+      },
+      "routes/recipes.$id": {
+        "id": "routes/recipes.$id",
+        "parentId": "routes/recipes",
+        "file": "routes/recipes.$id.tsx",
+        "path": ":id"
+      },
+      "routes/recipes.$id.reviews": {
+        "id": "routes/recipes.$id.reviews",
+        "parentId": "routes/recipes.$id",
+        "file": "routes/recipes.$id.reviews.tsx",
+        "path": "reviews"
+      },
+      "routes/_index": {
+        "id": "routes/_index",
+        "parentId": "root",
+        "file": "routes/_index.tsx",
+        "index": true
+      },
+      "routes/auth": {
+        "id": "routes/auth",
+        "parentId": "root",
+        "file": "routes/auth.tsx",
+        "path": "auth"
+      },
+      "routes/auth.social.$provider.callback": {
+        "id": "routes/auth.social.$provider.callback",
+        "parentId": "routes/auth",
+        "file": "routes/auth.social.$provider.callback.tsx",
+        "path": "social/:provider/callback"
+      },
+      "routes/auth.social.$provider.login": {
+        "id": "routes/auth.social.$provider.login",
+        "parentId": "routes/auth",
+        "file": "routes/auth.social.$provider.login.tsx",
+        "path": "social/:provider/login"
+      },
+      "routes/auth.logout": {
+        "id": "routes/auth.logout",
+        "parentId": "routes/auth",
+        "file": "routes/auth.logout.tsx",
+        "path": "logout"
+      },
+      "routes/auth.login": {
+        "id": "routes/auth.login",
+        "parentId": "routes/auth",
+        "file": "routes/auth.login.tsx",
+        "path": "login"
+      },
+      "routes/auth.join": {
+        "id": "routes/auth.join",
+        "parentId": "routes/auth",
+        "file": "routes/auth.join.tsx",
+        "path": "join"
+      }
+    },
+    "routeDiscovery": {
+      "mode": "lazy",
+      "manifestPath": "/__manifest"
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": true,
+    "unstable_routeConfig": [
+      {
+        "id": "root",
+        "path": "",
+        "file": "root.tsx",
+        "children": [
+          {
+            "id": "routes/users.$username.my-recipes",
+            "file": "routes/users.$username.my-recipes.tsx",
+            "path": "users/:username/my-recipes"
+          },
+          {
+            "id": "routes/profile.edit",
+            "file": "routes/profile.edit.tsx",
+            "path": "profile/edit"
+          },
+          {
+            "id": "routes/recipes",
+            "file": "routes/recipes.tsx",
+            "path": "recipes",
+            "children": [
+              {
+                "id": "routes/recipes.create",
+                "file": "routes/recipes.create.tsx",
+                "path": "create",
+                "children": [
+                  {
+                    "id": "routes/recipes.create.espresso",
+                    "file": "routes/recipes.create.espresso.tsx",
+                    "path": "espresso"
+                  },
+                  {
+                    "id": "routes/recipes.create._index",
+                    "file": "routes/recipes.create._index.tsx",
+                    "index": true
+                  },
+                  {
+                    "id": "routes/recipes.create.drip",
+                    "file": "routes/recipes.create.drip.tsx",
+                    "path": "drip"
+                  }
+                ]
+              },
+              {
+                "id": "routes/recipes.edit",
+                "file": "routes/recipes.edit.tsx",
+                "path": "edit",
+                "children": [
+                  {
+                    "id": "routes/recipes.edit.espresso.$id",
+                    "file": "routes/recipes.edit.espresso.$id.tsx",
+                    "path": "espresso/:id"
+                  },
+                  {
+                    "id": "routes/recipes.edit.drip.$id",
+                    "file": "routes/recipes.edit.drip.$id.tsx",
+                    "path": "drip/:id"
+                  }
+                ]
+              },
+              {
+                "id": "routes/recipes.$id",
+                "file": "routes/recipes.$id.tsx",
+                "path": ":id",
+                "children": [
+                  {
+                    "id": "routes/recipes.$id.reviews",
+                    "file": "routes/recipes.$id.reviews.tsx",
+                    "path": "reviews"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "routes/_index",
+            "file": "routes/_index.tsx",
+            "index": true
+          },
+          {
+            "id": "routes/auth",
+            "file": "routes/auth.tsx",
+            "path": "auth",
+            "children": [
+              {
+                "id": "routes/auth.social.$provider.callback",
+                "file": "routes/auth.social.$provider.callback.tsx",
+                "path": "social/:provider/callback"
+              },
+              {
+                "id": "routes/auth.social.$provider.login",
+                "file": "routes/auth.social.$provider.login.tsx",
+                "path": "social/:provider/login"
+              },
+              {
+                "id": "routes/auth.logout",
+                "file": "routes/auth.logout.tsx",
+                "path": "logout"
+              },
+              {
+                "id": "routes/auth.login",
+                "file": "routes/auth.login.tsx",
+                "path": "login"
+              },
+              {
+                "id": "routes/auth.join",
+                "file": "routes/auth.join.tsx",
+                "path": "join"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}
