@@ -92,7 +92,6 @@ export const createDripRecipe = async (
     tips,
     waterTemperature,
     coffeeAmount,
-    dripType,
     dripper,
     otherDripper,
     grinder,
@@ -108,7 +107,6 @@ export const createDripRecipe = async (
     tips?: string;
     waterTemperature: number;
     coffeeAmount: number;
-    dripType: 'hot' | 'ice';
     dripper?: string;
     otherDripper?: string;
     grinder?: string;
@@ -129,7 +127,6 @@ export const createDripRecipe = async (
   const dripParams: DripParams = {
     coffeeAmount,
     waterTemperature,
-    brewingType: dripType,
     dripper: dripper === 'other' ? otherDripper : dripper,
     grindSize,
     grinder: grinder === 'other' ? otherGrinder : grinder,
@@ -168,7 +165,6 @@ export const updateDripRecipe = async (
     tips,
     waterTemperature,
     coffeeAmount,
-    dripType,
     dripper,
     otherDripper,
     grinder,
@@ -184,7 +180,6 @@ export const updateDripRecipe = async (
     tips?: string;
     waterTemperature: number;
     coffeeAmount: number;
-    dripType: 'hot' | 'ice';
     dripper?: string;
     otherDripper?: string;
     grinder?: string;
@@ -201,7 +196,6 @@ export const updateDripRecipe = async (
   const dripParams: DripParams = {
     coffeeAmount,
     waterTemperature,
-    brewingType: dripType,
     dripper: dripper === 'other' ? otherDripper : dripper,
     grindSize,
     grinder: grinder === 'other' ? otherGrinder : grinder,

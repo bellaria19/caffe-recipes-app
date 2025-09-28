@@ -129,32 +129,6 @@ export const likes = pgTable(
   })
 );
 
-/**
- * Saved Recipes table - 저장된 레시피
- * 사용자가 저장한(북마크한) 레시피 정보
- */
-export const savedRecipes = pgTable(
-  'saved_recipes',
-  {
-    id: uuid('id').primaryKey().defaultRandom(),
-    profileId: uuid('profile_id')
-      .notNull()
-      .references(() => profiles.id, { onDelete: 'cascade' }),
-    recipeId: uuid('recipe_id')
-      .notNull()
-      .references(() => recipes.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-  },
-  (table) => ({
-    // 동일 사용자가 같은 레시피를 중복 저장하지 않도록 제약
-    uniqueProfileRecipeSave: unique().on(table.profileId, table.recipeId),
-    // 성능 최적화를 위한 인덱스
-    recipeIdIdx: index('idx_saved_recipes_recipe_id').on(table.recipeId),
-    profileIdIdx: index('idx_saved_recipes_profile_id').on(table.profileId),
-  })
-);
 
 /**
  * Drizzle ORM Relations 정의
@@ -164,7 +138,6 @@ export const profilesRelations = relations(profiles, ({ many }) => ({
   recipes: many(recipes),
   reviews: many(reviews),
   likes: many(likes),
-  savedRecipes: many(savedRecipes),
 }));
 
 export const recipesRelations = relations(recipes, ({ one, many }) => ({
@@ -174,7 +147,6 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   }),
   reviews: many(reviews),
   likes: many(likes),
-  savedRecipes: many(savedRecipes),
 }));
 
 export const reviewsRelations = relations(reviews, ({ one }) => ({
@@ -199,16 +171,6 @@ export const likesRelations = relations(likes, ({ one }) => ({
   }),
 }));
 
-export const savedRecipesRelations = relations(savedRecipes, ({ one }) => ({
-  profile: one(profiles, {
-    fields: [savedRecipes.profileId],
-    references: [profiles.id],
-  }),
-  recipe: one(recipes, {
-    fields: [savedRecipes.recipeId],
-    references: [recipes.id],
-  }),
-}));
 
 /**
  * Daily Popular Recipes table - 일간 인기순 레시피
@@ -320,7 +282,6 @@ export interface EspressoParams {
 export interface DripParams {
   coffeeAmount: number; // 원두량 (g)
   waterTemperature: number; // 온도 (°C)
-  brewingType?: 'hot' | 'ice'; // 추출방식
   dripper?: string; // 드리퍼 종류
   grindSize?: string; // 분쇄도 설명
   grinder?: string; // 그라인더명

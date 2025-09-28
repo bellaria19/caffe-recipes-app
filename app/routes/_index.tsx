@@ -260,7 +260,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <PageContainer className='flex flex-col'>
-      <div className='container mx-auto flex flex-1 flex-col p-4 py-10'>
+      <div className='container mx-auto flex max-w-6xl flex-1 flex-col p-4 py-10'>
         <div className='mb-6'>
           <RecipeSearchAndFilter
             searchQuery={searchQuery}

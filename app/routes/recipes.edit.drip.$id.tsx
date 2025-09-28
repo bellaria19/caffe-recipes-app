@@ -109,7 +109,6 @@ export const action = async ({ request, params }: Route.ActionArgs) => {
       tips: data.tips || undefined,
       waterTemperature: data.waterTemperature,
       coffeeAmount: data.coffeeAmount,
-      dripType: data.dripType,
       dripper: data.dripper || undefined,
       otherDripper: data.otherDripper || undefined,
       grinder: data.grinder || undefined,
@@ -191,7 +190,6 @@ export default function EditDrip({
         <DripParameters
           defaultWaterTemperature={recipe.dripParams?.waterTemperature}
           defaultCoffeeAmount={recipe.dripParams?.coffeeAmount}
-          defaultDripType={recipe.dripParams?.brewingType}
         />
 
         <Card>

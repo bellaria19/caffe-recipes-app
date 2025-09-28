@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
 import { BeakerIcon } from 'lucide-react';
 
 export function DisplayParameters({ recipe }: { recipe: Recipe }) {
@@ -121,7 +120,6 @@ function DripParametersDisplay({ recipe }: { recipe: Recipe }) {
               <TableHead className='text-center'>원두량</TableHead>
               <TableHead className='text-center'>총 물의 양</TableHead>
               <TableHead className='text-center'>총 추출 시간</TableHead>
-              <TableHead className='text-center'>추출 방식</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -138,18 +136,6 @@ function DripParametersDisplay({ recipe }: { recipe: Recipe }) {
               <TableCell className='text-center font-medium'>
                 {Math.floor(totalTime / 60)}:
                 {String(totalTime % 60).padStart(2, '0')}
-              </TableCell>
-              <TableCell className='text-center font-medium'>
-                <span
-                  className={cn(
-                    'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
-                    params.brewingType === 'hot'
-                      ? 'bg-red-100 text-red-700'
-                      : 'bg-blue-100 text-blue-700'
-                  )}
-                >
-                  {params.brewingType === 'hot' ? 'HOT' : 'ICE'}
-                </span>
               </TableCell>
             </TableRow>
           </TableBody>

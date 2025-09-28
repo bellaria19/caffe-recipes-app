@@ -171,7 +171,6 @@ export const dripFormSchema = z
       })
       .min(0)
       .max(30),
-    dripType: z.enum(['hot', 'ice']),
 
     // Grind settings
     dripper: z.string().optional(),

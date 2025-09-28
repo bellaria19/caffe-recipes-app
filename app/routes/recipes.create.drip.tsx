@@ -74,7 +74,6 @@ export const action = async ({ request }: Route.ActionArgs) => {
       tips: data.tips || undefined,
       waterTemperature: data.waterTemperature,
       coffeeAmount: data.coffeeAmount,
-      dripType: data.dripType,
       dripper: data.dripper || undefined,
       otherDripper: data.otherDripper || undefined,
       grinder: data.grinder || undefined,

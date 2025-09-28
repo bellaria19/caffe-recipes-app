@@ -1,4 +1,3 @@
-import { SelectField } from '@/components/common/select-field';
 import {
   Card,
   CardContent,
@@ -13,11 +12,9 @@ import { BeakerIcon } from 'lucide-react';
 export function DripParameters({
   defaultWaterTemperature,
   defaultCoffeeAmount,
-  defaultDripType,
 }: {
   defaultWaterTemperature?: number;
   defaultCoffeeAmount?: number;
-  defaultDripType?: 'hot' | 'ice';
 }) {
   return (
     <Card>
@@ -31,7 +28,7 @@ export function DripParameters({
         </CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <div className='grid gap-2'>
             <Label htmlFor='waterTemperature'>물 온도 (°C)</Label>
             <Input
@@ -59,20 +56,6 @@ export function DripParameters({
               placeholder='18'
               defaultValue={defaultCoffeeAmount}
               required
-            />
-          </div>
-
-          <div className='grid gap-2'>
-            <Label htmlFor='dripType'>추출 방식</Label>
-            <SelectField
-              name='dripType'
-              required
-              placeholder='추출 방식을 선택하세요'
-              defaultValue={defaultDripType}
-              options={[
-                { value: 'hot', label: 'Hot' },
-                { value: 'ice', label: 'Ice' },
-              ]}
             />
           </div>
         </div>

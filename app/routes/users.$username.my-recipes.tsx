@@ -68,7 +68,7 @@ export default function MyRecipes({
   );
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [activeTab, setActiveTab] = useState<'my-recipes' | 'saved-recipes'>(
+  const [activeTab, setActiveTab] = useState<'my-recipes' | 'liked-recipes'>(
     'my-recipes'
   );
 
@@ -273,7 +273,7 @@ export default function MyRecipes({
 
   return (
     <PageContainer className='flex flex-col'>
-      <div className='container mx-auto flex flex-1 flex-col p-4 py-10'>
+      <div className='container mx-auto flex max-w-6xl flex-1 flex-col p-4 py-10'>
         {/* Enhanced Header Section */}
         <div className='mb-8'>
           <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
@@ -338,11 +338,11 @@ export default function MyRecipes({
               </span>
             </Button>
             <Button
-              variant={activeTab === 'saved-recipes' ? 'default' : 'ghost'}
+              variant={activeTab === 'liked-recipes' ? 'default' : 'ghost'}
               size='lg'
-              onClick={() => setActiveTab('saved-recipes')}
+              onClick={() => setActiveTab('liked-recipes')}
               className={`flex-1 justify-center gap-2 transition-all ${
-                activeTab === 'saved-recipes'
+                activeTab === 'liked-recipes'
                   ? 'shadow-md'
                   : 'hover:bg-muted/50'
               }`}
@@ -466,7 +466,7 @@ export default function MyRecipes({
               </div>
             )}
 
-            {activeTab === 'saved-recipes' && likedRecipes.length === 0 && (
+            {activeTab === 'liked-recipes' && likedRecipes.length === 0 && (
               <div className='flex items-center justify-center py-16'>
                 <div className='max-w-md text-center'>
                   <div className='mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-red-500/10 to-pink-500/10 p-6'>

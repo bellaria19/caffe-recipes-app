@@ -57,20 +57,25 @@ export function DisplayExtractionSteps({ recipe }: { recipe: Recipe }) {
                   <div className='bg-primary text-primary-foreground flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-medium'>
                     {index + 1}
                   </div>
-                  <div className='flex flex-col'>
-                    <span className='font-medium'>{step.stepName}</span>
-                    <span className='text-muted-foreground text-xs'>
+                  {/* <div className='flex flex-col'> */}
+                  <span className='font-medium'>{step.stepName}</span>
+                  {/* <span className='text-muted-foreground text-xs'>
                       {formatTime(cumulativeTime)}
-                    </span>
-                  </div>
+                    </span> */}
+                  {/* </div> */}
                 </div>
                 <div className='flex items-center gap-4'>
-                  <span className='text-lg font-bold'>{step.waterAmount}g</span>
-                  {step.duration && (
+                  <span className='text-lg font-semibold'>
+                    {step.waterAmount}g
+                  </span>
+                  {/* {step.duration && (
                     <span className='text-muted-foreground text-sm'>
                       {step.duration}초
                     </span>
-                  )}
+                  )} */}
+                  <span className='text-muted-foreground text-sm'>
+                    {formatTime(cumulativeTime)}
+                  </span>
                 </div>
               </div>
             );
