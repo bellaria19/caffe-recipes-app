@@ -5,15 +5,19 @@ import type { Route } from '.react-router/types/app/routes/+types/auth.login';
 import { AuthInputField } from '@/components/auth/auth-input-field';
 import { SocialAuthButtons } from '@/components/auth/social-auth-buttons';
 import { Button } from '@/components/ui/button';
+import { loginFormSchema } from '@/schemas/auth-schemas';
 import { makeSSRClient } from '@/supa-client';
 import { LoaderCircleIcon, LogIn } from 'lucide-react';
-import { Form, Link, redirect, useNavigation } from 'react-router';
-import { loginFormSchema } from '@/schemas/auth-schemas';
+import {
+  Form,
+  Link,
+  redirect,
+  useNavigation,
+} from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Login | Moca' }];
 };
-
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
@@ -37,7 +41,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
     };
   }
 
-  return redirect('/', {
+  return redirect('/?loggedIn=true', {
     headers,
   });
 };

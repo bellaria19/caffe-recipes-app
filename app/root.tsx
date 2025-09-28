@@ -80,7 +80,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
       <main className='pt-14'>
         <Outlet />
       </main>
-      <Toaster />
+      <Toaster position="top-center" />
     </ThemeProvider>
   );
 }

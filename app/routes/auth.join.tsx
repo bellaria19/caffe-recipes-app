@@ -4,6 +4,7 @@ import { AuthInputField } from '@/components/auth/auth-input-field';
 import { SocialAuthButtons } from '@/components/auth/social-auth-buttons';
 import { Button } from '@/components/ui/button';
 import { checkUsernameExists } from '@/queries/auth';
+import { joinFormSchema } from '@/schemas/auth-schemas';
 import { makeSSRClient } from '@/supa-client';
 import { LoaderCircleIcon, UserPlus } from 'lucide-react';
 import {
@@ -13,12 +14,10 @@ import {
   redirect,
   useNavigation,
 } from 'react-router';
-import { joinFormSchema } from '@/schemas/auth-schemas';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Join | Moca' }];
 };
-
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
@@ -52,7 +51,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
     return { signUpError: signUpError.message };
   }
 
-  return redirect('/', {
+  return redirect('/?registered=true', {
     headers,
   });
 };

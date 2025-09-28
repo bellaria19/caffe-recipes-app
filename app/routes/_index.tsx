@@ -13,8 +13,9 @@ import { getRecipes } from '@/queries/recipes';
 import { getLoggedInUserId } from '@/queries/users';
 import { browserClient, makeSSRClient } from '@/supa-client';
 import { Coffee } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { type MetaFunction, useNavigate, useSearchParams } from 'react-router';
+import { toast } from 'sonner';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Home | Moca' }];
@@ -78,6 +79,49 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   // Initialize recipes state for dynamic updates
   const [recipes, setRecipes] = useState<Recipe[]>(loaderData.recipes || []);
+
+  // Show auth notifications
+  useEffect(() => {
+    console.log('useEffect 실행됨:', {
+      registered: searchParams.get('registered'),
+      loggedIn: searchParams.get('loggedIn'),
+      loggedOut: searchParams.get('loggedOut')
+    });
+
+    if (searchParams.get('registered') === 'true') {
+      console.log('회원가입 toast 표시');
+      toast.success('회원가입이 완료되었습니다! 🎉', {
+        description: '환영합니다! 이제 커피 레시피를 공유하고 탐험해보세요.',
+        duration: 5000,
+      });
+    } else if (searchParams.get('loggedIn') === 'true') {
+      console.log('로그인 toast 표시');
+      toast.success('로그인되었습니다! 👋', {
+        description: '다시 돌아오신 것을 환영합니다!',
+        duration: 3000,
+      });
+    } else if (searchParams.get('loggedOut') === 'true') {
+      console.log('로그아웃 toast 표시');
+      toast.info('로그아웃되었습니다 👋', {
+        description: '로그아웃되었습니다.',
+        duration: 3000,
+      });
+    }
+
+    // Clean up URL parameters
+    if (
+      searchParams.get('registered') ||
+      searchParams.get('loggedIn') ||
+      searchParams.get('loggedOut')
+    ) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('registered');
+      newParams.delete('loggedIn');
+      newParams.delete('loggedOut');
+      const newURL = newParams.toString() ? `/?${newParams.toString()}` : '/';
+      navigate(newURL, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const handleLikeRecipe = async (recipeId: string) => {
     try {
