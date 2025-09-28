@@ -9,7 +9,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Coffee, LogIn, LogOut, Settings, User, UserPlus } from 'lucide-react';
+import {
+  Coffee,
+  LogIn,
+  LogOut,
+  Plus,
+  Settings,
+  User,
+  UserPlus,
+} from 'lucide-react';
 import { Link } from 'react-router';
 
 export function Navbar({
@@ -63,6 +71,15 @@ export function Navbar({
                       className='flex items-center gap-2'
                     >
                       <User className='h-4 w-4' />내 레시피
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to='/recipes/create'
+                      className='flex items-center gap-2'
+                    >
+                      <Plus className='h-4 w-4' />
+                      레시피 추가
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
