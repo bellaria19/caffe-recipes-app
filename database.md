@@ -84,7 +84,6 @@ CREATE TABLE recipes (
 {
   "coffeeAmount": 22, // 원두량 (g)
   "waterTemperature": 94, // 물 온도 (°C)
-  "brewingType": "hot", // 'hot' | 'ice' (선택사항)
   "extractionSteps": [ // 추출 단계들
     {
       "stepName": "Blooming",
@@ -202,7 +201,6 @@ export interface EspressoParams {
 export interface DripParams {
   coffeeAmount: number; // 원두량 (g)
   waterTemperature: number; // 온도 (°C)
-  brewingType?: 'hot' | 'ice'; // 추출방식
   dripper?: string; // 드리퍼 종류
   grindSize?: string; // 분쇄도 설명
   grinder?: string; // 그라인더명
