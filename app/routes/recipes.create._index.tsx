@@ -36,10 +36,10 @@ export default function CreateRecipe() {
           어떤 종류의 커피 레시피를 만들고 싶으신가요?
         </p>
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-          <Link to='/recipes/create/espresso'>
-            <Card className='hover:border-primary h-full cursor-pointer border-2 transition-shadow hover:shadow-lg'>
+          <Link to='/recipes/create/espresso' className='group'>
+            <Card className='hover:border-primary hover:bg-primary/5 h-full cursor-pointer border-2 border-border/50 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]'>
               <CardHeader className='text-center'>
-                <Coffee className='text-primary mx-auto mb-4 h-12 w-12' />
+                <Coffee className='text-primary mx-auto mb-4 h-12 w-12 transition-transform duration-300 group-hover:scale-110' />
                 <CardTitle>에스프레소</CardTitle>
                 <CardDescription className='pt-4'>
                   완벽한 에스프레소 추출법을 지금 공유해보세요
@@ -48,10 +48,10 @@ export default function CreateRecipe() {
             </Card>
           </Link>
 
-          <Link to='/recipes/create/drip'>
-            <Card className='hover:border-primary h-full cursor-pointer border-2 transition-shadow hover:shadow-lg'>
+          <Link to='/recipes/create/drip' className='group'>
+            <Card className='hover:border-primary hover:bg-primary/5 h-full cursor-pointer border-2 border-border/50 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]'>
               <CardHeader className='text-center'>
-                <Droplets className='text-primary mx-auto mb-4 h-12 w-12' />
+                <Droplets className='text-primary mx-auto mb-4 h-12 w-12 transition-transform duration-300 group-hover:scale-110' />
                 <CardTitle>드립 커피</CardTitle>
                 <CardDescription className='pt-4'>
                   특별한 드립 커피 노하우를 지금 공유해보세요

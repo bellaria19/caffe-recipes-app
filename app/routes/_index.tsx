@@ -12,6 +12,7 @@ import { getUserLikes } from '@/queries/home';
 import { getRecipes } from '@/queries/recipes';
 import { getLoggedInUserId } from '@/queries/users';
 import { browserClient, makeSSRClient } from '@/supa-client';
+import { Coffee } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { type MetaFunction, useNavigate, useSearchParams } from 'react-router';
 
@@ -294,7 +295,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             {filteredRecipes.length === 0 && (
               <div className='flex items-center justify-center py-12'>
                 <div className='text-center'>
-                  <h3 className='text-muted-foreground mb-2 text-xl font-semibold'>
+                  <div className='bg-primary/10 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'>
+                    <Coffee className='text-primary/70 h-8 w-8' />
+                  </div>
+                  <h3 className='text-foreground mb-2 text-xl font-semibold'>
                     레시피를 찾을 수 없습니다
                   </h3>
                   <p className='text-muted-foreground'>

@@ -68,7 +68,7 @@ export function RecipePagination({
             className={
               currentPage <= 1
                 ? 'pointer-events-none opacity-50'
-                : 'hover:bg-muted/50 cursor-pointer transition-colors'
+                : 'hover:bg-primary/10 cursor-pointer transition-all duration-200'
             }
           />
         </PaginationItem>
@@ -81,10 +81,10 @@ export function RecipePagination({
               <PaginationLink
                 onClick={() => onPageChange(item as number)}
                 isActive={currentPage === item}
-                className={`cursor-pointer transition-colors ${
+                className={`cursor-pointer transition-all duration-200 ${
                   currentPage === item
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'hover:bg-muted/50'
+                    ? 'bg-primary text-primary-foreground shadow-md border-primary'
+                    : 'hover:bg-primary/10 hover:border-primary/30'
                 }`}
               >
                 {item}
@@ -101,7 +101,7 @@ export function RecipePagination({
             className={
               currentPage >= totalPages
                 ? 'pointer-events-none opacity-50'
-                : 'hover:bg-muted/50 cursor-pointer transition-colors'
+                : 'hover:bg-primary/10 cursor-pointer transition-all duration-200'
             }
           />
         </PaginationItem>

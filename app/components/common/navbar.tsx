@@ -22,15 +22,17 @@ export function Navbar({
   profileImageUrl?: string | null;
 }) {
   return (
-    <nav className='bg-background/95 supports-[backdrop-filter]:bg-background/60 fixed top-0 right-0 left-0 z-50 border-b backdrop-blur'>
+    <nav className='bg-background/95 supports-[backdrop-filter]:bg-background/60 border-primary/20 fixed top-0 right-0 left-0 z-50 border-b shadow-sm backdrop-blur'>
       <div className='container mx-auto flex h-14 items-center justify-between px-4'>
         <div className='flex items-center space-x-6'>
           <Link
             to='/'
-            className='flex items-center space-x-2 transition-opacity hover:opacity-80'
+            className='flex items-center space-x-2 transition-all duration-200 hover:scale-105'
           >
-            <Coffee className='text-primary h-6 w-6' />
-            <span className='text-lg font-semibold'>Moca</span>
+            <Coffee className='text-primary h-6 w-6 transition-transform duration-200' />
+            <span className='from-primary to-primary/80 bg-gradient-to-r bg-clip-text text-lg font-semibold text-transparent'>
+              MoCa
+            </span>
           </Link>
         </div>
 
@@ -43,11 +45,11 @@ export function Navbar({
                   <Button
                     variant='outline'
                     size='sm'
-                    className='flex items-center space-x-2'
+                    className='border-primary/30 hover:bg-primary/10 hover:border-primary flex items-center space-x-2 transition-all duration-200'
                   >
                     <Avatar className='h-6 w-6'>
                       <AvatarImage src={profileImageUrl || undefined} />
-                      <AvatarFallback className='text-xs'>
+                      <AvatarFallback className='bg-primary/10 text-primary text-xs font-semibold'>
                         {username?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
@@ -87,6 +89,7 @@ export function Navbar({
             <>
               <NavbarButton
                 to='/auth/login'
+                variant='default'
                 icon={<LogIn className='h-4 w-4' />}
               >
                 로그인

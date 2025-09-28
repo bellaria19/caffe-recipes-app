@@ -279,7 +279,7 @@ export default function MyRecipes({
           <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
             <div className='space-y-2'>
               <div className='flex items-center gap-3'>
-                <h1 className='from-foreground via-primary to-foreground/80 bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent sm:text-3xl md:text-4xl'>
+                <h1 className='from-primary to-foreground/80 bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent sm:text-3xl md:text-4xl'>
                   My Coffee Lab
                 </h1>
               </div>
