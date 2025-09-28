@@ -5,7 +5,7 @@ import type { Route } from './+types/root';
 import { AuthStateSync } from '@/components/auth/auth-state-sync';
 import { Navbar } from '@/components/common/navbar';
 import { Toaster } from '@/components/ui/sonner';
-import { getUserById } from '@/features/users/queries';
+import { getUserById } from '@/queries/users';
 import { makeSSRClient } from '@/supa-client';
 import { ThemeProvider } from 'next-themes';
 import {
@@ -74,10 +74,8 @@ export default function App({ loaderData }: Route.ComponentProps) {
       <AuthStateSync isInitiallyLoggedIn={isLoggedIn} />
       <Navbar
         isLoggedIn={isLoggedIn}
-        username={
-          loaderData.profile?.username ||
-          loaderData.user?.user_metadata.username
-        }
+        username={loaderData.profile?.username}
+        profileImageUrl={loaderData.profile?.profile_image_url}
       />
       <main className='pt-14'>
         <Outlet />

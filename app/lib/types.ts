@@ -58,3 +58,17 @@ export interface DripStep {
   waterAmount: number; // 물의 양 (g)
   duration?: number; // 시간 (초, 선택사항)
 }
+
+export interface Review {
+  id: string;
+  profileId: string;
+  recipeId: string;
+  rating: number; // 1-5 stars
+  content?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  author: {
+    username: string;
+    profileImageUrl?: string | null;
+  };
+}
