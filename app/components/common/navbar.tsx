@@ -9,14 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Coffee,
-  LogIn,
-  LogOut,
-  Settings,
-  User,
-  UserPlus,
-} from 'lucide-react';
+import { Coffee, LogIn, LogOut, Settings, User, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
 
 export function Navbar({
@@ -48,7 +41,7 @@ export function Navbar({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant='ghost'
+                    variant='outline'
                     size='sm'
                     className='flex items-center space-x-2'
                   >
