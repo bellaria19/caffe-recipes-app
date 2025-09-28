@@ -23,7 +23,7 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
     throw error;
   }
 
-  return redirect('/', {
+  return redirect('/?socialLogin=true', {
     headers,
   });
 };

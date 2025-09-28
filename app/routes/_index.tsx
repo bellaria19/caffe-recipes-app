@@ -85,6 +85,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     console.log('useEffect 실행됨:', {
       registered: searchParams.get('registered'),
       loggedIn: searchParams.get('loggedIn'),
+      socialLogin: searchParams.get('socialLogin'),
       loggedOut: searchParams.get('loggedOut')
     });
 
@@ -100,6 +101,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         description: '다시 돌아오신 것을 환영합니다!',
         duration: 3000,
       });
+    } else if (searchParams.get('socialLogin') === 'true') {
+      console.log('소셜 로그인 toast 표시');
+      toast.success('소셜 로그인 완료! 🚀', {
+        description: '소셜 계정으로 성공적으로 로그인되었습니다.',
+        duration: 3000,
+      });
     } else if (searchParams.get('loggedOut') === 'true') {
       console.log('로그아웃 toast 표시');
       toast.info('로그아웃되었습니다 👋', {
@@ -112,11 +119,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     if (
       searchParams.get('registered') ||
       searchParams.get('loggedIn') ||
+      searchParams.get('socialLogin') ||
       searchParams.get('loggedOut')
     ) {
       const newParams = new URLSearchParams(searchParams);
       newParams.delete('registered');
       newParams.delete('loggedIn');
+      newParams.delete('socialLogin');
       newParams.delete('loggedOut');
       const newURL = newParams.toString() ? `/?${newParams.toString()}` : '/';
       navigate(newURL, { replace: true });
