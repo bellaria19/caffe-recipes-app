@@ -3,6 +3,7 @@ import type { MetaFunction } from 'react-router';
 
 import type { Route } from '.react-router/types/app/routes/+types/users.$username.my-recipes';
 
+import { PageContainer } from '@/components/common/page-container';
 import { RecipeCard } from '@/components/common/recipe-card';
 import { RecipePagination } from '@/components/common/recipe-pagination';
 import { RecipeSearchAndFilter } from '@/components/common/recipe-search-and-filter';
@@ -271,7 +272,7 @@ export default function MyRecipes({
   const currentUrl = location.pathname + location.search;
 
   return (
-    <div className='from-background to-muted/20 flex min-h-[calc(100vh-3.5rem)] flex-col bg-gradient-to-b'>
+    <PageContainer className='flex flex-col'>
       <div className='container mx-auto flex flex-1 flex-col p-4 py-10'>
         {/* Enhanced Header Section */}
         <div className='mb-8'>
@@ -307,19 +308,17 @@ export default function MyRecipes({
         </div>
 
         {/* Enhanced Search and Filter Section */}
-        <Card className='mb-6'>
-          <CardContent>
-            <RecipeSearchAndFilter
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              selectedType={selectedFilter}
-              onTypeChange={handleFilterChange}
-              selectedSort={selectedSort}
-              onSortChange={handleSortChange}
-              placeholder='레시피 제목이나 설명으로 검색하세요...'
-            />
-          </CardContent>
-        </Card>
+        <div className='mb-6'>
+          <RecipeSearchAndFilter
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            selectedType={selectedFilter}
+            onTypeChange={handleFilterChange}
+            selectedSort={selectedSort}
+            onSortChange={handleSortChange}
+            placeholder='레시피 제목이나 설명으로 검색하세요...'
+          />
+        </div>
 
         {/* Enhanced Recipe Type Tabs - Moved below search section */}
         <div className='bg-card/50 mb-6 rounded-xl border p-1.5 shadow-sm backdrop-blur-sm'>
@@ -511,6 +510,6 @@ export default function MyRecipes({
           )}
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

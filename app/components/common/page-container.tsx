@@ -7,7 +7,7 @@ interface PageContainerProps {
 
 export function PageContainer({ children, className }: PageContainerProps) {
   return (
-    <div className={cn('min-h-[calc(100vh-3.5rem)]', className)}>
+    <div className={cn('min-h-[calc(100vh-3.5rem)] bg-background', className)}>
       {children}
     </div>
   );

@@ -7,7 +7,7 @@ export const meta: MetaFunction = () => {
 
 export default function AuthLayout() {
   return (
-    <PageContainer className='bg-background grid items-center justify-center overflow-hidden lg:grid-cols-2'>
+    <PageContainer className='grid items-center justify-center overflow-hidden lg:grid-cols-2'>
       <Outlet />
 
       <div className='bg-muted relative hidden h-full lg:block'>
