@@ -127,7 +127,7 @@ export default function Recipe({ loaderData }: Route.ComponentProps) {
       {/* Recipe Header */}
       <div className='space-y-6'>
         {/* Basic Info */}
-        <DisplayBasicInfo recipe={recipe} />
+        <DisplayBasicInfo recipe={recipe} averageRating={reviewStats.averageRating} />
         {/* Recipe Parameters */}
         <DisplayParameters recipe={recipe} />
         {/* Optional Info */}

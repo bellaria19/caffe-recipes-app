@@ -49,6 +49,8 @@ export const recipes = pgTable(
     brewingTool: text('brewing_tool'), // 선택사항: 사용한 도구
     tips: text('tips'), // 선택사항: 사용자 팁
     recipeDetails: jsonb('recipe_details').notNull(), // EspressoParams | DripParams
+    averageRating: numeric('average_rating', { precision: 2, scale: 1 }).default('0'), // 캐시된 평균 평점 (0.0-5.0)
+    totalReviews: integer('total_reviews').default(0), // 캐시된 총 리뷰 수
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -61,6 +63,7 @@ export const recipes = pgTable(
     profileIdIdx: index('idx_recipes_profile_id').on(table.profileId),
     recipeTypeIdx: index('idx_recipes_recipe_type').on(table.recipeType),
     createdAtIdx: index('idx_recipes_created_at').on(table.createdAt.desc()),
+    averageRatingIdx: index('idx_recipes_average_rating').on(table.averageRating.desc()),
   })
 );
 

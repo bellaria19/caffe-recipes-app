@@ -22,8 +22,7 @@ export const getRecipes = async (
         username,
         profile_image_url
       ),
-      likes:likes!recipe_id (count),
-      reviews:reviews!recipe_id (count)
+      likes:likes!recipe_id (count)
     `);
 
   // Filter by recipe type
@@ -59,7 +58,7 @@ export const getRecipes = async (
     title: recipe.title,
     description: recipe.description || undefined,
     brewType: recipe.recipe_type as BrewType,
-    rating: 0, // TODO: Calculate from reviews
+    rating: Number((recipe as any).average_rating) || 0, // Use cached rating
     author: recipe.author || 'Unknown',
     // profileImageUrl: (recipe.profiles as any)?.profile_image_url || undefined,
     tips: recipe.tips || undefined,
@@ -75,7 +74,7 @@ export const getRecipes = async (
         ? (recipe.recipe_details as unknown as DripParams)
         : undefined,
     likesCount: Array.isArray(recipe.likes) ? recipe.likes.length : 0,
-    reviewsCount: Array.isArray(recipe.reviews) ? recipe.reviews.length : 0,
+    reviewsCount: (recipe as any).total_reviews || 0, // Use cached review count
   }));
 
   return recipes;
@@ -94,8 +93,7 @@ export const getRecipeById = async (
         username,
         profile_image_url
       ),
-      likes:likes!recipe_id (count),
-      reviews:reviews!recipe_id (count)
+      likes:likes!recipe_id (count)
     `
     )
     .eq('id', id)
@@ -112,7 +110,7 @@ export const getRecipeById = async (
     title: data.title,
     description: data.description || undefined,
     brewType: data.recipe_type as 'espresso' | 'drip',
-    rating: 0, // TODO: Calculate from reviews
+    rating: Number((data as any).average_rating) || 0, // Use cached rating
     author: data.author || 'Unknown',
     // profileImageUrl: (data.profiles as any)?.profile_image_url || undefined,
     tips: data.tips || undefined,
@@ -128,7 +126,7 @@ export const getRecipeById = async (
         ? (data.recipe_details as unknown as DripParams)
         : undefined,
     likesCount: Array.isArray(data.likes) ? data.likes.length : 0,
-    reviewsCount: Array.isArray(data.reviews) ? data.reviews.length : 0,
+    reviewsCount: (data as any).total_reviews || 0, // Use cached review count
   };
 
   return recipe;
@@ -154,8 +152,7 @@ export const getUserRecipes = async (
         username,
         profile_image_url
       ),
-      likes:likes!recipe_id (count),
-      reviews:reviews!recipe_id (count)
+      likes:likes!recipe_id (count)
     `
     )
     .eq('profile_id', userId)
@@ -173,7 +170,7 @@ export const getUserRecipes = async (
     title: recipe.title,
     description: recipe.description || undefined,
     brewType: recipe.recipe_type as BrewType,
-    rating: 0, // TODO: Calculate from reviews
+    rating: Number((recipe as any).average_rating) || 0, // Use cached rating
     author: recipe.author || 'Unknown',
     // profileImageUrl: (recipe.profiles as any)?.profile_image_url || undefined,
     tips: recipe.tips || undefined,
@@ -189,7 +186,7 @@ export const getUserRecipes = async (
         ? (recipe.recipe_details as unknown as DripParams)
         : undefined,
     likesCount: Array.isArray(recipe.likes) ? recipe.likes.length : 0,
-    reviewsCount: Array.isArray(recipe.reviews) ? recipe.reviews.length : 0,
+    reviewsCount: (recipe as any).total_reviews || 0, // Use cached review count
   }));
 
   return recipes;
@@ -215,8 +212,7 @@ export const getLikedRecipes = async (
           username,
           profile_image_url
         ),
-        likes:likes\!recipe_id (count),
-        reviews:reviews\!recipe_id (count)
+        likes:likes\!recipe_id (count)
       )
     `
     )
@@ -239,7 +235,7 @@ export const getLikedRecipes = async (
         title: recipe.title,
         description: recipe.description || undefined,
         brewType: recipe.recipe_type as BrewType,
-        rating: 0, // TODO: Calculate from reviews
+        rating: Number((recipe as any).average_rating) || 0, // Use cached rating
         author: recipe.author || 'Unknown',
         // profileImageUrl: recipe.profiles?.profile_image_url || undefined,
         tips: recipe.tips || undefined,
@@ -255,7 +251,7 @@ export const getLikedRecipes = async (
             ? (recipe.recipe_details as unknown as DripParams)
             : undefined,
         likesCount: Array.isArray(recipe.likes) ? recipe.likes.length : 0,
-        reviewsCount: Array.isArray(recipe.reviews) ? recipe.reviews.length : 0,
+        reviewsCount: (recipe as any).total_reviews || 0, // Use cached review count
       };
     });
 

@@ -76,7 +76,9 @@ export function RecipeCard({
               className='h-4 w-4 flex-shrink-0 text-yellow-500'
               fill='currentColor'
             />
-            <span className='text-foreground text-sm'>{recipe.rating}/5</span>
+            <span className='text-foreground text-sm'>
+              {recipe.rating > 0 ? `${recipe.rating.toFixed(1)}/5` : 'No ratings'}
+            </span>
           </div>
           <div className='flex items-center gap-3'>
             {(onLike || onUnlike || disabled) && (

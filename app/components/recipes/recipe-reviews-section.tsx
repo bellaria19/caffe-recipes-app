@@ -72,7 +72,7 @@ export function RecipeReviewsSection({
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 {renderStars(averageRating)}
-                <span className="text-lg font-semibold">{averageRating}</span>
+                <span className="text-lg font-semibold">{averageRating.toFixed(1)}</span>
                 <span className="text-muted-foreground text-sm">
                   ({totalReviews}개의 리뷰)
                 </span>

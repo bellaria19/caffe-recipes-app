@@ -6,7 +6,7 @@ import { PageContainer } from '@/components/common/page-container';
 import { RecipeCard } from '@/components/common/recipe-card';
 import { RecipePagination } from '@/components/common/recipe-pagination';
 import { RecipeSearchAndFilter } from '@/components/common/recipe-search-and-filter';
-import { getPopularRecipes } from '@/lib/data/popular-recipes';
+// import { getPopularRecipes } from '@/lib/data/popular-recipes';
 import { addLike, removeLike } from '@/mutations/home';
 import { getUserLikes } from '@/queries/home';
 import { getRecipes } from '@/queries/recipes';
@@ -162,7 +162,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           if (selectedSort === 'popularity-daily') period = 'daily';
           else if (selectedSort === 'popularity-weekly') period = 'weekly';
 
-          const recipes = await getPopularRecipes(period, 100, 0);
+          // const recipes = await getPopularRecipes(period, 100, 0);
           setPopularRecipes(recipes);
         } catch (error) {
           console.error('Failed to fetch popular recipes:', error);

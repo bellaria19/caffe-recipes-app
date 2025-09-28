@@ -4,7 +4,12 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader } from '@/components/ui/card';
 import { ChefHat, Clock, Star } from 'lucide-react';
 
-export function DisplayBasicInfo({ recipe }: { recipe: Recipe }) {
+interface DisplayBasicInfoProps {
+  recipe: Recipe;
+  averageRating?: number;
+}
+
+export function DisplayBasicInfo({ recipe, averageRating }: DisplayBasicInfoProps) {
   return (
     <Card>
       <CardHeader>
@@ -29,7 +34,11 @@ export function DisplayBasicInfo({ recipe }: { recipe: Recipe }) {
               </div>
               <div className='flex items-center gap-1'>
                 <Star className='h-4 w-4 text-yellow-500' fill='currentColor' />
-                <span>{recipe.rating}/5</span>
+                <span>
+                  {averageRating !== undefined && averageRating > 0
+                    ? `${averageRating.toFixed(1)}/5`
+                    : 'No ratings'}
+                </span>
               </div>
               <div className='flex items-center gap-1'>
                 <Clock className='h-4 w-4' />
