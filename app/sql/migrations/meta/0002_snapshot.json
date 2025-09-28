@@ -1,0 +1,14 @@
+{
+  "id": "b8f5f7e2-8d3a-4c9a-9e2b-1a3b4c5d6e7f",
+  "prevId": "0001_chunky_nick_fury",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {},
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
