@@ -181,7 +181,7 @@ export default function CreateDrip({ actionData }: Route.ComponentProps) {
                     name='waterAmount'
                     type='number'
                     min='10'
-                    max='100'
+                    max='200'
                     step='5'
                     placeholder='40'
                     value={step.waterAmount}

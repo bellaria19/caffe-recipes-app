@@ -89,7 +89,8 @@ export function DisplayOptionalInfo({ recipe }: { recipe: Recipe }) {
               ) : (
                 (espressoParams?.grindSize || dripParams?.grindSize) && (
                   <TableCell className='text-center font-medium'>
-                    {espressoParams?.grindSize || dripParams?.grindSize}
+                    {espressoParams?.grindSize || dripParams?.grindSize}{' '}
+                    <span className='text-muted-foreground text-xs'>μm</span>
                   </TableCell>
                 )
               )}

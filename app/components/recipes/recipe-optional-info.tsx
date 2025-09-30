@@ -26,10 +26,10 @@ const baseDripperOptions = [
 
 // Dynamic option generators
 const getDripperOptions = (currentValue?: string) => {
-  const options = [...baseDripperOptions];
+  const options = [{ value: 'none', label: '선택 안함' }, ...baseDripperOptions];
 
   // Add current value if it's not in base options
-  if (currentValue && !options.find(opt => opt.value === currentValue)) {
+  if (currentValue && !options.find((opt) => opt.value === currentValue)) {
     options.push({ value: currentValue, label: currentValue });
   }
 
@@ -37,10 +37,10 @@ const getDripperOptions = (currentValue?: string) => {
 };
 
 const getGrinderOptions = (currentValue?: string) => {
-  const options = [...baseGrinderOptions];
+  const options = [{ value: 'none', label: '선택 안함' }, ...baseGrinderOptions];
 
   // Add current value if it's not in base options
-  if (currentValue && !options.find(opt => opt.value === currentValue)) {
+  if (currentValue && !options.find((opt) => opt.value === currentValue)) {
     options.push({ value: currentValue, label: currentValue });
   }
 
@@ -104,7 +104,7 @@ export function RecipeOptionalInfo({
               onValueChange={setDripper}
               name='dripper'
               defaultValue={defaultDripper}
-              required
+              required={false}
               placeholder='드리퍼를 선택하세요'
               options={dripperOptions}
             />
@@ -143,7 +143,7 @@ export function RecipeOptionalInfo({
                 value={grinder}
                 onValueChange={setGrinder}
                 name='grinder'
-                required
+                required={false}
                 placeholder='그라인더를 선택하세요'
                 options={grinderOptions}
               />

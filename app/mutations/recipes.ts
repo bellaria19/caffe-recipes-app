@@ -58,7 +58,7 @@ export const createEspressoRecipe = async (
     extractionAmountMin,
     extractionAmountMax,
     grindSize,
-    grinder: grinder === 'other' ? otherGrinder : grinder,
+    grinder: grinder === 'none' ? undefined : grinder === 'other' ? otherGrinder : grinder,
     grinderSetting,
   };
 
@@ -127,9 +127,9 @@ export const createDripRecipe = async (
   const dripParams: DripParams = {
     coffeeAmount,
     waterTemperature,
-    dripper: dripper === 'other' ? otherDripper : dripper,
+    dripper: dripper === 'none' ? undefined : dripper === 'other' ? otherDripper : dripper,
     grindSize,
-    grinder: grinder === 'other' ? otherGrinder : grinder,
+    grinder: grinder === 'none' ? undefined : grinder === 'other' ? otherGrinder : grinder,
     grinderSetting,
     extractionSteps,
   };
@@ -196,9 +196,9 @@ export const updateDripRecipe = async (
   const dripParams: DripParams = {
     coffeeAmount,
     waterTemperature,
-    dripper: dripper === 'other' ? otherDripper : dripper,
+    dripper: dripper === 'none' ? undefined : dripper === 'other' ? otherDripper : dripper,
     grindSize,
-    grinder: grinder === 'other' ? otherGrinder : grinder,
+    grinder: grinder === 'none' ? undefined : grinder === 'other' ? otherGrinder : grinder,
     grinderSetting,
     extractionSteps,
   };
@@ -273,7 +273,7 @@ export const updateEspressoRecipe = async (
     extractionAmountMin,
     extractionAmountMax,
     grindSize,
-    grinder: grinder === 'other' ? otherGrinder : grinder,
+    grinder: grinder === 'none' ? undefined : grinder === 'other' ? otherGrinder : grinder,
     grinderSetting,
   };
 
