@@ -22,11 +22,13 @@ export function SortDropdown({
   const getSortLabel = (sort: SortType | '') => {
     switch (sort) {
       case 'popularity':
-        return '전체 인기순';
-      case 'popularity-daily':
-        return '일간 인기순';
-      case 'popularity-weekly':
-        return '주간 인기순';
+        return '인기순';
+      // case 'popularity':
+      //   return '전체 인기순';
+      // case 'popularity-daily':
+      //   return '일간 인기순';
+      // case 'popularity-weekly':
+      //   return '주간 인기순';
       case 'newest':
         return '최신순';
       default:
@@ -44,16 +46,17 @@ export function SortDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start'>
         <DropdownMenuItem onClick={() => onSortChange('popularity')}>
-          전체 인기순
+          인기순
+          {/* 전체 인기순 */}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => onSortChange('popularity-daily')}>
+        {/* <DropdownMenuItem onClick={() => onSortChange('popularity-daily')}>
           일간 인기순
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onSortChange('popularity-weekly')}>
           주간 인기순
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator /> */}
         <DropdownMenuItem onClick={() => onSortChange('newest')}>
           최신순
         </DropdownMenuItem>
